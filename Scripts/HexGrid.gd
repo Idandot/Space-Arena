@@ -77,16 +77,65 @@ func on_hex_clicked(hex):
 	currentHex = hex
 
 func update_ship_position(ship):
-	#берем позицию в аксиальных
+	var new_vel_ax = ship.NewVelocity
 	var new_pos_ax = ship.Position
-	#Переводим в offset
-	var new_pos_of = axial_to_offset(new_pos_ax.x, new_pos_ax.y)
-	#Применяем ограничения
-	new_pos_of.x = clamp(new_pos_of.x, 0, gridSizeOX - 1)
-	new_pos_of.y = clamp(new_pos_of.y, 0, gridSizeOY - 1)
-	#Переводим обратно в аксиальные
-	new_pos_ax = offset_to_axial(new_pos_of.x, new_pos_of.y)
+	var path = decompose_vector(new_pos_ax, new_pos_ax + new_vel_ax)
+	for step in path:
+		var next_pos_ax = new_pos_ax + step
+		var next_pos_of = axial_to_offset(next_pos_ax.x, next_pos_ax.y)
+		if next_pos_of.x != clamp(next_pos_of.x, 0, gridSizeOX - 1) \
+		or next_pos_of.y != clamp(next_pos_of.y, 0, gridSizeOY - 1):
+			print("pushed in the wall")
+			break
+		else:
+			new_pos_ax = next_pos_ax
 	ship.Position = new_pos_ax
-	#Переводим в мировые координаты
 	var world_pos = axial_to_world(new_pos_ax.x, new_pos_ax.y)
 	ship.position = world_pos
+
+func decompose_vector(start_pos: Vector2i, end_pos: Vector2i) -> Array:
+	var change_pos = end_pos - start_pos
+	print(change_pos)
+	var path = []
+	while change_pos != Vector2i.ZERO:
+		var h = change_pos.x
+		var k = change_pos.y
+		var l = h+k
+		if abs(h) >= abs(k) and abs(h) >= abs(l):
+			var step = Vector2i(sign(h), 0)
+			change_pos -= step
+			path.append(step)
+		elif abs(k) >= abs(l) and abs(k) >= abs(h):
+			var step = Vector2i(0, sign(k))
+			change_pos -= step
+			path.append(Vector2i(step))
+		else:
+			var step = Vector2i(sign(l), sign(l))
+			change_pos -= step
+			path.append(step)
+	print(path)
+	return path
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

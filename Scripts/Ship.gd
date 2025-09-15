@@ -88,7 +88,6 @@ func _unhandled_key_input(event):
 	elif event.is_action_pressed("brake"):
 		brake()
 	elif event.is_action_pressed("end_movement"):
-		Position += NewVelocity
 		emit_signal("end_movement", self)
 		PreviousVelocity = NewVelocity
 		NewVelocity = Vector2i.ZERO

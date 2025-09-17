@@ -12,7 +12,6 @@ func setup(hexSideSize: int, pos: Vector2):
 		var angle = deg_to_rad(60*i)
 		points.append(Vector2(cos(angle), sin(angle))*hexSideSize)
 	colPoly.polygon = points
-#	poly.polygon = points
 	self.position = pos
 	queue_redraw()
 

@@ -2,8 +2,9 @@
 
 [ext_resource type="Script" path="res://Scripts/Ship.gd" id="1_cdi5h"]
 
-[node name="Node2D" type="Node2D"]
+[node name="Ship" type="Node2D"]
 script = ExtResource("1_cdi5h")
+shipColor = Color(0.803922, 0.533333, 0.435294, 1)
 
 [node name="Area2D" type="Area2D" parent="."]
 

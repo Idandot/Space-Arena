@@ -1,10 +1,29 @@
-[gd_scene load_steps=4 format=3 uid="uid://bvh1uo520kqmq"]
+[gd_scene load_steps=5 format=3 uid="uid://bvh1uo520kqmq"]
 
 [ext_resource type="Script" path="res://Scripts/HexGrid.gd" id="1_mhtuk"]
 [ext_resource type="PackedScene" uid="uid://bx6jcpmfamp4b" path="res://Scenes/Hex.tscn" id="2_004cx"]
 [ext_resource type="PackedScene" uid="uid://2lfjmpjxtq52" path="res://Scenes/Ship.tscn" id="3_jkae1"]
+[ext_resource type="Script" path="res://Scripts/Vectors.gd" id="4_ogwqa"]
 
-[node name="Node2D" type="Node2D"]
+[node name="HexGrid" type="Node2D" node_paths=PackedStringArray("AccelerationText")]
 script = ExtResource("1_mhtuk")
 Hex = ExtResource("2_004cx")
 Ship = ExtResource("3_jkae1")
+AccelerationText = NodePath("Panel/Label")
+
+[node name="Vectors" type="Node2D" parent="."]
+script = ExtResource("4_ogwqa")
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = 960.0
+offset_right = 1152.0
+offset_bottom = 64.0
+
+[node name="Label" type="Label" parent="Panel"]
+offset_right = 192.0
+offset_bottom = 64.0
+text = "Acceleration 0/10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="child_entered_tree" from="." to="Vectors" method="_on_hex_grid_child_entered_tree"]

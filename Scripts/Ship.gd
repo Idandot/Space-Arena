@@ -4,7 +4,7 @@ extends Node2D
 @export var shipLength = 50
 @export var shipWidth = 30
 @export var shipColor = Color(1,0.2,0.8)
-@export var MaxAcceleration = 10
+@export var MaxAcceleration = 3
 @export var Acceleration = MaxAcceleration
 var Position = Vector2i(0,0)
 var PreviousVelocity = Vector2i(0,0)
@@ -32,6 +32,7 @@ signal action()
 
 func _ready():
 	acceleration_label = HexGrid.AccelerationText
+	update_acceleration(MaxAcceleration)
 	points = [Vector2(-shipWidth/2.0, shipLength/2.0), Vector2(shipWidth/2.0, shipLength/2.0), Vector2(0, -shipLength/2.0)]
 	colPoly.polygon = points
 	poly.polygon = points

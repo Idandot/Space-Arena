@@ -7,8 +7,8 @@ extends Node2D
 @export var hexSideSizeW = 50
 @export var gridOffsetWX = 50
 @export var gridOffsetWY = 50
-@export var gridSizeOX = 7
-@export var gridSizeOY = 7
+@export var gridSizeOX = 10
+@export var gridSizeOY = 6
 @export var hexColor = Color(1,0.5,1)
 @export var Hex: PackedScene
 @export var Ship: PackedScene

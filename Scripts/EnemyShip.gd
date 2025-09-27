@@ -3,6 +3,8 @@ extends Ship
 var player: Node2D
 
 func _ready():
+	ships_array = Root.ships_array
+	print(ships_array)
 	shipColor = Color(0.2,0.8,1)
 	points = [Vector2(-shipWidth/2.0, shipLength/2.0), Vector2(shipWidth/2.0, shipLength/2.0), Vector2(0, -shipLength/2.0)]
 	colPoly.polygon = points
@@ -11,7 +13,6 @@ func _ready():
 	MaxAcceleration = 3
 
 func take_turn():
-	print("Enemy takes turn")
 	update_acceleration(MaxAcceleration)
 	var best_dir = Facing
 	var best_dist = INF
@@ -26,14 +27,11 @@ func take_turn():
 			best_dir = dir_index
 	while Acceleration > 0:
 		if best_dir != dir:
-			print(dir, "/", best_dir)
 			turn_right()
-		elif Root.axial_distance(NewVelocity + PreviousVelocity + AXIAL_DIR[dir]) < safe_velocity:
-			print("accelerated")
+		elif Root.axial_distance(ResultVelocity + AXIAL_DIR[dir]) < safe_velocity:
 			accelerate()
 		else:
 			update_acceleration(-1)
-			print("skipped")
 	end_turn()
 
 

@@ -25,17 +25,18 @@ var dir = 0
 var InitialDir = 0
 var hex_grid: Node2D
 var self_id
+var mass = 100
+var restoration_coefficient = 0.5
+var energy_to_HP = 1
 
 @onready var colPoly = $Area2D/CollisionPolygon2D
 @onready var poly = $Area2D/Polygon2D
 @onready var area = $Area2D
 @onready var Ships = get_parent()
 @onready var Root = get_parent().get_parent()
+var ships_array: Array
 
 signal turn_ended
-
-func _ready():
-	update_acceleration(MaxAcceleration)
 
 func take_turn():
 	pass
@@ -62,22 +63,20 @@ func update_rotation():
 
 func accelerate():
 	if update_acceleration(-1):
-		NewVelocity += Facing
+		update_velocity(Facing)
 	else:
 		print("Insufficient Acceleration Capacity")
 
 func brake():
 	if update_acceleration(-2):
-		NewVelocity -= Facing
+		update_velocity(-Facing)
 	else:
 		print("Insufficient Acceleration Capacity")
 
 func end_turn():
-	ResultVelocity = PreviousVelocity + NewVelocity
 	PreviousVelocity = ResultVelocity
 	update_ship_position()
 	NewVelocity = Vector2i.ZERO
-	ResultVelocity = Vector2i.ZERO
 	update_acceleration(MaxAcceleration)
 	InitialDir = dir
 	queue_redraw()
@@ -91,9 +90,16 @@ func update_ship_position():
 		await get_tree().process_frame
 		var next_pos_ax = new_pos_ax + step
 		var next_pos_of = Root.axial_to_offset(next_pos_ax)
+		var hit_target = check_ships_collision(next_pos_ax, ships_array)
 		if next_pos_of.x != clamp(next_pos_of.x, 0, hex_grid.gridSizeOX - 1) \
 		or next_pos_of.y != clamp(next_pos_of.y, 0, hex_grid.gridSizeOY - 1):
 			print("pushed in the wall")
+			collision_process(null)
+			PreviousVelocity = Vector2i.ZERO
+			break
+		elif (hit_target != null):
+			print("collided with", hit_target)
+			collision_process(hit_target)
 			PreviousVelocity = Vector2i.ZERO
 			break
 		else:
@@ -154,6 +160,67 @@ func draw_arrow(from: Vector2, to: Vector2, col:= Color(1,1,1), w:=-1):
 	draw_line(to, to + left, col, w)
 	draw_line(to, to + right, col, w)
 
+func check_ships_collision(self_position: Vector2i, i_ships_array: Array):
+	for s in i_ships_array:
+			if (self_position == s.axial_position) and (s != self):
+				return s
+	return null
+
+func take_damage(amount: int):
+	print(self.name, " have taken ", amount," damage")
+	pass
+
+func update_velocity(additional_velocity: Vector2i, set_to_zero:= false):
+	if set_to_zero:
+		NewVelocity = Vector2i.ZERO
+		PreviousVelocity = Vector2i.ZERO
+	NewVelocity += additional_velocity
+	ResultVelocity = NewVelocity + PreviousVelocity
+	pass
+
+func collision_process(target: Node2D):
+	#Проверка если цель - стена, входные данные
+	var v2: Vector2
+	var m2: float
+	var e2: float
+	var target_axial_position: Vector2
+	if target == null: #стена
+		v2 = Vector2.ZERO
+		m2 = INF
+		e2 = 0.0
+		target_axial_position = axial_position + Facing
+	else:
+		v2 = Vector2(target.ResultVelocity)
+		m2 = target.mass
+		e2 = target.restoration_coefficient
+		target_axial_position = target.axial_position
+	var v1 = Vector2(ResultVelocity)
+	var m1: float = mass
+	var e1 = restoration_coefficient
+	var self_axial_position: Vector2 = axial_position
+	#Вспомогательные величины
+	var q = 1 / (1/m1 + 1/m2) #редуцированная масса
+	var e = min(e1, e2) #Общий коэффициент восстановления
+	var n = (target_axial_position - self_axial_position).normalized() #направление между кораблями
+	var vrel = (v1-v2).dot(n) #относительная скорость кораблей по нормальному вектору
+	#результирующий импульс и скорости
+	var j = - (1+e) * vrel / q #изменение импульса для каждого корабля
+	var u1 = (v1 + j / m1 * n).round() #новая скорость корабля 1
+	var u2 = (v2 - j / m2 * n).round() #новая скорость корабля 2
+	update_velocity(u1, true)
+	if u2 != Vector2.ZERO: #чтобы стену не пыталось подвинуть
+		target.update_velocity(u2, true)
+	#урон зависит от потери кинетической энергии
+	var deltaE = (1 - e**2) * q * vrel**2 /2
+	var total_damage = deltaE * energy_to_HP
+	if target == null:
+		var damage1 = round(total_damage)
+		take_damage(damage1)
+	else:
+		var damage1 = round(total_damage * m2 / (m1 + m2))
+		take_damage(damage1)
+		var damage2 = round(total_damage * m1 / (m1 + m2))
+		target.take_damage(damage2)
 
 
 

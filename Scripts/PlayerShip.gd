@@ -5,6 +5,8 @@ var can_act = false
 
 
 func _ready():
+	ships_array = Root.ships_array
+	print(ships_array)
 	acceleration_label = Root.acceleration_label
 	points = [Vector2(-shipWidth/2.0, shipLength/2.0), Vector2(shipWidth/2.0, shipLength/2.0), Vector2(0, -shipLength/2.0)]
 	colPoly.polygon = points

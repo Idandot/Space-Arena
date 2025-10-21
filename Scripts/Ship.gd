@@ -1,6 +1,7 @@
 extends Node2D
 class_name Ship
 
+@export var name_in_game = "Unnamed Ship"
 @export var speed = 1
 @export var shipLength = 50
 @export var shipWidth = 30
@@ -11,16 +12,26 @@ var axial_position = Vector2i(0,0)
 var PreviousVelocity = Vector2i(0,0)
 var NewVelocity = Vector2i(0,0)
 var ResultVelocity = Vector2i(0,0)
-var Facing = Vector2i(0,1)
+var facing = Vector2i(0,-1)
 var points = []
 var AXIAL_DIR = [
-	Vector2i(0,-1),
-	Vector2i(1,0),
-	Vector2i(1,1),
-	Vector2i(0,1),
-	Vector2i(-1,0),
-	Vector2i(-1,-1),
+	Vector2i(0,-1), #up
+	Vector2i(1,0), #right up
+	Vector2i(1,1), #right down
+	Vector2i(0,1), #down
+	Vector2i(-1,0), #left down
+	Vector2i(-1,-1), #left up
 ]
+
+#temporary direct enegry weapon characteristics
+@export var weapon_stats = {
+	"min_range": 0,
+	"effective_range": 1,
+	"max_range": 2,
+	"arc_degrees": 120,
+}
+var is_weapon_active = false
+
 var dir = 0
 var InitialDir = 0
 var hex_grid: Node2D
@@ -28,6 +39,7 @@ var self_id
 var mass = 100
 var restoration_coefficient = 0.5
 var energy_to_HP = 1
+
 
 @onready var colPoly = $Area2D/CollisionPolygon2D
 @onready var poly = $Area2D/Polygon2D
@@ -37,6 +49,7 @@ var energy_to_HP = 1
 var ships_array: Array
 
 signal turn_ended
+signal request_highlight(ship)
 
 func take_turn():
 	pass
@@ -45,7 +58,7 @@ func turn_right():
 	if update_acceleration(-1):
 		dir = (dir+1)%6
 		area.rotation = dir*deg_to_rad(60)
-		Facing = AXIAL_DIR[dir]
+		facing = AXIAL_DIR[dir]
 	else:
 		print("Insufficient Acceleration Capacity")
 
@@ -53,33 +66,39 @@ func turn_left():
 	if update_acceleration(-1):
 		dir = (dir-1)%6
 		area.rotation = dir*deg_to_rad(60)
-		Facing = AXIAL_DIR[dir]
+		facing = AXIAL_DIR[dir]
 	else:
 		print("Insufficient Acceleration Capacity")
 
 func update_rotation():
 	area.rotation = dir*deg_to_rad(60)
-	Facing = AXIAL_DIR[dir]
+	facing = AXIAL_DIR[dir]
 
 func accelerate():
 	if update_acceleration(-1):
-		update_velocity(Facing)
+		update_velocity(facing)
 	else:
 		print("Insufficient Acceleration Capacity")
 
 func brake():
 	if update_acceleration(-2):
-		update_velocity(-Facing)
+		update_velocity(-facing)
 	else:
 		print("Insufficient Acceleration Capacity")
 
-func end_turn():
+func start_shooting_phase():
 	PreviousVelocity = ResultVelocity
 	update_ship_position()
 	NewVelocity = Vector2i.ZERO
 	update_acceleration(MaxAcceleration)
 	InitialDir = dir
 	queue_redraw()
+	
+	is_weapon_active = true
+	Root.turn_label.text = self.name_in_game + "'s shooting phase"
+	emit_signal("request_highlight", self)
+
+func end_turn():
 	emit_signal("turn_ended")
 
 func update_ship_position():
@@ -90,17 +109,11 @@ func update_ship_position():
 		await get_tree().process_frame
 		var next_pos_ax = new_pos_ax + step
 		var next_pos_of = Root.axial_to_offset(next_pos_ax)
-		var hit_target = check_ships_collision(next_pos_ax, ships_array)
 		if next_pos_of.x != clamp(next_pos_of.x, 0, hex_grid.gridSizeOX - 1) \
 		or next_pos_of.y != clamp(next_pos_of.y, 0, hex_grid.gridSizeOY - 1):
 			print("pushed in the wall")
-			collision_process(null)
-			PreviousVelocity = Vector2i.ZERO
-			break
-		elif (hit_target != null):
-			print("collided with", hit_target)
-			collision_process(hit_target)
-			PreviousVelocity = Vector2i.ZERO
+			update_velocity(Vector2i.ZERO, true)
+			take_damage(Root.axial_distance(res_vel_ax))
 			break
 		else:
 			new_pos_ax = next_pos_ax
@@ -167,7 +180,7 @@ func check_ships_collision(self_position: Vector2i, i_ships_array: Array):
 	return null
 
 func take_damage(amount: int):
-	print(self.name, " have taken ", amount," damage")
+	print(self.name, " had taken ", amount," damage")
 	pass
 
 func update_velocity(additional_velocity: Vector2i, set_to_zero:= false):
@@ -176,51 +189,51 @@ func update_velocity(additional_velocity: Vector2i, set_to_zero:= false):
 		PreviousVelocity = Vector2i.ZERO
 	NewVelocity += additional_velocity
 	ResultVelocity = NewVelocity + PreviousVelocity
-	pass
+	queue_redraw()
 
-func collision_process(target: Node2D):
-	#Проверка если цель - стена, входные данные
-	var v2: Vector2
-	var m2: float
-	var e2: float
-	var target_axial_position: Vector2
-	if target == null: #стена
-		v2 = Vector2.ZERO
-		m2 = INF
-		e2 = 0.0
-		target_axial_position = axial_position + Facing
+func find_target(targets):
+	for ship in targets:
+		if ship.name_in_game != self.name_in_game:
+			return ship
+	print("no valid targets")
+	return null
+
+func fire():
+	if is_weapon_active:
+		var target = find_target(ships_array)
+		if target != null:
+			target.take_damage(10)
+			is_weapon_active = false
 	else:
-		v2 = Vector2(target.ResultVelocity)
-		m2 = target.mass
-		e2 = target.restoration_coefficient
-		target_axial_position = target.axial_position
-	var v1 = Vector2(ResultVelocity)
-	var m1: float = mass
-	var e1 = restoration_coefficient
-	var self_axial_position: Vector2 = axial_position
-	#Вспомогательные величины
-	var q = 1 / (1/m1 + 1/m2) #редуцированная масса
-	var e = min(e1, e2) #Общий коэффициент восстановления
-	var n = (target_axial_position - self_axial_position).normalized() #направление между кораблями
-	var vrel = (v1-v2).dot(n) #относительная скорость кораблей по нормальному вектору
-	#результирующий импульс и скорости
-	var j = - (1+e) * vrel / q #изменение импульса для каждого корабля
-	var u1 = (v1 + j / m1 * n).round() #новая скорость корабля 1
-	var u2 = (v2 - j / m2 * n).round() #новая скорость корабля 2
-	update_velocity(u1, true)
-	if u2 != Vector2.ZERO: #чтобы стену не пыталось подвинуть
-		target.update_velocity(u2, true)
-	#урон зависит от потери кинетической энергии
-	var deltaE = (1 - e**2) * q * vrel**2 /2
-	var total_damage = deltaE * energy_to_HP
-	if target == null:
-		var damage1 = round(total_damage)
-		take_damage(damage1)
-	else:
-		var damage1 = round(total_damage * m2 / (m1 + m2))
-		take_damage(damage1)
-		var damage2 = round(total_damage * m1 / (m1 + m2))
-		target.take_damage(damage2)
+		print("weapon isn't active")
+
+func is_in_shooting_arc(ax_target_pos):
+	var direction: Vector2 = (Root.axial_to_world(ax_target_pos - axial_position, true)).normalized()
+	var angle_to_target = rad_to_deg(direction.angle())
+	var angle_diff = abs(Root.angle_difference(area.rotation, angle_to_target))
+	
+	return angle_diff <= weapon_stats.arc_degrees/2
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -4,6 +4,8 @@
 
 [node name="PlayerShip" type="Node2D"]
 script = ExtResource("1_ea2ix")
+name_in_game = "Player"
+shipColor = Color(0.141176, 0.631373, 0.996078, 1)
 
 [node name="Area2D" type="Area2D" parent="."]
 

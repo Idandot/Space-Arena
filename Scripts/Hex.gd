@@ -4,6 +4,8 @@ var points = []
 @onready var colPoly = $Area2D/CollisionPolygon2D
 @onready var poly = $Area2D/Polygon2D
 var color: Color = Color(1,1,1)
+var self_offset_coordinates: Vector2i
+var self_axial_coordinates: Vector2i
 
 signal clicked(hex: Node)
 
@@ -26,3 +28,7 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 func change_color(new_color: Color):
 	color = new_color
 	queue_redraw()
+
+func set_coordinates(axial: Vector2i, offset: Vector2i):
+	self_offset_coordinates = offset
+	self_axial_coordinates = axial

@@ -1,9 +1,9 @@
 extends Node2D
 
-@export var base_color = Color(1, 1, 1, 1)
-@export var effective_color = Color(0, 1, 0, 1)
-@export var penalty_color = Color(1, 1, 0, 1)
-@export var super_penalty_color = Color(1, 0.5, 0, 1)
+@export var base_color = Color(1, 1, 1, 0.5)
+@export var effective_color = Color(0, 1, 0, 0.5)
+@export var penalty_color = Color(1, 1, 0, 0.5)
+@export var super_penalty_color = Color(1, 0.5, 0, 0.5)
 
 @onready var Root = get_parent().get_parent()
 @onready var HexGrid = Root.find_child("HexGrid")
@@ -11,10 +11,9 @@ extends Node2D
 
 func clear_highlight():
 	for hex in HexGrid.get_children():
-		hex.change_color(base_color)
+		hex.deselected()
 
 func highlight_shooting_range(ship: Node2D):
-	print("highlight for: ", ship.name_in_game)
 	
 	clear_highlight()
 	var ship_pos: Vector2i = ship.axial_position
@@ -25,15 +24,14 @@ func highlight_shooting_range(ship: Node2D):
 	var weapon_stats = ship.weapon_stats
 	
 	var hexes_in_range = HexGrid.get_hexes_in_range(ship_pos, weapon_stats.max_range)
-
+	ship.debug_specific_hexes()
 	for hex_data in hexes_in_range:
 		var hex = hex_data.hex
 		var distance = hex_data.distance
-		
 		if ship.is_in_shooting_arc(hex_data.axial_position):
 			var color = color_to_set(weapon_stats, distance)
 			if color:
-				hex.change_color(color)
+				hex.selected(color)
 
 func color_to_set(weapon_stats: Dictionary, distance: int):
 	if distance <= weapon_stats.min_range:

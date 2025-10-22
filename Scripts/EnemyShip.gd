@@ -13,7 +13,7 @@ func _ready():
 
 func take_turn():
 	update_acceleration(MaxAcceleration)
-	var best_dir = facing
+	var best_dir = 0
 	var best_dist = INF
 	var safe_velocity = 4
 		
@@ -34,14 +34,13 @@ func take_turn():
 			update_acceleration(-1)
 		await get_tree().create_timer(0.2).timeout
 	
-	start_shooting_phase()
 	
+	await get_tree().process_frame
+	await start_shooting_phase()
 	await get_tree().create_timer(0.2).timeout
-	
 	fire()
 	
 	end_turn()
-
 
 
 

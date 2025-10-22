@@ -66,15 +66,19 @@ func axial_to_world(axial_vector: Vector2i, relative: bool) -> Vector2:
 func axial_distance(axial_vector: Vector2i) -> int:
 	var q = axial_vector.x
 	var r = axial_vector.y
-	var z = -q-r
+	var z = -q+r
 	return int((abs(q) + abs(r) + abs(z))/2.0)
 
 func chance(positive: float,negative: float):
 	return positive / (negative + positive + 10**(-10))
 
 func angle_difference(angle1: float, angle2: float) -> float:
-	var diff = fmod(angle1 - angle2 + 180, 360) - 180
-	return diff
+	var diff = fmod(angle2 - angle1, 360.0)
+	if diff > 180:
+		diff -= 360
+	elif diff < -180:
+		diff += 360
+	return abs(diff)
 	
 
 func _on_hex_grid_grid_created():
@@ -97,16 +101,14 @@ func _on_hex_grid_grid_created():
 	ships_array.append(enemy_ship)
 	
 	turn_manager.start_game(ships_array)
-	test_real_conversion()
 
-func test_real_conversion():
-	# Возьми реальные offset координаты из твоей сетки
-	var test_offsets = [Vector2i(0,0), Vector2i(1,0), Vector2i(0,1), Vector2i(1,1), Vector2i(2,0)]
-	
-	for offset in test_offsets:
-		var axial = offset_to_axial(offset)
-		var back_to_offset = axial_to_offset(axial)
-		print("Offset:", offset, " -> Axial:", axial, " -> Back:", back_to_offset, " Match:", offset == back_to_offset)
+
+
+
+
+
+
+
 
 
 

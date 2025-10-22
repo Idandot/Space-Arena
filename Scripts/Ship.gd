@@ -9,6 +9,7 @@ class_name Ship
 @export var MaxAcceleration = 3
 @export var Acceleration = MaxAcceleration
 var axial_position = Vector2i(0,0)
+var offset_position = Vector2i(0,0)
 var PreviousVelocity = Vector2i(0,0)
 var NewVelocity = Vector2i(0,0)
 var ResultVelocity = Vector2i(0,0)
@@ -22,6 +23,14 @@ var AXIAL_DIR = [
 	Vector2i(-1,0), #left down
 	Vector2i(-1,-1), #left up
 ]
+var FACING_DICT = {
+	Vector2i(0,-1): -90, #up
+	Vector2i(1,0): -30, #right up
+	Vector2i(1,1): 30, #right down
+	Vector2i(0,1): 90, #down
+	Vector2i(-1,0): 120, #left down
+	Vector2i(-1,-1): -120, #left up
+}
 
 #temporary direct enegry weapon characteristics
 @export var weapon_stats = {
@@ -88,14 +97,17 @@ func brake():
 
 func start_shooting_phase():
 	PreviousVelocity = ResultVelocity
-	update_ship_position()
+	await update_ship_position()
 	NewVelocity = Vector2i.ZERO
 	update_acceleration(MaxAcceleration)
 	InitialDir = dir
 	queue_redraw()
 	
+	await get_tree().process_frame
+	
 	is_weapon_active = true
 	Root.turn_label.text = self.name_in_game + "'s shooting phase"
+	
 	emit_signal("request_highlight", self)
 
 func end_turn():
@@ -118,8 +130,12 @@ func update_ship_position():
 		else:
 			new_pos_ax = next_pos_ax
 	axial_position = new_pos_ax
+	offset_position = Root.axial_to_offset(axial_position)
 	var world_pos = Root.axial_to_world(new_pos_ax, false)
 	self.position = world_pos
+	print("world position: ", world_pos)
+	print("axial position: ", axial_position)
+	print("offset position: ", offset_position)
 
 func decompose_vector(start_pos: Vector2i, end_pos: Vector2i) -> Array:
 	var change_pos = end_pos - start_pos
@@ -207,16 +223,27 @@ func fire():
 	else:
 		print("weapon isn't active")
 
-func is_in_shooting_arc(ax_target_pos):
+func is_in_shooting_arc(ax_target_pos) -> bool:
+	if ax_target_pos == axial_position:
+		return true
+	
 	var direction: Vector2 = (Root.axial_to_world(ax_target_pos - axial_position, true)).normalized()
 	var angle_to_target = rad_to_deg(direction.angle())
-	var angle_diff = abs(Root.angle_difference(area.rotation, angle_to_target))
+	var facing_angle = FACING_DICT[facing]
+	var angle_diff = abs(Root.angle_difference(facing_angle, angle_to_target))
 	
-	return angle_diff <= weapon_stats.arc_degrees/2
 	
+	return is_equal_approx(angle_diff, weapon_stats.arc_degrees/2) or angle_diff < weapon_stats.arc_degrees/2
 	
 
-
+func debug_specific_hexes():
+	var problem_hexes = [Vector2i(2,3), Vector2i(3,4), Vector2i(5,7)]
+	for hex in problem_hexes:
+		var diff = hex - Vector2i(4,5)
+		var world_pos = Root.axial_to_world(diff, true)
+		var angle = rad_to_deg(world_pos.angle())
+		var distance = Root.axial_distance(diff)
+		print("Hex ", hex, " diff: ", diff, " world_pos: ", world_pos, " angle: ", angle, " distance: ", distance)
 
 
 

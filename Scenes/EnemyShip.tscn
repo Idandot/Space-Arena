@@ -6,10 +6,6 @@
 script = ExtResource("1_v3ga3")
 name_in_game = "Enemy"
 shipColor = Color(0.823529, 0, 0, 1)
-weapon_minimum_range = null
-weapon_effective_range = null
-weapon_max_range = null
-weapon_arc_degrees = null
 
 [node name="Area2D" type="Area2D" parent="."]
 

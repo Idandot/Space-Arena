@@ -15,22 +15,6 @@ var NewVelocity = Vector2i(0,0)
 var ResultVelocity = Vector2i(0,0)
 var facing = Vector2i(0,-1)
 var points = []
-var AXIAL_DIR = [
-	Vector2i(0,-1), #up
-	Vector2i(1,0), #right up
-	Vector2i(1,1), #right down
-	Vector2i(0,1), #down
-	Vector2i(-1,0), #left down
-	Vector2i(-1,-1), #left up
-]
-var FACING_DICT = {
-	Vector2i(0,-1): -90, #up
-	Vector2i(1,0): -30, #right up
-	Vector2i(1,1): 30, #right down
-	Vector2i(0,1): 90, #down
-	Vector2i(-1,0): 150, #left down
-	Vector2i(-1,-1): -150, #left up
-}
 
 #temporary direct enegry weapon characteristics
 @export var weapon_stats = {
@@ -49,6 +33,7 @@ var mass = 100
 var restoration_coefficient = 0.5
 var energy_to_HP = 1
 
+var Utils = SpaceArenaUtilities
 
 @onready var colPoly = $Area2D/CollisionPolygon2D
 @onready var poly = $Area2D/Polygon2D
@@ -82,8 +67,8 @@ func update_rotation():
 	change_rotation(dir)
 
 func change_rotation(to_dir):
-	facing = AXIAL_DIR[to_dir]
-	area.rotation = deg_to_rad(FACING_DICT[facing])
+	facing = Utils.convert_direction(to_dir, "Vector")
+	area.rotation = deg_to_rad(Utils.convert_direction(to_dir, "angle"))
 
 func accelerate():
 	if update_acceleration(-1):
@@ -125,18 +110,18 @@ func update_ship_position():
 	for step in path:
 		await get_tree().process_frame
 		var next_pos_ax = new_pos_ax + step
-		var next_pos_of = Root.axial_to_offset(next_pos_ax)
+		var next_pos_of = Utils.axial_to_offset(next_pos_ax)
 		if next_pos_of.x != clamp(next_pos_of.x, 0, hex_grid.gridSizeOX - 1) \
 		or next_pos_of.y != clamp(next_pos_of.y, 0, hex_grid.gridSizeOY - 1):
 			print("FUTURE INDICATION: ","pushed in the wall")
 			update_velocity(Vector2i.ZERO, true)
-			take_damage(Root.axial_distance(res_vel_ax))
+			take_damage(Utils.axial_distance(res_vel_ax))
 			break
 		else:
 			new_pos_ax = next_pos_ax
 	axial_position = new_pos_ax
-	offset_position = Root.axial_to_offset(axial_position)
-	var world_pos = Root.axial_to_world(new_pos_ax, false)
+	offset_position = Utils.axial_to_offset(axial_position)
+	var world_pos = Utils.axial_to_world(new_pos_ax, false)
 	self.position = world_pos
 	if Root.debug_mode.ship_position:
 		print("DEBUG INFO:")
@@ -177,9 +162,9 @@ func update_acceleration(amount: int) -> bool:
 
 func _draw():
 	#Это конечные координаты векторов
-	var NewVelW = Root.axial_to_world(NewVelocity, true)
-	var PrevVelW = Root.axial_to_world(PreviousVelocity, true)
-	var ResVelW = Root.axial_to_world(PreviousVelocity + NewVelocity, true)
+	var NewVelW = Utils.axial_to_world(NewVelocity, true)
+	var PrevVelW = Utils.axial_to_world(PreviousVelocity, true)
+	var ResVelW = Utils.axial_to_world(PreviousVelocity + NewVelocity, true)
 	draw_arrow(Vector2.ZERO, ResVelW, Color(1,1,1),2)
 	draw_arrow(Vector2.ZERO, NewVelW, Color(0,1,0))
 	draw_arrow(Vector2.ZERO, PrevVelW, Color(0,0,1))
@@ -232,7 +217,7 @@ func fire():
 	if !is_in_shooting_arc(target.axial_position):
 		print("FUTURE INDICATION: ","Target isn't in shooting arc")
 		return
-	var distance_to_target = Root.axial_distance(target.axial_position - axial_position)
+	var distance_to_target = Utils.axial_distance(target.axial_position - axial_position)
 	if distance_to_target > weapon_stats.max_range:
 		print("FUTURE INDICATION: ","Target isn't in range")
 		return
@@ -245,10 +230,10 @@ func is_in_shooting_arc(ax_target_pos) -> bool:
 	if ax_target_pos == axial_position:
 		return true
 	
-	var direction: Vector2 = (Root.axial_to_world(ax_target_pos - axial_position, true)).normalized()
+	var direction: Vector2 = (Utils.axial_to_world(ax_target_pos - axial_position, true)).normalized()
 	var angle_to_target = rad_to_deg(direction.angle())
-	var facing_angle = FACING_DICT[facing]
-	var angle_diff = abs(Root.angle_difference(facing_angle, angle_to_target))
+	var facing_angle = Utils.convert_direction(facing, "angle")
+	var angle_diff = abs(Utils.angle_difference(facing_angle, angle_to_target))
 	
 	
 	return is_equal_approx(angle_diff, weapon_stats.arc_degrees/2) or angle_diff < weapon_stats.arc_degrees/2

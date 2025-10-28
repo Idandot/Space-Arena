@@ -8,6 +8,7 @@ extends Node2D
 var currentHex
 var grid = Array()
 var newShip: Node2D
+var Utils = SpaceArenaUtilities
 
 @onready var Root = get_parent()
 
@@ -15,8 +16,8 @@ signal gridCreated
 
 func get_hex_corner(center: Vector2, i: int):
 	var angle = deg_to_rad(i*60)
-	var x = center.x + Root.hexSideSizeW * cos(angle)
-	var y = center.y + Root.hexSideSizeW * sin(angle)
+	var x = center.x + Utils.HEX_SIDE_SIZE * cos(angle)
+	var y = center.y + Utils.HEX_SIDE_SIZE * sin(angle)
 	return Vector2(x, y)
 
 func _ready():
@@ -27,12 +28,12 @@ func _ready():
 		for oy in range(gridSizeOY):
 			var newHex = Hex.instantiate()
 			add_child(newHex)
-			newHex.setup(Root.hexSideSizeW, Root.offset_to_world(Vector2i(ox, oy)))
+			newHex.setup(Utils.HEX_SIDE_SIZE, Utils.offset_to_world(Vector2i(ox, oy)))
 			grid[ox][oy]=(newHex)
 	emit_signal("gridCreated")
 
 func get_hex(axial: Vector2i):
-	var offset: Vector2i = Root.axial_to_offset(axial)
+	var offset: Vector2i = Utils.axial_to_offset(axial)
 	var oX = offset.x
 	var oY = offset.y
 	if oX >= 0 and oX < grid.size():
@@ -50,7 +51,7 @@ func get_hexes_in_range(ax_center: Vector2i, range: int):
 			
 			var hex = get_hex(hex_pos)
 			if hex:
-				var distance = Root.axial_distance(hex_pos - ax_center)
+				var distance = Utils.axial_distance(hex_pos - ax_center)
 				result.append({"hex": hex, "distance": distance, "axial_position": hex_pos})
 	return result
 

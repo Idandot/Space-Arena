@@ -19,9 +19,9 @@ func take_turn():
 	var safe_velocity = 4
 		
 	for dir_index in range(6):
-		var dir_vec = AXIAL_DIR[dir_index]
+		var dir_vec = Utils.convert_direction(dir_index, "Vector")
 		var test_pos = axial_position + dir_vec
-		var dist = Root.axial_distance(player.axial_position - test_pos)
+		var dist = Utils.axial_distance(player.axial_position - test_pos)
 		if dist < best_dist:
 			best_dist = dist
 			best_dir = dir_index
@@ -29,7 +29,7 @@ func take_turn():
 		
 		if best_dir != dir:
 			turn_right()
-		elif Root.axial_distance(ResultVelocity + AXIAL_DIR[dir]) < safe_velocity:
+		elif Utils.axial_distance(ResultVelocity + facing) < safe_velocity:
 			accelerate()
 		else:
 			update_acceleration(-1)

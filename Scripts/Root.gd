@@ -11,6 +11,11 @@ extends Node2D
 @export var player_ship_scene: PackedScene
 @export var enemy_ship_scene: PackedScene
 
+@export var debug_mode = {
+	"ship_position": false,
+	"ship_rotation": false,
+}
+
 var player_ship: Node2D
 var enemy_ship: Node2D
 var ships_array: Array

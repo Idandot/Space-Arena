@@ -15,7 +15,7 @@ func start_turn():
 	if !ship.is_connected("turn_ended", Callable(self, "_on_ship_turn_finished")):
 		ship.connect("turn_ended", Callable(self, "_on_ship_turn_finished"), CONNECT_ONE_SHOT)
 	ship.take_turn()
-	Root.turn_label.text = ship.name_in_game + "'s turn"
+	Root.turn_label.text = ship.name_in_game + "'s movement phase"
 
 func _on_ship_turn_finished():
 	current_index = (current_index + 1) % ships.size()

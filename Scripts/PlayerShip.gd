@@ -8,7 +8,8 @@ var can_shoot = false
 func _ready():
 	ships_array = Root.ships_array
 	acceleration_label = Root.acceleration_label
-	points = [Vector2(-shipWidth/2.0, shipLength/2.0), Vector2(shipWidth/2.0, shipLength/2.0), Vector2(0, -shipLength/2.0)]
+	points = [Vector2(-shipLength/2.0, shipWidth/2.0), Vector2(-shipLength/2.0, -shipWidth/2.0), Vector2(shipLength/2.0, 0)]
+	area.rotation = deg_to_rad(-90)
 	colPoly.polygon = points
 	poly.polygon = points
 	poly.color = shipColor

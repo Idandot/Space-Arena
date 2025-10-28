@@ -31,7 +31,7 @@ script = ExtResource("4_fuy71")
 
 [node name="HighlightManager" type="Node2D" parent="Managers"]
 script = ExtResource("7_myr3u")
-super_penalty_color = Color(1, 0.501961, 0, 1)
+red = Color(1, 0, 0, 1)
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3

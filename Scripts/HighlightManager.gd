@@ -4,6 +4,7 @@ extends Node2D
 @export var effective_color = Color(0, 1, 0, 0.5)
 @export var penalty_color = Color(1, 1, 0, 0.5)
 @export var super_penalty_color = Color(1, 0.5, 0, 0.5)
+@export var red = Color(1, 0.5, 0, 0.5)
 
 @onready var Root = get_parent().get_parent()
 @onready var HexGrid = Root.find_child("HexGrid")
@@ -24,7 +25,7 @@ func highlight_shooting_range(ship: Node2D):
 	var weapon_stats = ship.weapon_stats
 	
 	var hexes_in_range = HexGrid.get_hexes_in_range(ship_pos, weapon_stats.max_range)
-	ship.debug_specific_hexes()
+	
 	for hex_data in hexes_in_range:
 		var hex = hex_data.hex
 		var distance = hex_data.distance

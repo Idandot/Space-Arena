@@ -28,15 +28,15 @@ var FACING_DICT = {
 	Vector2i(1,0): -30, #right up
 	Vector2i(1,1): 30, #right down
 	Vector2i(0,1): 90, #down
-	Vector2i(-1,0): 120, #left down
-	Vector2i(-1,-1): -120, #left up
+	Vector2i(-1,0): 150, #left down
+	Vector2i(-1,-1): -150, #left up
 }
 
 #temporary direct enegry weapon characteristics
 @export var weapon_stats = {
 	"min_range": 0,
-	"effective_range": 1,
-	"max_range": 2,
+	"effective_range": 2,
+	"max_range": 4,
 	"arc_degrees": 120,
 }
 var is_weapon_active = false
@@ -66,34 +66,36 @@ func take_turn():
 func turn_right():
 	if update_acceleration(-1):
 		dir = (dir+1)%6
-		area.rotation = dir*deg_to_rad(60)
-		facing = AXIAL_DIR[dir]
+		change_rotation(dir)
+		
 	else:
-		print("Insufficient Acceleration Capacity")
+		print("FUTURE INDICATION: ","Insufficient Acceleration Capacity")
 
 func turn_left():
 	if update_acceleration(-1):
 		dir = (dir-1)%6
-		area.rotation = dir*deg_to_rad(60)
-		facing = AXIAL_DIR[dir]
+		change_rotation(dir)
 	else:
-		print("Insufficient Acceleration Capacity")
+		print("FUTURE INDICATION: ","Insufficient Acceleration Capacity")
 
 func update_rotation():
-	area.rotation = dir*deg_to_rad(60)
-	facing = AXIAL_DIR[dir]
+	change_rotation(dir)
+
+func change_rotation(to_dir):
+	facing = AXIAL_DIR[to_dir]
+	area.rotation = deg_to_rad(FACING_DICT[facing])
 
 func accelerate():
 	if update_acceleration(-1):
 		update_velocity(facing)
 	else:
-		print("Insufficient Acceleration Capacity")
+		print("FUTURE INDICATION: ","Insufficient Acceleration Capacity")
 
 func brake():
 	if update_acceleration(-2):
 		update_velocity(-facing)
 	else:
-		print("Insufficient Acceleration Capacity")
+		print("FUTURE INDICATION: ","Insufficient Acceleration Capacity")
 
 func start_shooting_phase():
 	PreviousVelocity = ResultVelocity
@@ -111,6 +113,9 @@ func start_shooting_phase():
 	emit_signal("request_highlight", self)
 
 func end_turn():
+	if Root.debug_mode.ship_rotation:
+		print("DEBUG INFO:")
+		print("facing: ", facing, ", angle: ", rad_to_deg(area.rotation))
 	emit_signal("turn_ended")
 
 func update_ship_position():
@@ -123,7 +128,7 @@ func update_ship_position():
 		var next_pos_of = Root.axial_to_offset(next_pos_ax)
 		if next_pos_of.x != clamp(next_pos_of.x, 0, hex_grid.gridSizeOX - 1) \
 		or next_pos_of.y != clamp(next_pos_of.y, 0, hex_grid.gridSizeOY - 1):
-			print("pushed in the wall")
+			print("FUTURE INDICATION: ","pushed in the wall")
 			update_velocity(Vector2i.ZERO, true)
 			take_damage(Root.axial_distance(res_vel_ax))
 			break
@@ -133,9 +138,11 @@ func update_ship_position():
 	offset_position = Root.axial_to_offset(axial_position)
 	var world_pos = Root.axial_to_world(new_pos_ax, false)
 	self.position = world_pos
-	print("world position: ", world_pos)
-	print("axial position: ", axial_position)
-	print("offset position: ", offset_position)
+	if Root.debug_mode.ship_position:
+		print("DEBUG INFO:")
+		print("world position: ", world_pos)
+		print("axial position: ", axial_position)
+		print("offset position: ", offset_position)
 
 func decompose_vector(start_pos: Vector2i, end_pos: Vector2i) -> Array:
 	var change_pos = end_pos - start_pos
@@ -196,7 +203,7 @@ func check_ships_collision(self_position: Vector2i, i_ships_array: Array):
 	return null
 
 func take_damage(amount: int):
-	print(self.name, " had taken ", amount," damage")
+	print("FUTURE INDICATION: ", self.name, " had taken ", amount," damage")
 	pass
 
 func update_velocity(additional_velocity: Vector2i, set_to_zero:= false):
@@ -211,17 +218,28 @@ func find_target(targets):
 	for ship in targets:
 		if ship.name_in_game != self.name_in_game:
 			return ship
-	print("no valid targets")
+	print("FUTURE INDICATION: ","no valid targets")
 	return null
 
 func fire():
-	if is_weapon_active:
-		var target = find_target(ships_array)
-		if target != null:
-			target.take_damage(10)
-			is_weapon_active = false
-	else:
-		print("weapon isn't active")
+	if !is_weapon_active:
+		print("FUTURE INDICATION: ","weapon isn't active")
+		return
+	var target = find_target(ships_array)
+	if target == null:
+		print("FUTURE INDICATION: ","no target")
+		return
+	if !is_in_shooting_arc(target.axial_position):
+		print("FUTURE INDICATION: ","Target isn't in shooting arc")
+		return
+	var distance_to_target = Root.axial_distance(target.axial_position - axial_position)
+	if distance_to_target > weapon_stats.max_range:
+		print("FUTURE INDICATION: ","Target isn't in range")
+		return
+	
+	target.take_damage(10)
+	is_weapon_active = false
+
 
 func is_in_shooting_arc(ax_target_pos) -> bool:
 	if ax_target_pos == axial_position:
@@ -234,21 +252,6 @@ func is_in_shooting_arc(ax_target_pos) -> bool:
 	
 	
 	return is_equal_approx(angle_diff, weapon_stats.arc_degrees/2) or angle_diff < weapon_stats.arc_degrees/2
-	
-
-func debug_specific_hexes():
-	var problem_hexes = [Vector2i(2,3), Vector2i(3,4), Vector2i(5,7)]
-	for hex in problem_hexes:
-		var diff = hex - Vector2i(4,5)
-		var world_pos = Root.axial_to_world(diff, true)
-		var angle = rad_to_deg(world_pos.angle())
-		var distance = Root.axial_distance(diff)
-		print("Hex ", hex, " diff: ", diff, " world_pos: ", world_pos, " angle: ", angle, " distance: ", distance)
-
-
-
-
-
 
 
 

@@ -22,6 +22,7 @@ var facing = Vector2i(0,-1)
 
 @export_group("Weapons")
 @export var weapon_stats = {
+	"damage": 10,
 	"min_range": 0,
 	"effective_range": 2,
 	"max_range": 4,
@@ -30,6 +31,16 @@ var facing = Vector2i(0,-1)
 	"facing_offset": 1,
 }
 var is_weapon_active = false
+
+@export_group("Structure")
+@export var starting_structure = {
+	"nose": 30,
+	"left_wing": 40,
+	"right_wing": 40,
+	"aft": 20,
+	"inner_structure": 50,
+}
+@onready var structure: Dictionary = starting_structure.duplicate(true)
 
 var dir: int = 0
 var initial_dir = 0
@@ -62,7 +73,6 @@ func turn_right():
 func turn_left():
 	if update_acceleration(-1):
 		dir = (dir-1)%6
-		print(dir)
 		change_rotation(dir)
 	else:
 		print("FUTURE INDICATION: ","Insufficient Acceleration Capacity")
@@ -119,7 +129,7 @@ func update_ship_position():
 		or next_pos_of.y != clamp(next_pos_of.y, 0, hex_grid.gridSizeOY - 1):
 			print("FUTURE INDICATION: ","pushed in the wall")
 			update_velocity(Vector2i.ZERO, true)
-			take_damage(Utils.axial_distance(res_vel_ax))
+			take_damage(Utils.axial_distance(res_vel_ax), axial_position + facing)
 			break
 		else:
 			new_pos_ax = next_pos_ax
@@ -191,8 +201,27 @@ func check_ships_collision(self_position: Vector2i, i_ships_array: Array):
 				return s
 	return null
 
-func take_damage(amount: int):
-	print("FUTURE INDICATION: ", self.name, " had taken ", amount," damage")
+func take_damage(amount: int, ax_attacker_pos: Vector2i):
+	var location = define_arc(ax_attacker_pos)
+	var excess_damage = 0
+	
+	structure[location] -= amount
+	if structure[location] <= 0:
+		excess_damage = abs(structure[location])
+		structure[location] = 0
+	
+	structure["inner_structure"] -= excess_damage
+	if structure["inner_structure"] <= 0:
+		print("FUTURE INDICATION: ", name_in_game, " is destroyed")
+		Destroy()
+		return
+	
+	print("FUTURE INDICATION: ", self.name, " had taken ", amount," damage in ", location)
+	print(location, " armor left: ", structure[location], "/", starting_structure[location])
+	if excess_damage != 0:
+		print("inner structure left: ", structure["inner_structure"], "/", starting_structure["inner_structure"])
+
+func Destroy():
 	pass
 
 func update_velocity(additional_velocity: Vector2i, set_to_zero:= false):
@@ -226,7 +255,7 @@ func fire():
 		print("FUTURE INDICATION: ","Target isn't in range")
 		return
 	
-	target.take_damage(10)
+	target.take_damage(weapon_stats["damage"], axial_position)
 	is_weapon_active = false
 
 
@@ -243,14 +272,28 @@ func is_in_shooting_arc(ax_target_pos) -> bool:
 	var direction: Vector2 = (Utils.axial_to_world(ax_target_pos - divergence_origin, true)).normalized()
 	var angle_to_target = rad_to_deg(direction.angle())
 	var weapon_facing_angle = Utils.convert_direction(dir + weapon_stats.facing_offset, "index", "angle")
-	print(weapon_facing_angle, angle_to_target)
 	var angle_diff = abs(Utils.angle_difference(weapon_facing_angle, angle_to_target))
 	
 	return is_equal_approx(angle_diff, weapon_stats.arc_degrees/2) or angle_diff < weapon_stats.arc_degrees/2
 
-func define_arc():
+func define_arc(ax_attacker_pos):
+	var nose_arc_angle = Utils.convert_direction(facing, "vector", "angle")
 	
-	pass
+	var direction: Vector2 = (Utils.axial_to_world(ax_attacker_pos - axial_position, true)).normalized()
+	var angle_to_attacker = rad_to_deg(direction.angle())
+	
+	var nose_arc_diff = Utils.angle_difference(nose_arc_angle, angle_to_attacker)
+	var left_wing_arc_diff = Utils.angle_difference(nose_arc_angle - 90, angle_to_attacker)
+	var right_wing_arc_diff = Utils.angle_difference(nose_arc_angle + 90, angle_to_attacker)
+	
+	if left_wing_arc_diff <= 30:
+		return "left_wing"
+	elif right_wing_arc_diff <= 30:
+		return "right_wing"
+	elif nose_arc_diff <= 90:
+		return "nose"
+	else:
+		return "aft"
 
 
 

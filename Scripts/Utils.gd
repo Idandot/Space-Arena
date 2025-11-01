@@ -85,8 +85,24 @@ static func chance(positive: float,negative: float):
 
 static func angle_difference(angle1: float, angle2: float) -> float:
 	var diff = fmod(angle2 - angle1, 360.0)
-	if diff > 180:
-		diff -= 360
-	elif diff < -180:
-		diff += 360
+	diff = angle_normalize(diff)
 	return abs(diff)
+
+static func angle_normalize(angle: float) -> float:
+	if angle > 180:
+		angle -= 360
+	elif angle < -180:
+		angle += 360
+	return angle
+
+
+
+
+
+
+
+
+
+
+
+

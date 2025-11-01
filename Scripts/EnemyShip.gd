@@ -16,14 +16,16 @@ func _ready():
 	poly.polygon = points
 	poly.color = shipColor
 	MaxAcceleration = 3
-	name_in_game = "Enemy"
+	
+	print("my enemy is: ", player)
 
 func take_turn():
 	update_acceleration(MaxAcceleration)
 	var best_dir = 0
 	var best_dist = INF
 	var safe_velocity = 4
-		
+	
+	
 	for dir_index in range(6):
 		var dir_vec = Utils.convert_direction(dir_index, "index", "vector")
 		var test_pos = axial_position + dir_vec
@@ -48,6 +50,10 @@ func take_turn():
 	fire()
 	
 	end_turn()
+
+
+
+
 
 
 

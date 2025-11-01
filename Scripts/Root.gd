@@ -36,6 +36,7 @@ func _on_hex_grid_grid_created():
 	enemy_ship.hex_grid = hex_grid
 	enemy_ship.self_id = 1
 	enemy_ship.player = player_ship
+	enemy_ship.name_in_game = "Enemy"
 	ships_array.append(enemy_ship)
 	
 	turn_manager.start_game(ships_array)

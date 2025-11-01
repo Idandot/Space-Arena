@@ -21,6 +21,8 @@ enemy_ship_scene = ExtResource("3_0aikf")
 [node name="HexGrid" type="Node2D" parent="."]
 script = ExtResource("1_mhtuk")
 Hex = ExtResource("2_004cx")
+gridSizeOX = 22
+gridSizeOY = 17
 
 [node name="Ships" type="Node2D" parent="."]
 

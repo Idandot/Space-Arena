@@ -18,8 +18,6 @@ func highlight_shooting_range(ship: Node2D):
 	
 	clear_highlight()
 	var ship_pos: Vector2i = ship.axial_position
-	var ship_hex = HexGrid.get_hex(ship_pos)
-	var ship_facing: Vector2i = ship.facing
 	
 	#temporary weapon stats
 	var weapon_stats = ship.weapon_stats

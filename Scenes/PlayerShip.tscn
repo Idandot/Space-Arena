@@ -6,6 +6,14 @@
 script = ExtResource("1_ea2ix")
 name_in_game = "Player"
 shipColor = Color(0.141176, 0.631373, 0.996078, 1)
+weapon_stats = {
+"apex_offset": 6,
+"arc_degrees": 180,
+"effective_range": 14,
+"facing_offset": 0,
+"max_range": 21,
+"min_range": 6
+}
 
 [node name="Area2D" type="Area2D" parent="."]
 

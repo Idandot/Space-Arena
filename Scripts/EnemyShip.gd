@@ -2,10 +2,16 @@ extends Ship
 
 var player: Node2D
 
+@export_group("Visuals")
+@export_group("Movement")
+@export_group("Weapons")
+
 func _ready():
 	ships_array = Root.ships_array
 	points = [Vector2(-shipLength/2.0, shipWidth/2.0), Vector2(-shipLength/2.0, -shipWidth/2.0), Vector2(shipLength/2.0, 0)]
-	area.rotation = deg_to_rad(-90)
+	area.rotation = deg_to_rad(Utils.convert_direction(initial_direction, "name", "angle"))
+	dir = Utils.convert_direction(initial_direction,"name", "index")
+	initial_dir = dir
 	colPoly.polygon = points
 	poly.polygon = points
 	poly.color = shipColor
@@ -19,7 +25,7 @@ func take_turn():
 	var safe_velocity = 4
 		
 	for dir_index in range(6):
-		var dir_vec = Utils.convert_direction(dir_index, "Vector")
+		var dir_vec = Utils.convert_direction(dir_index, "index", "vector")
 		var test_pos = axial_position + dir_vec
 		var dist = Utils.axial_distance(player.axial_position - test_pos)
 		if dist < best_dist:

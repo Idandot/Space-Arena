@@ -6,6 +6,15 @@
 script = ExtResource("1_v3ga3")
 name_in_game = "Enemy"
 shipColor = Color(0.823529, 0, 0, 1)
+initial_direction = "up"
+weapon_stats = {
+"apex_offset": 0,
+"arc_degrees": 120,
+"effective_range": 6,
+"facing_offset": -1,
+"max_range": 9,
+"min_range": 0
+}
 
 [node name="Area2D" type="Area2D" parent="."]
 

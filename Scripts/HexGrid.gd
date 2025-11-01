@@ -41,12 +41,11 @@ func get_hex(axial: Vector2i):
 			return grid[oX][oY]
 	return null
 
-func get_hexes_in_range(ax_center: Vector2i, range: int):
+func get_hexes_in_range(ax_center: Vector2i, bubble_range: int):
 	var result = Array()
 	
-	for aX in range(-range, range + 1):
-		for aY in range(max(-range, aX - range), min(range, aX + range) + 1):
-			var aZ = -aX - aY
+	for aX in range(-bubble_range, bubble_range + 1):
+		for aY in range(max(-bubble_range, aX - bubble_range), min(bubble_range, aX + bubble_range) + 1):
 			var hex_pos = ax_center + Vector2i(aX, aY)
 			
 			var hex = get_hex(hex_pos)

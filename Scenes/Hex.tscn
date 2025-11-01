@@ -12,5 +12,3 @@ script = ExtResource("1_n2m3e")
 [node name="Polygon2D" type="Polygon2D" parent="Area2D"]
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
-
-[connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]

@@ -2,63 +2,28 @@ extends Node
 
 class_name SpaceArenaUtilities
 
-const HEX_SIDE_SIZE = 50
+const HEX_SIDE_SIZE = 20
 const GRID_OFFSET_WX = 50
 const GRID_OFFSET_WY = 50
 
 const DIRECTION = [
-	{
-		"name":"up",
-		"index":0,
-		"angle":-90,
-		"Vector":Vector2i(0,-1),
-	},
-	{
-		"name":"rightup",
-		"index":1,
-		"angle":-30,
-		"Vector":Vector2i(1,0),
-	},
-	{
-		"name":"rightdown",
-		"index":2,
-		"angle":30,
-		"Vector":Vector2i(1,1),
-	},
-	{
-		"name":"down",
-		"index":3,
-		"angle":90,
-		"Vector":Vector2i(0,1),
-	},
-	{
-		"name":"leftdown",
-		"index":4,
-		"angle":150,
-		"Vector":Vector2i(-1,0),
-	},
-	{
-		"name":"leftup",
-		"index":5,
-		"angle":-150,
-		"Vector":Vector2i(-1,-1),
-	},
+	{"name":"up","index":0,"angle":-90,"vector":Vector2i(0,-1)},
+	{"name":"rightup","index":1,"angle":-30,"vector":Vector2i(1,0)},
+	{"name":"rightdown","index":2,"angle":30,"vector":Vector2i(1,1)},
+	{"name":"down","index":3,"angle":90,"vector":Vector2i(0,1)},
+	{"name":"leftdown","index":4,"angle":150,"vector":Vector2i(-1,0)},
+	{"name":"leftup","index":5,"angle":-150,"vector":Vector2i(-1,-1)},
 ]
 
-static func convert_direction(value, target_type):
-	var input_type = typeof(value)
+static func convert_direction(value, initial_type, target_type):
+	if initial_type == "index":
+		value = (value+6) % 6
 	
 	#ищем прямые совпадения
 	for entry in DIRECTION:
-		if input_type == TYPE_STRING and value == entry.name:
+		if value == entry[initial_type]:
 			return entry[target_type]
-		if input_type == TYPE_VECTOR2I and value == entry.Vector:
-			return entry[target_type]
-		if input_type == TYPE_INT and value == entry.index:
-			return entry[target_type]
-		if input_type == TYPE_INT and value == entry.angle:
-			return entry[target_type]
-	print("ERROR: Hadn't found ", value, " in the dictionary")
+	print("ERROR: Hadn't found ", value, " in the dictionary with initial type ", initial_type)
 	return null
 
 static func offset_to_world(offset_vector: Vector2i) -> Vector2:
@@ -96,7 +61,7 @@ static func axial_to_offset_alt(axial_vector: Vector2i) -> Vector2i:
 	var q = axial_vector.x
 	var r = axial_vector.y
 	var ox = q
-	var oy = r + (q - (q & 1)) / 2
+	var oy = r + floor((q - (q & 1)) / 2.0)
 	return Vector2i(ox, oy)
 
 static func axial_to_world(axial_vector: Vector2i, relative: bool) -> Vector2:

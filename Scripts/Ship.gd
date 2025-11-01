@@ -1,38 +1,41 @@
 extends Node2D
 class_name Ship
 
+@export_group("Visuals")
 @export var name_in_game = "Unnamed Ship"
 @export var speed = 1
-@export var shipLength = 50
-@export var shipWidth = 30
+@export var shipLength = 25
+@export var shipWidth = 20
 @export var shipColor = Color(1,0.2,0.8)
+var points = []
+
+@export_group("Movement")
 @export var MaxAcceleration = 3
 @export var Acceleration = MaxAcceleration
+@export var initial_direction = "down"
 var axial_position = Vector2i(0,0)
 var offset_position = Vector2i(0,0)
 var PreviousVelocity = Vector2i(0,0)
 var NewVelocity = Vector2i(0,0)
 var ResultVelocity = Vector2i(0,0)
 var facing = Vector2i(0,-1)
-var points = []
 
-#temporary direct enegry weapon characteristics
+@export_group("Weapons")
 @export var weapon_stats = {
 	"min_range": 0,
 	"effective_range": 2,
 	"max_range": 4,
 	"arc_degrees": 120,
+	"apex_offset": 1,
+	"facing_offset": 1,
 }
 var is_weapon_active = false
 
-var dir = 0
-var InitialDir = 0
+var dir: int = 0
+var initial_dir = 0
 var hex_grid: Node2D
 var self_id
 var mass = 100
-var restoration_coefficient = 0.5
-var energy_to_HP = 1
-
 var Utils = SpaceArenaUtilities
 
 @onready var colPoly = $Area2D/CollisionPolygon2D
@@ -59,6 +62,7 @@ func turn_right():
 func turn_left():
 	if update_acceleration(-1):
 		dir = (dir-1)%6
+		print(dir)
 		change_rotation(dir)
 	else:
 		print("FUTURE INDICATION: ","Insufficient Acceleration Capacity")
@@ -66,9 +70,9 @@ func turn_left():
 func update_rotation():
 	change_rotation(dir)
 
-func change_rotation(to_dir):
-	facing = Utils.convert_direction(to_dir, "Vector")
-	area.rotation = deg_to_rad(Utils.convert_direction(to_dir, "angle"))
+func change_rotation(to_dir: int):
+	facing = Utils.convert_direction(to_dir,"index", "vector")
+	area.rotation = deg_to_rad(Utils.convert_direction(to_dir,"index", "angle"))
 
 func accelerate():
 	if update_acceleration(-1):
@@ -87,7 +91,7 @@ func start_shooting_phase():
 	await update_ship_position()
 	NewVelocity = Vector2i.ZERO
 	update_acceleration(MaxAcceleration)
-	InitialDir = dir
+	initial_dir = dir
 	queue_redraw()
 	
 	await get_tree().process_frame
@@ -227,18 +231,26 @@ func fire():
 
 
 func is_in_shooting_arc(ax_target_pos) -> bool:
-	if ax_target_pos == axial_position:
-		return true
 	
-	var direction: Vector2 = (Utils.axial_to_world(ax_target_pos - axial_position, true)).normalized()
+	var weapon_facing_vector = Utils.convert_direction(dir + weapon_stats.facing_offset, "index", "vector")
+	
+	for r in range(weapon_stats.apex_offset + 1):
+		if axial_position + weapon_facing_vector * r == ax_target_pos:
+			return true
+	
+	
+	var divergence_origin = axial_position + weapon_stats.apex_offset * facing
+	var direction: Vector2 = (Utils.axial_to_world(ax_target_pos - divergence_origin, true)).normalized()
 	var angle_to_target = rad_to_deg(direction.angle())
-	var facing_angle = Utils.convert_direction(facing, "angle")
-	var angle_diff = abs(Utils.angle_difference(facing_angle, angle_to_target))
-	
+	var weapon_facing_angle = Utils.convert_direction(dir + weapon_stats.facing_offset, "index", "angle")
+	print(weapon_facing_angle, angle_to_target)
+	var angle_diff = abs(Utils.angle_difference(weapon_facing_angle, angle_to_target))
 	
 	return is_equal_approx(angle_diff, weapon_stats.arc_degrees/2) or angle_diff < weapon_stats.arc_degrees/2
 
-
+func define_arc():
+	
+	pass
 
 
 

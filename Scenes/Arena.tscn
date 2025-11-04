@@ -1,12 +1,14 @@
-[gd_scene load_steps=8 format=3 uid="uid://bvh1uo520kqmq"]
+[gd_scene load_steps=10 format=3 uid="uid://bvh1uo520kqmq"]
 
 [ext_resource type="Script" path="res://Scripts/Root.gd" id="1_lvvug"]
 [ext_resource type="Script" path="res://Scripts/HexGrid.gd" id="1_mhtuk"]
 [ext_resource type="PackedScene" uid="uid://bx6jcpmfamp4b" path="res://Scenes/Hex.tscn" id="2_004cx"]
 [ext_resource type="PackedScene" uid="uid://jn4sb6r7uk4e" path="res://Scenes/EnemyShip.tscn" id="3_0aikf"]
 [ext_resource type="PackedScene" uid="uid://c10cpr3gmsfin" path="res://Scenes/PlayerShip.tscn" id="3_woy88"]
-[ext_resource type="Script" path="res://Scripts/TurnManager.gd" id="4_fuy71"]
-[ext_resource type="Script" path="res://Scripts/HighlightManager.gd" id="7_myr3u"]
+[ext_resource type="Script" path="res://Scripts/Managers/TurnManager.gd" id="6_ttilb"]
+[ext_resource type="Script" path="res://Scripts/Managers/HighlightManager.gd" id="7_qacju"]
+[ext_resource type="Theme" uid="uid://dho5hnu13gwhm" path="res://Themes/Font.tres" id="8_n0diq"]
+[ext_resource type="Script" path="res://Scripts/Control.gd" id="9_mpdis"]
 
 [node name="Root" type="Node2D" node_paths=PackedStringArray("acceleration_label", "turn_label", "ships", "hex_grid", "turn_manager")]
 script = ExtResource("1_lvvug")
@@ -29,10 +31,10 @@ gridSizeOY = 17
 [node name="Managers" type="Node2D" parent="."]
 
 [node name="TurnManager" type="Node2D" parent="Managers"]
-script = ExtResource("4_fuy71")
+script = ExtResource("6_ttilb")
 
 [node name="HighlightManager" type="Node2D" parent="Managers"]
-script = ExtResource("7_myr3u")
+script = ExtResource("7_qacju")
 red = Color(1, 0, 0, 1)
 
 [node name="UI" type="Control" parent="."]
@@ -45,17 +47,21 @@ offset_bottom = 40.0
 layout_mode = 0
 offset_left = 960.0
 offset_right = 1152.0
-offset_bottom = 128.0
+offset_bottom = 648.0
+script = ExtResource("9_mpdis")
 
 [node name="Acceleration Label" type="Label" parent="UI/Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_bottom = -64.0
+offset_bottom = -616.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Acceleration 0/10"
+tooltip_text = "Your current acceleration points"
+mouse_filter = 1
+theme = ExtResource("8_n0diq")
+text = "Acceleration 0/3"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -64,11 +70,23 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 64.0
+offset_top = 32.0
+offset_bottom = -590.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("8_n0diq")
 text = "Your Turn"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Battle Log" type="RichTextLabel" parent="UI/Panel"]
+layout_mode = 0
+offset_top = 384.0
+offset_right = 192.0
+offset_bottom = 648.0
+tooltip_text = "Battle Log"
+mouse_filter = 1
+theme = ExtResource("8_n0diq")
+scroll_following = true
 
 [connection signal="gridCreated" from="HexGrid" to="." method="_on_hex_grid_grid_created"]

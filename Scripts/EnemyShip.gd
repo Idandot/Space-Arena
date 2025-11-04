@@ -8,7 +8,9 @@ var player: Node2D
 
 func _ready():
 	ships_array = Root.ships_array
-	points = [Vector2(-shipLength/2.0, shipWidth/2.0), Vector2(-shipLength/2.0, -shipWidth/2.0), Vector2(shipLength/2.0, 0)]
+	points = [Vector2(-shipLength/2.0, shipWidth/2.0), 
+	Vector2(-shipLength/2.0, -shipWidth/2.0), 
+	Vector2(shipLength/2.0, 0)]
 	area.rotation = deg_to_rad(Utils.convert_direction(initial_direction, "name", "angle"))
 	dir = Utils.convert_direction(initial_direction,"name", "index")
 	initial_dir = dir
@@ -16,8 +18,6 @@ func _ready():
 	poly.polygon = points
 	poly.color = shipColor
 	MaxAcceleration = 3
-	
-	print("my enemy is: ", player)
 
 func take_turn():
 	update_acceleration(MaxAcceleration)

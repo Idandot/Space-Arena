@@ -1,5 +1,10 @@
 extends Node2D
 
+# Сделать генерализацию спавна
+# Пофиксить сторону применения урона при столкновении
+# Позволить игроку брать много разных пушек из списка доступных
+
+
 @export var acceleration_label: Label
 @export var turn_label: Label
 @export var ships: Node2D

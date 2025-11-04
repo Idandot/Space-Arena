@@ -10,6 +10,7 @@ var can_shoot = false
 
 
 func _ready():
+	is_player = true
 	ships_array = Root.ships_array
 	acceleration_label = Root.acceleration_label
 	points = [Vector2(-shipLength/2.0, shipWidth/2.0), Vector2(-shipLength/2.0, -shipWidth/2.0), Vector2(shipLength/2.0, 0)]
@@ -39,11 +40,7 @@ func _process(_delta):
 		start_shooting_phase()
 		
 	elif Input.is_action_just_pressed("Reset"):
-		NewVelocity = Vector2i.ZERO
-		update_acceleration(MaxAcceleration)
-		dir = initial_dir
-		update_rotation()
-		print("Move Reset")
+		reset()
 	if !can_shoot:
 		return
 	elif Input.is_action_just_pressed("fire"):
@@ -62,7 +59,12 @@ func update_acceleration(amount: int) -> bool:
 func take_turn():
 	can_move = true
 
-
+func reset():
+	update_velocity(Vector2i.ZERO, true)
+	update_acceleration(MaxAcceleration)
+	dir = initial_dir
+	update_rotation()
+	BEM.battle_log(["Movement reset"])
 
 
 

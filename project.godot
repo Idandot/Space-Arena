@@ -15,6 +15,10 @@ run/main_scene="res://Scenes/Arena.tscn"
 config/features=PackedStringArray("4.0", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+BattleEventManager="*res://Scripts/Managers/BattleEventManager.gd"
+
 [display]
 
 window/stretch/mode="canvas_items"

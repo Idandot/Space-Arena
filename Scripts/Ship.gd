@@ -35,10 +35,10 @@ var is_weapon_active = false
 @export_group("Structure")
 @export var starting_structure = {
 	"nose": 30,
-	"left_wing": 40,
-	"right_wing": 40,
+	"left wing": 40,
+	"right wing": 40,
 	"aft": 20,
-	"inner_structure": 50,
+	"inner structure": 50,
 }
 @onready var structure: Dictionary = starting_structure.duplicate(true)
 
@@ -47,7 +47,9 @@ var initial_dir = 0
 var hex_grid: Node2D
 var self_id
 var mass = 100
+var is_player = false
 var Utils = SpaceArenaUtilities
+var BEM = BattleEventManager
 
 @onready var colPoly = $Area2D/CollisionPolygon2D
 @onready var poly = $Area2D/Polygon2D
@@ -127,8 +129,8 @@ func update_ship_position():
 		var next_pos_of = Utils.axial_to_offset(next_pos_ax)
 		if next_pos_of.x != clamp(next_pos_of.x, 0, hex_grid.gridSizeOX - 1) \
 		or next_pos_of.y != clamp(next_pos_of.y, 0, hex_grid.gridSizeOY - 1):
-			print("FUTURE INDICATION: ","pushed in the wall")
-			update_velocity(Vector2i.ZERO, true)
+			BEM.battle_log([self.name_in_game, " pushed in the wall"])
+			update_velocity(Vector2i.ZERO, true, true)
 			take_damage(Utils.axial_distance(res_vel_ax), axial_position + facing)
 			break
 		else:
@@ -210,23 +212,30 @@ func take_damage(amount: int, ax_attacker_pos: Vector2i):
 		excess_damage = abs(structure[location])
 		structure[location] = 0
 	
-	structure["inner_structure"] -= excess_damage
-	if structure["inner_structure"] <= 0:
-		print("FUTURE INDICATION: ", name_in_game, " is destroyed")
+	structure["inner structure"] -= excess_damage
+	if structure["inner structure"] <= 0:
+		BEM.battle_log([name_in_game, " is destroyed"], "Critical")
 		Destroy()
 		return
 	
-	print("FUTURE INDICATION: ", self.name, " had taken ", amount," damage in ", location)
-	print(location, " armor left: ", structure[location], "/", starting_structure[location])
+	BEM.battle_log([self.name, " had taken ", 
+	amount, " damage in ", location])
+	
+	BEM.battle_log([location, " armor left: ", 
+	structure[location], "/", starting_structure[location]])
+	
 	if excess_damage != 0:
-		print("inner structure left: ", structure["inner_structure"], "/", starting_structure["inner_structure"])
+		BEM.battle_log(["inner structure left: ", 
+		structure["inner structure"], "/", 
+		starting_structure["inner structure"]], "Warning")
 
 func Destroy():
 	pass
 
-func update_velocity(additional_velocity: Vector2i, set_to_zero:= false):
-	if set_to_zero:
+func update_velocity(additional_velocity: Vector2i, reset_new:= false, reset_prev:=false):
+	if reset_new:
 		NewVelocity = Vector2i.ZERO
+	if reset_prev:
 		PreviousVelocity = Vector2i.ZERO
 	NewVelocity += additional_velocity
 	ResultVelocity = NewVelocity + PreviousVelocity
@@ -236,28 +245,28 @@ func find_target(targets):
 	for ship in targets:
 		if ship.name_in_game != self.name_in_game:
 			return ship
-	print("FUTURE INDICATION: ","no valid targets")
+	BEM.battle_log(["ERROR: no valid targets"], "Critical")
 	return null
 
 func fire():
 	if !is_weapon_active:
-		print("FUTURE INDICATION: ","weapon isn't active")
-		return
+		return fire_fail("Weapon isn't active")
 	var target = find_target(ships_array)
 	if target == null:
-		print("FUTURE INDICATION: ","no target")
+		BEM.battle_log(["ERROR: target is NULL"], "Critical")
 		return
 	if !is_in_shooting_arc(target.axial_position):
-		print("FUTURE INDICATION: ","Target isn't in shooting arc")
-		return
+		return fire_fail("Target is out of shooting arc")
 	var distance_to_target = Utils.axial_distance(target.axial_position - axial_position)
 	if distance_to_target > weapon_stats.max_range:
-		print("FUTURE INDICATION: ","Target isn't in range")
-		return
+		return fire_fail("Target is out of range")
 	
 	target.take_damage(weapon_stats["damage"], axial_position)
 	is_weapon_active = false
 
+func fire_fail(reason):
+	if is_player:
+		BEM.battle_log([reason], "Warning")
 
 func is_in_shooting_arc(ax_target_pos) -> bool:
 	
@@ -287,9 +296,9 @@ func define_arc(ax_attacker_pos):
 	var right_wing_arc_diff = Utils.angle_difference(nose_arc_angle + 90, angle_to_attacker)
 	
 	if left_wing_arc_diff <= 30:
-		return "left_wing"
+		return "left wing"
 	elif right_wing_arc_diff <= 30:
-		return "right_wing"
+		return "right wing"
 	elif nose_arc_diff <= 90:
 		return "nose"
 	else:

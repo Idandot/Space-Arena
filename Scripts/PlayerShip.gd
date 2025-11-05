@@ -11,15 +11,7 @@ var can_shoot = false
 
 func _ready():
 	is_player = true
-	ships_array = Root.ships_array
 	acceleration_label = Root.acceleration_label
-	points = [Vector2(-shipLength/2.0, shipWidth/2.0), Vector2(-shipLength/2.0, -shipWidth/2.0), Vector2(shipLength/2.0, 0)]
-	area.rotation = deg_to_rad(Utils.convert_direction(initial_direction,"name", "angle"))
-	dir = Utils.convert_direction(initial_direction,"name", "index")
-	initial_dir = dir
-	colPoly.polygon = points
-	poly.polygon = points
-	poly.color = shipColor
 	name_in_game = "Player"
 
 func _process(_delta):

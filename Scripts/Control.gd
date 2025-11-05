@@ -14,3 +14,4 @@ func _on_log(msg, color_name):
 	$"Battle Log".push_color(colors[color_name])
 	$"Battle Log".add_text(msg + "\n")
 	$"Battle Log".pop()
+	print(msg)

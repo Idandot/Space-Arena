@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 BattleEventManager="*res://Scripts/Managers/BattleEventManager.gd"
+ShipsManager="*res://Scripts/Managers/ShipsManager.gd"
 
 [display]
 

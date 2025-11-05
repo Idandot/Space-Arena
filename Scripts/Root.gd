@@ -17,34 +17,72 @@ extends Node2D
 @export var debug_mode = {
 	"ship_position": false,
 	"ship_rotation": false,
+	"ship_init": true
 }
 
 var player_ship: Node2D
 var enemy_ship: Node2D
-var ships_array: Array
-	
+
+@export var starting_config = [
+	[
+		{
+			"control": "bot", 
+			"spawnpointOf": Vector2i(0,0), 
+			"initial_facing": "rightdown",
+			"max_acceleration": 3,
+			"color": Color.BLUE
+		},
+		{
+			"control": "bot", 
+			"spawnpointOf": Vector2i(0,1), 
+			"initial_facing": "rightdown",
+			"max_acceleration": 3,
+			"color": Color.CADET_BLUE
+		}
+	],
+	[
+		{
+			"control": "bot", 
+			"spawnpointOf": Vector2i(21,16),
+			"initial_facing": "leftup",
+			"max_acceleration": 3,
+			"color": Color.RED
+		},
+		{
+			"control": "bot", 
+			"spawnpointOf": Vector2i(21,15), 
+			"initial_facing": "leftup",
+			"max_acceleration": 3,
+			"color": Color.REBECCA_PURPLE
+		}
+	]
+]
+
 
 func _on_hex_grid_grid_created():
-	#Создаем корабль игрока
-	player_ship = player_ship_scene.instantiate()
-	ships.add_child(player_ship)
-	player_ship.position = Utils.axial_to_world(Vector2i(0,0), false)
-	player_ship.axial_position = Vector2i(0,0)
-	player_ship.hex_grid = hex_grid
-	player_ship.self_id = 0
-	ships_array.append(player_ship)
-	#Создаем корабль противника
-	enemy_ship = enemy_ship_scene.instantiate()
-	ships.add_child(enemy_ship)
-	enemy_ship.position = Utils.axial_to_world(Utils.offset_to_axial(Vector2i(hex_grid.gridSizeOX-1, hex_grid.gridSizeOY-1)), false)
-	enemy_ship.axial_position = Utils.offset_to_axial(Vector2i(hex_grid.gridSizeOX-1, hex_grid.gridSizeOY-1))
-	enemy_ship.hex_grid = hex_grid
-	enemy_ship.self_id = 1
-	enemy_ship.player = player_ship
-	enemy_ship.name_in_game = "Enemy"
-	ships_array.append(enemy_ship)
+	var team_id = 0
+	var ship_id = 0
 	
-	turn_manager.start_game(ships_array)
+	for team_data in starting_config:
+		for teammate in team_data:
+			var scene: PackedScene = null
+			if teammate.control == "bot":
+				scene = enemy_ship_scene
+			else:
+				scene = player_ship_scene
+			
+			var ship = scene.instantiate()
+			ships.add_child(ship)
+			ship.team_id = team_id
+			ship.ship_id = ship_id
+			ship.call_deferred("init_from_data", teammate)
+			ShipsManager.register(ship)
+			ship_id += 1
+		team_id += 1
+	
+	print("ships spawned: ", ShipsManager.ships.size())
+	turn_manager.start_game()
+
 
 
 

@@ -44,8 +44,10 @@ var is_weapon_active = false
 
 var dir: int = 0
 var initial_dir = 0
-var hex_grid: Node2D
-var self_id
+
+var ship_id
+var team_id
+
 var mass = 100
 var is_player = false
 var Utils = SpaceArenaUtilities
@@ -56,10 +58,58 @@ var BEM = BattleEventManager
 @onready var area = $Area2D
 @onready var Ships = get_parent()
 @onready var Root = get_parent().get_parent()
+@onready var hex_grid = Root.find_child("HexGrid", false)
 var ships_array: Array
 
 signal turn_ended
 signal request_highlight(ship)
+signal destroyed(ship)
+
+func init_from_data(data):
+	if !data.has("spawnpointOf"):
+		BEM.battle_log(["ERROR: no spawnpoint in ", data], "Critical")
+		print("ERROR: no spawnpoint in ", data)
+		return
+	axial_position = Utils.offset_to_axial(data.spawnpointOf)
+	self.position = Utils.axial_to_world(axial_position)
+	
+	if !data.has("initial_facing"):
+		BEM.battle_log(["ERROR: no initial facing in ", data], "Critical")
+		print("ERROR: no initial facing in ", data)
+		return
+	if area == null:
+		BEM.battle_log(["ERROR: no area2D found ", data], "Critical")
+		print("ERROR: no area2D found ", data)
+		return
+	dir = Utils.convert_direction(data.initial_facing, "name" , "index")
+	update_rotation()
+	initial_dir = dir
+	
+	if !data.has("max_acceleration"):
+		BEM.battle_log(["ERROR: no max acceleration in ", data], "Critical")
+		print("ERROR: no max acceleration in ", data)
+		return
+	MaxAcceleration = data.max_acceleration
+	
+	if !data.has("color"):
+		BEM.battle_log(["ERROR: no color in ", data], "Critical")
+		print("ERROR: no color in ", data)
+		return
+	shipColor = data.color
+	poly.color = shipColor
+	
+	ships_array = ShipsManager.ships
+	
+	#отрисовка
+	points = [Vector2(-shipLength/2.0, shipWidth/2.0), 
+	Vector2(-shipLength/2.0, -shipWidth/2.0), 
+	Vector2(shipLength/2.0, 0)]
+	colPoly.polygon = points
+	poly.polygon = points
+	
+	if Root.debug_mode.ship_init == true:
+		print("ship ", name_in_game, "created")
+
 
 func take_turn():
 	pass
@@ -99,6 +149,7 @@ func brake():
 		print("FUTURE INDICATION: ","Insufficient Acceleration Capacity")
 
 func start_shooting_phase():
+	ships_array = ShipsManager.get_alive()
 	PreviousVelocity = ResultVelocity
 	await update_ship_position()
 	NewVelocity = Vector2i.ZERO
@@ -229,7 +280,12 @@ func take_damage(amount: int, ax_attacker_pos: Vector2i):
 		structure["inner structure"], "/", 
 		starting_structure["inner structure"]], "Warning")
 
-func Destroy():
+func Destroy(emit_signal:= true):
+	if emit_signal:
+		emit_signal("destroyed", self)
+	
+	
+	queue_free()
 	pass
 
 func update_velocity(additional_velocity: Vector2i, reset_new:= false, reset_prev:=false):
@@ -243,7 +299,13 @@ func update_velocity(additional_velocity: Vector2i, reset_new:= false, reset_pre
 
 func find_target(targets):
 	for ship in targets:
-		if ship.name_in_game != self.name_in_game:
+		if !is_instance_valid(ship):
+			BEM.battle_log(["ERROR: target isn't valid"], "Critical")
+			return null
+		if ship.is_queued_for_deletion():
+			BEM.battle_log(["ERROR: target is queued for deletion"], "Critical")
+			return null
+		if ship.team_id != self.team_id:
 			return ship
 	BEM.battle_log(["ERROR: no valid targets"], "Critical")
 	return null

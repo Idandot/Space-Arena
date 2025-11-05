@@ -64,7 +64,7 @@ static func axial_to_offset_alt(axial_vector: Vector2i) -> Vector2i:
 	var oy = r + floor((q - (q & 1)) / 2.0)
 	return Vector2i(ox, oy)
 
-static func axial_to_world(axial_vector: Vector2i, relative: bool) -> Vector2:
+static func axial_to_world(axial_vector: Vector2i, relative:= false) -> Vector2:
 	var q = axial_vector.x
 	var r = axial_vector.y
 	var x =  HEX_SIDE_SIZE * 1.5 * q

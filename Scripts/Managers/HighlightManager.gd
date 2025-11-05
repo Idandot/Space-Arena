@@ -6,9 +6,11 @@ extends Node2D
 @export var super_penalty_color = Color(1, 0.5, 0, 0.5)
 @export var red = Color(1, 0.5, 0, 0.5)
 
+
 @onready var Root = get_parent().get_parent()
 @onready var HexGrid = Root.find_child("HexGrid")
 @onready var Ships = Root.find_child("Ships")
+@onready var ships = ShipsManager.ships
 
 func clear_highlight():
 	for hex in HexGrid.get_children():
@@ -41,7 +43,7 @@ func color_to_set(weapon_stats: Dictionary, distance: int):
 		return effective_color
 
 func _ready():
-	for ship in Root.ships_array:
+	for ship in ships:
 		ship.connect("request_highlight", self.highlight_shooting_range)
 
 

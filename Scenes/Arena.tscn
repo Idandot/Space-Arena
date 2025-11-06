@@ -1,9 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://bvh1uo520kqmq"]
+[gd_scene load_steps=10 format=3 uid="uid://cf8n1jp00fq0m"]
 
 [ext_resource type="Script" path="res://Scripts/Root.gd" id="1_lvvug"]
 [ext_resource type="Script" path="res://Scripts/HexGrid.gd" id="1_mhtuk"]
 [ext_resource type="PackedScene" uid="uid://bx6jcpmfamp4b" path="res://Scenes/Hex.tscn" id="2_004cx"]
-[ext_resource type="PackedScene" uid="uid://jn4sb6r7uk4e" path="res://Scenes/EnemyShip.tscn" id="3_0aikf"]
+[ext_resource type="PackedScene" uid="uid://jn4sb6r7uk4e" path="res://Scenes/BotShip.tscn" id="3_f528x"]
 [ext_resource type="PackedScene" uid="uid://c10cpr3gmsfin" path="res://Scenes/PlayerShip.tscn" id="3_woy88"]
 [ext_resource type="Script" path="res://Scripts/Managers/TurnManager.gd" id="6_ttilb"]
 [ext_resource type="Script" path="res://Scripts/Managers/HighlightManager.gd" id="7_qacju"]
@@ -18,7 +18,7 @@ ships = NodePath("Ships")
 hex_grid = NodePath("HexGrid")
 turn_manager = NodePath("Managers/TurnManager")
 player_ship_scene = ExtResource("3_woy88")
-enemy_ship_scene = ExtResource("3_0aikf")
+enemy_ship_scene = ExtResource("3_f528x")
 
 [node name="HexGrid" type="Node2D" parent="."]
 script = ExtResource("1_mhtuk")

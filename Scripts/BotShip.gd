@@ -5,7 +5,7 @@ extends Ship
 @export_group("Movement")
 @export_group("Weapons")
 
-var delay = 0.01
+var delay = 0.1
 
 func _ready():
 	name_in_game = "Bot " + str(ship_id)
@@ -20,7 +20,7 @@ func take_turn():
 	var target = find_target(ships_array)
 	
 	for dir_index in range(6):
-		var dir_vec = Utils.convert_direction(dir_index, "index", "vector")
+		var dir_vec = HexDirection.new(dir_index).vector
 		var test_pos = axial_position + dir_vec
 		var dist = Utils.axial_distance(target.axial_position - test_pos)
 		if dist < best_dist:
@@ -28,9 +28,9 @@ func take_turn():
 			best_dir = dir_index
 	while Acceleration > 0:
 		
-		if best_dir != dir:
+		if best_dir != facing.index:
 			turn_right()
-		elif Utils.axial_distance(ResultVelocity + facing) < safe_velocity:
+		elif Utils.axial_distance(ResultVelocity + facing.vector) < safe_velocity:
 			accelerate()
 		else:
 			update_acceleration(-1)

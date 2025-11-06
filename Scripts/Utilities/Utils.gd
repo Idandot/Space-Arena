@@ -6,26 +6,6 @@ const HEX_SIDE_SIZE = 20
 const GRID_OFFSET_WX = 50
 const GRID_OFFSET_WY = 50
 
-const DIRECTION = [
-	{"name":"up","index":0,"angle":-90,"vector":Vector2i(0,-1)},
-	{"name":"rightup","index":1,"angle":-30,"vector":Vector2i(1,0)},
-	{"name":"rightdown","index":2,"angle":30,"vector":Vector2i(1,1)},
-	{"name":"down","index":3,"angle":90,"vector":Vector2i(0,1)},
-	{"name":"leftdown","index":4,"angle":150,"vector":Vector2i(-1,0)},
-	{"name":"leftup","index":5,"angle":-150,"vector":Vector2i(-1,-1)},
-]
-
-static func convert_direction(value, initial_type, target_type):
-	if initial_type == "index":
-		value = (value+6) % 6
-	
-	#ищем прямые совпадения
-	for entry in DIRECTION:
-		if value == entry[initial_type]:
-			return entry[target_type]
-	print("ERROR: Hadn't found ", value, " in the dictionary with initial type ", initial_type)
-	return null
-
 static func offset_to_world(offset_vector: Vector2i) -> Vector2:
 	var ox = offset_vector.x
 	var oy = offset_vector.y

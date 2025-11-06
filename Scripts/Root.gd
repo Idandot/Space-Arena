@@ -26,7 +26,7 @@ var enemy_ship: Node2D
 @export var starting_config = [
 	[
 		{
-			"control": "bot", 
+			"control": "player", 
 			"spawnpointOf": Vector2i(0,0), 
 			"initial_facing": "rightdown",
 			"max_acceleration": 3,
@@ -42,7 +42,7 @@ var enemy_ship: Node2D
 	],
 	[
 		{
-			"control": "bot", 
+			"control": "player", 
 			"spawnpointOf": Vector2i(21,16),
 			"initial_facing": "leftup",
 			"max_acceleration": 3,

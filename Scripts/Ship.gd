@@ -12,13 +12,17 @@ var points = []
 @export_group("Movement")
 @export var MaxAcceleration = 3
 @export var Acceleration = MaxAcceleration
-@export var initial_direction = "down"
+var turn_cost = 1
+var accelerate_cost = 1
+var brake_cost = 2
 var axial_position = Vector2i(0,0)
 var offset_position = Vector2i(0,0)
 var PreviousVelocity = Vector2i(0,0)
 var NewVelocity = Vector2i(0,0)
 var ResultVelocity = Vector2i(0,0)
-var facing = Vector2i(0,-1)
+
+var initial_facing: String
+var facing: HexDirection
 
 @export_group("Weapons")
 @export var weapon_stats = {
@@ -41,9 +45,6 @@ var is_weapon_active = false
 	"inner structure": 50,
 }
 @onready var structure: Dictionary = starting_structure.duplicate(true)
-
-var dir: int = 0
-var initial_dir = 0
 
 var ship_id
 var team_id
@@ -73,6 +74,7 @@ func init_from_data(data):
 	axial_position = Utils.offset_to_axial(data.spawnpointOf)
 	self.position = Utils.axial_to_world(axial_position)
 	
+	
 	if !data.has("initial_facing"):
 		BEM.battle_log(["ERROR: no initial facing in ", data], "Critical")
 		print("ERROR: no initial facing in ", data)
@@ -81,9 +83,9 @@ func init_from_data(data):
 		BEM.battle_log(["ERROR: no area2D found ", data], "Critical")
 		print("ERROR: no area2D found ", data)
 		return
-	dir = Utils.convert_direction(data.initial_facing, "name" , "index")
-	update_rotation()
-	initial_dir = dir
+	facing = HexDirection.new(data.initial_facing)
+	set_area_rotation()
+	initial_facing = facing.get_name()
 	
 	if !data.has("max_acceleration"):
 		BEM.battle_log(["ERROR: no max acceleration in ", data], "Critical")
@@ -115,38 +117,33 @@ func take_turn():
 	pass
 
 func turn_right():
-	if update_acceleration(-1):
-		dir = (dir+1)%6
-		change_rotation(dir)
-		
+	if update_acceleration(-turn_cost):
+		facing.rotate_right()
+		set_area_rotation()
 	else:
-		print("FUTURE INDICATION: ","Insufficient Acceleration Capacity")
+		BEM.battle_log(["Insufficient acceleration capacity"], "Warning")
 
 func turn_left():
-	if update_acceleration(-1):
-		dir = (dir-1)%6
-		change_rotation(dir)
+	if update_acceleration(-turn_cost):
+		facing.rotate_left()
+		set_area_rotation()
 	else:
-		print("FUTURE INDICATION: ","Insufficient Acceleration Capacity")
+		BEM.battle_log(["Insufficient acceleration capacity"], "Warning")
 
-func update_rotation():
-	change_rotation(dir)
-
-func change_rotation(to_dir: int):
-	facing = Utils.convert_direction(to_dir,"index", "vector")
-	area.rotation = deg_to_rad(Utils.convert_direction(to_dir,"index", "angle"))
+func set_area_rotation():
+	area.rotation = deg_to_rad(facing.angle)
 
 func accelerate():
-	if update_acceleration(-1):
-		update_velocity(facing)
+	if update_acceleration(-accelerate_cost):
+		update_velocity(facing.vector)
 	else:
-		print("FUTURE INDICATION: ","Insufficient Acceleration Capacity")
+		BEM.battle_log(["Insufficient acceleration capacity"], "Warning")
 
 func brake():
-	if update_acceleration(-2):
-		update_velocity(-facing)
+	if update_acceleration(-brake_cost):
+		update_velocity(-facing.vector)
 	else:
-		print("FUTURE INDICATION: ","Insufficient Acceleration Capacity")
+		BEM.battle_log(["Insufficient acceleration capacity"], "Warning")
 
 func start_shooting_phase():
 	ships_array = ShipsManager.get_alive()
@@ -154,7 +151,7 @@ func start_shooting_phase():
 	await update_ship_position()
 	NewVelocity = Vector2i.ZERO
 	update_acceleration(MaxAcceleration)
-	initial_dir = dir
+	initial_facing = facing.get_name()
 	queue_redraw()
 	
 	await get_tree().process_frame
@@ -167,7 +164,7 @@ func start_shooting_phase():
 func end_turn():
 	if Root.debug_mode.ship_rotation:
 		print("DEBUG INFO:")
-		print("facing: ", facing, ", angle: ", rad_to_deg(area.rotation))
+		print("facing: ", facing.get_vector(), ", angle: ", rad_to_deg(area.rotation))
 	emit_signal("turn_ended")
 
 func update_ship_position():
@@ -182,7 +179,7 @@ func update_ship_position():
 		or next_pos_of.y != clamp(next_pos_of.y, 0, hex_grid.gridSizeOY - 1):
 			BEM.battle_log([self.name_in_game, " pushed in the wall"])
 			update_velocity(Vector2i.ZERO, true, true)
-			take_damage(Utils.axial_distance(res_vel_ax), axial_position + facing)
+			take_damage(Utils.axial_distance(res_vel_ax), axial_position + facing.get_vector())
 			break
 		else:
 			new_pos_ax = next_pos_ax
@@ -197,6 +194,7 @@ func update_ship_position():
 		print("offset position: ", offset_position)
 
 func decompose_vector(start_pos: Vector2i, end_pos: Vector2i) -> Array:
+	#TODO: try Bresenham method
 	var change_pos = end_pos - start_pos
 	var path = []
 	while change_pos != Vector2i.ZERO:
@@ -248,12 +246,6 @@ func draw_arrow(from: Vector2, to: Vector2, col:= Color(1,1,1), w:=-1):
 	draw_line(to, to + left, col, w)
 	draw_line(to, to + right, col, w)
 
-func check_ships_collision(self_position: Vector2i, i_ships_array: Array):
-	for s in i_ships_array:
-			if (self_position == s.axial_position) and (s != self):
-				return s
-	return null
-
 func take_damage(amount: int, ax_attacker_pos: Vector2i):
 	var location = define_arc(ax_attacker_pos)
 	var excess_damage = 0
@@ -280,10 +272,9 @@ func take_damage(amount: int, ax_attacker_pos: Vector2i):
 		structure["inner structure"], "/", 
 		starting_structure["inner structure"]], "Warning")
 
-func Destroy(emit_signal:= true):
-	if emit_signal:
+func Destroy(to_emit_signal:= true):
+	if to_emit_signal:
 		emit_signal("destroyed", self)
-	
 	
 	queue_free()
 	pass
@@ -298,6 +289,7 @@ func update_velocity(additional_velocity: Vector2i, reset_new:= false, reset_pre
 	queue_redraw()
 
 func find_target(targets):
+	#TODO: smart target filter
 	for ship in targets:
 		if !is_instance_valid(ship):
 			BEM.battle_log(["ERROR: target isn't valid"], "Critical")
@@ -331,24 +323,22 @@ func fire_fail(reason):
 		BEM.battle_log([reason], "Warning")
 
 func is_in_shooting_arc(ax_target_pos) -> bool:
-	
-	var weapon_facing_vector = Utils.convert_direction(dir + weapon_stats.facing_offset, "index", "vector")
+	var weapon_facing = HexDirection.new(facing.index + weapon_stats.facing_offset)
 	
 	for r in range(weapon_stats.apex_offset + 1):
-		if axial_position + weapon_facing_vector * r == ax_target_pos:
+		if axial_position + weapon_facing.vector * r == ax_target_pos:
 			return true
 	
 	
-	var divergence_origin = axial_position + weapon_stats.apex_offset * facing
+	var divergence_origin = axial_position + weapon_stats.apex_offset * facing.vector
 	var direction: Vector2 = (Utils.axial_to_world(ax_target_pos - divergence_origin, true)).normalized()
 	var angle_to_target = rad_to_deg(direction.angle())
-	var weapon_facing_angle = Utils.convert_direction(dir + weapon_stats.facing_offset, "index", "angle")
-	var angle_diff = abs(Utils.angle_difference(weapon_facing_angle, angle_to_target))
+	var angle_diff = abs(Utils.angle_difference(weapon_facing.angle, angle_to_target))
 	
 	return is_equal_approx(angle_diff, weapon_stats.arc_degrees/2) or angle_diff < weapon_stats.arc_degrees/2
 
-func define_arc(ax_attacker_pos):
-	var nose_arc_angle = Utils.convert_direction(facing, "vector", "angle")
+func define_arc(ax_attacker_pos) -> String:
+	var nose_arc_angle = facing.angle
 	
 	var direction: Vector2 = (Utils.axial_to_world(ax_attacker_pos - axial_position, true)).normalized()
 	var angle_to_attacker = rad_to_deg(direction.angle())

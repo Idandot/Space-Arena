@@ -54,8 +54,8 @@ func take_turn():
 func reset():
 	update_velocity(Vector2i.ZERO, true)
 	update_acceleration(MaxAcceleration)
-	dir = initial_dir
-	update_rotation()
+	facing.set_direction(initial_facing)
+	area.rotation = deg_to_rad(facing.angle)
 	BEM.battle_log(["Movement reset"])
 
 

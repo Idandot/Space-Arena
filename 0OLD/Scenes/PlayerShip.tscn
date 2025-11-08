@@ -1,9 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://c10cpr3gmsfin"]
 
-[ext_resource type="Script" path="res://Scripts/PlayerShip.gd" id="1_ea2ix"]
+[ext_resource type="Script" path="res://0OLD/Scripts/PlayerShip.gd" id="1_3n5c3"]
 
 [node name="PlayerShip" type="Node2D"]
-script = ExtResource("1_ea2ix")
+script = ExtResource("1_3n5c3")
 name_in_game = "Player"
 shipColor = Color(0.141176, 0.631373, 0.996078, 1)
 weapon_stats = {

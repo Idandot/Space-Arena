@@ -11,14 +11,14 @@ config_version=5
 [application]
 
 config/name="Space Arena"
-run/main_scene="res://Scenes/Arena.tscn"
+run/main_scene="res://Base/Arena.tscn"
 config/features=PackedStringArray("4.0", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
-BattleEventManager="*res://Scripts/Managers/BattleEventManager.gd"
-ShipsManager="*res://Scripts/Managers/ShipsManager.gd"
+BattleEventManager="*res://0OLD/Scripts/Managers/BattleEventManager.gd"
+ShipsManager="*res://0OLD/Scripts/Managers/ShipsManager.gd"
 
 [display]
 

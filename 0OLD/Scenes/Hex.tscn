@@ -1,9 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://bx6jcpmfamp4b"]
 
-[ext_resource type="Script" path="res://Scripts/Hex.gd" id="1_n2m3e"]
+[ext_resource type="Script" path="res://0OLD/Scripts/Hex.gd" id="1_vnpmb"]
 
 [node name="Node2D" type="Node2D"]
-script = ExtResource("1_n2m3e")
+script = ExtResource("1_vnpmb")
 
 [node name="Area2D" type="Area2D" parent="."]
 

@@ -17,7 +17,7 @@ func take_turn():
 	var best_dist = INF
 	var safe_velocity = 4
 	
-	var target = find_target(ships_array)
+	var target = find_target()
 	
 	for dir_index in range(6):
 		var dir_vec = HexDirection.new(dir_index).vector

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bmm4vqu42pr30"]
+
+[ext_resource type="Script" path="res://Base/ActionRegistry.gd" id="1_1arm2"]
+
+[node name="ActionRegistry" type="Node"]
+script = ExtResource("1_1arm2")

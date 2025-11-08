@@ -20,6 +20,7 @@ var offset_position = Vector2i(0,0)
 var PreviousVelocity = Vector2i(0,0)
 var NewVelocity = Vector2i(0,0)
 var ResultVelocity = Vector2i(0,0)
+var is_my_turn = false
 
 var initial_facing: String
 var facing: HexDirection
@@ -275,7 +276,8 @@ func take_damage(amount: int, ax_attacker_pos: Vector2i):
 func Destroy(to_emit_signal:= true):
 	if to_emit_signal:
 		emit_signal("destroyed", self)
-	
+	if is_my_turn:
+		end_turn()
 	queue_free()
 	pass
 
@@ -288,24 +290,27 @@ func update_velocity(additional_velocity: Vector2i, reset_new:= false, reset_pre
 	ResultVelocity = NewVelocity + PreviousVelocity
 	queue_redraw()
 
-func find_target(targets):
-	#TODO: smart target filter
+func find_target():
+	var targets = ShipsManager.get_enemies(team_id)
+	if targets.size() == 0:
+		push_warning("cannot find target for ", name_in_game, " game should already be over")
+		return null
+	var best_target = targets[0]
+	var best_target_score = 0
 	for ship in targets:
-		if !is_instance_valid(ship):
-			BEM.battle_log(["ERROR: target isn't valid"], "Critical")
-			return null
-		if ship.is_queued_for_deletion():
-			BEM.battle_log(["ERROR: target is queued for deletion"], "Critical")
-			return null
-		if ship.team_id != self.team_id:
-			return ship
-	BEM.battle_log(["ERROR: no valid targets"], "Critical")
-	return null
+		var target_score = 0
+		if is_in_shooting_arc(ship.axial_position):
+			target_score += 1
+		if is_in_weapon_max_distance(ship.axial_position):
+			target_score += 1
+		if target_score > best_target_score:
+			best_target = ship
+	return best_target
 
 func fire():
 	if !is_weapon_active:
 		return fire_fail("Weapon isn't active")
-	var target = find_target(ships_array)
+	var target = find_target()
 	if target == null:
 		BEM.battle_log(["ERROR: target is NULL"], "Critical")
 		return
@@ -323,40 +328,23 @@ func fire_fail(reason):
 		BEM.battle_log([reason], "Warning")
 
 func is_in_shooting_arc(ax_target_pos) -> bool:
-	var weapon_facing = HexDirection.new(facing.index + weapon_stats.facing_offset)
-	
-	for r in range(weapon_stats.apex_offset + 1):
-		if axial_position + weapon_facing.vector * r == ax_target_pos:
-			return true
-	
-	
-	var divergence_origin = axial_position + weapon_stats.apex_offset * facing.vector
-	var direction: Vector2 = (Utils.axial_to_world(ax_target_pos - divergence_origin, true)).normalized()
-	var angle_to_target = rad_to_deg(direction.angle())
-	var angle_diff = abs(Utils.angle_difference(weapon_facing.angle, angle_to_target))
-	
-	return is_equal_approx(angle_diff, weapon_stats.arc_degrees/2) or angle_diff < weapon_stats.arc_degrees/2
+	return Utils.is_in_shooting_arc(ax_target_pos, axial_position, facing, weapon_stats)
+
+func is_in_weapon_max_distance(ax_target_pos) -> bool:
+	var distance = Utils.axial_distance(ax_target_pos - axial_position)
+	return distance <= weapon_stats.max_range
 
 func define_arc(ax_attacker_pos) -> String:
-	var nose_arc_angle = facing.angle
-	
-	var direction: Vector2 = (Utils.axial_to_world(ax_attacker_pos - axial_position, true)).normalized()
-	var angle_to_attacker = rad_to_deg(direction.angle())
-	
-	var nose_arc_diff = Utils.angle_difference(nose_arc_angle, angle_to_attacker)
-	var left_wing_arc_diff = Utils.angle_difference(nose_arc_angle - 90, angle_to_attacker)
-	var right_wing_arc_diff = Utils.angle_difference(nose_arc_angle + 90, angle_to_attacker)
-	
-	if left_wing_arc_diff <= 30:
-		return "left wing"
-	elif right_wing_arc_diff <= 30:
-		return "right wing"
-	elif nose_arc_diff <= 90:
-		return "nose"
-	else:
-		return "aft"
+	return Utils.define_arc(axial_position, ax_attacker_pos, facing)
 
-
+func get_possible_movement_actions() -> Array:
+	return [
+		{"type": "accelerate","cost": accelerate_cost},
+		{"type":"turn_left","cost": turn_cost},
+		{"type":"turn_right","cost": turn_cost},
+		{"type":"brake","cost": brake_cost},
+		{"type":"skip","cost": 1}
+	]
 
 
 

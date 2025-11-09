@@ -1,4 +1,5 @@
 extends Node2D
+class_name Hex
 
 var points := []
 @onready var colPoly = $Area2D/CollisionPolygon2D

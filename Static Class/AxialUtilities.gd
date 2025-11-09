@@ -66,7 +66,7 @@ static func find_rect(hexes: Array[Vector2i]) -> Rect2:
 	if hexes.is_empty():
 		return Rect2()
 	
-	var world_points: PackedVector2Array
+	var world_points: PackedVector2Array = []
 	
 	for hex in hexes:
 		var world_pos = axial_to_world(hex)
@@ -81,10 +81,10 @@ static func find_rect(hexes: Array[Vector2i]) -> Rect2:
 		max_point.x = max(max_point.x, point.x)
 		max_point.y = max(max_point.y, point.y)
 	
-	max_point.x += HEX_WIDTH /2
-	min_point.x -= HEX_WIDTH /2
-	max_point.y += HEX_HEIGHT /2
-	min_point.y -= HEX_HEIGHT /2
+	max_point.x += HEX_WIDTH /2.0
+	min_point.x -= HEX_WIDTH /2.0
+	max_point.y += HEX_HEIGHT /2.0
+	min_point.y -= HEX_HEIGHT /2.0
 	
 	var rect_position = min_point
 	var rect_size = max_point - min_point 

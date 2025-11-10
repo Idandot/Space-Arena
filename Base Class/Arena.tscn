@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://desilnlp5gqtr"]
+[gd_scene load_steps=7 format=3 uid="uid://desilnlp5gqtr"]
 
 [ext_resource type="Script" path="res://Base Class/Arena.gd" id="1_q4evv"]
+[ext_resource type="PackedScene" uid="uid://c4kh3mrinecq8" path="res://Base Class/Actor.tscn" id="2_6ctvo"]
 [ext_resource type="Script" path="res://Base Class/HexGrid.gd" id="2_sp4n8"]
 [ext_resource type="PackedScene" uid="uid://drbie2ve3q7dd" path="res://Base Class/Hex.tscn" id="3_4hi4l"]
 [ext_resource type="Script" path="res://Base Class/ArenaCam.gd" id="4_kmxm0"]
@@ -8,6 +9,7 @@
 
 [node name="Arena" type="Node2D"]
 script = ExtResource("1_q4evv")
+actors_ref = Array[PackedScene]([ExtResource("2_6ctvo"), ExtResource("2_6ctvo")])
 
 [node name="HexGrid" type="Node2D" parent="."]
 script = ExtResource("2_sp4n8")

@@ -4,6 +4,8 @@ extends Node2D
 
 @export var arena_radius = 10
 
+#TODO: сделать менее жесткие связи между Arena и TurnManager
+
 #Арена без HexGrid это как секс без девушки
 @onready var _hex_grid: HexGrid = $HexGrid
 #Наблюдатель обязателен
@@ -25,6 +27,9 @@ func _ready():
 	var actors: Array[Actor] = []
 	for actor_ref in actors_ref:
 		var actor = actor_ref.instantiate()
+		if !actor is Actor:
+			push_warning("Only Actors can be used in Arena")
+			continue
 		add_child(actor)
 		actors.append(actor)
 	

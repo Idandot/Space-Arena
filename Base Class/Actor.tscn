@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://c4kh3mrinecq8"]
+
+[ext_resource type="Script" path="res://Base Class/Actor.gd" id="1_3jj5i"]
+[ext_resource type="Script" path="res://Modules/Controller.gd" id="1_n2rc8"]
+
+[node name="Actor" type="Node2D"]
+script = ExtResource("1_3jj5i")
+
+[node name="Controller" type="Node" parent="."]
+script = ExtResource("1_n2rc8")

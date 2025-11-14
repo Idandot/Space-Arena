@@ -52,7 +52,7 @@ static func round_axial(axial_frac: Vector2) -> Vector2i:
 	
 	return Vector2i(q,r)
 
-static func axial_in_radius(center: Vector2i, radius: int) -> Array[Vector2i]:
+static func hexes_in_radius(center: Vector2i, radius: int) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 	
 	for q in range(-radius, +radius +1):
@@ -61,6 +61,22 @@ static func axial_in_radius(center: Vector2i, radius: int) -> Array[Vector2i]:
 	
 	return result
 
+static func distance(vector: Vector2i) -> int:
+	var q = vector.x
+	var r = vector.y
+	var s = -q-r
+	return max(abs(q), abs(r), abs(s))
+
+static func axial_clamp(vector: Vector2i, radius: int) -> Vector2i:
+	var dist = distance(vector)
+	if dist <= radius:
+		return vector
+	
+	var length = float(dist)
+	var scale = float(radius)/length
+	var fracv2 = vector*scale
+	
+	return round_axial(fracv2)
 
 static func find_rect(hexes: Array[Vector2i]) -> Rect2:
 	if hexes.is_empty():

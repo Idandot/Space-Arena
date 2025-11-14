@@ -11,14 +11,13 @@ config_version=5
 [application]
 
 config/name="Space Arena"
-run/main_scene="res://Base Class/Arena.tscn"
+run/main_scene="res://Autoload Class/Arena.tscn"
 config/features=PackedStringArray("4.0", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
-BattleEventManager="*res://0OLD/Scripts/Managers/BattleEventManager.gd"
-ShipsManager="*res://0OLD/Scripts/Managers/ShipsManager.gd"
+HexGridClass="*res://Autoload Class/HexGrid.gd"
 
 [display]
 

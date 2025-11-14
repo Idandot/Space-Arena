@@ -12,7 +12,7 @@ var _current_round := 0
 enum game_states {INACTIVE, ACTIVE}
 var _current_game_state := game_states.INACTIVE
 
-#по необходимости добавить сюда сигналы для внешних система
+#по необходимости добавить сюда сигналы для внешних систем
 
 ##начинает игровой цикл
 func start_game(actors: Array[Actor]) -> void:
@@ -58,6 +58,10 @@ func end_game() -> void:
 	#Возвращаем TurnManager в изначальное состояние чтобы если что ничего не приключилось
 	#Если в будущем нужна инфа об окончании игры, сигналы лучше вставлять перед сбросом
 
+##выдает челика чей сейчас ход
+func get_current_actor() -> Actor:
+	return _current_actor
+
 func _start_next_turn():
 	if _current_game_state != game_states.ACTIVE:
 		push_warning("Game isn't active")
@@ -88,11 +92,8 @@ func _on_turn_ended(actor: Actor):
 	_check_victory_conditions()
 	_start_next_turn()
 
-func _get_current_actor() -> Actor:
-	return _current_actor
-
 func _check_victory_conditions():
-	push_error("this func isn't written!")
+	push_warning("this func isn't written!")
 
 func _sort_actors_by_initiative(actors: Array[Actor]) -> Array[Actor]:
 	if actors.size() <= 1:

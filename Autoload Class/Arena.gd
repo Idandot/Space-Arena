@@ -3,11 +3,10 @@ extends Node2D
 #Занимается начальным сетапом арены, а за ходами следить будет TurnManager
 
 @export var arena_radius = 10
+@export var hex_scene: PackedScene
 
-#TODO: сделать менее жесткие связи между Arena и TurnManager
+#TODO: сделать менее жесткие связи между Arena и ее детьми
 
-#Арена без HexGrid это как секс без девушки
-@onready var _hex_grid: HexGrid = $HexGrid
 #Наблюдатель обязателен
 @onready var _arena_camera: ArenaCamera = $ArenaCamera
 #Организатор ходов
@@ -19,9 +18,10 @@ extends Node2D
 
 func _ready():
 	#нужно создать арену и дождаться ее полного создания!
-	await _hex_grid.create_grid(arena_radius)
+	HexGridClass.set_hex_scene(hex_scene)
+	await HexGridClass.create_grid(arena_radius)
 	#чтобы все было видно, подстраиваем камеру
-	_arena_camera.zoom_to_fit(_hex_grid.get_grid_world_size())
+	_arena_camera.zoom_to_fit(HexGridClass.get_grid_world_size())
 	
 	#Инициализируем всех актеров
 	var actors: Array[Actor] = []

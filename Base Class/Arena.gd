@@ -11,10 +11,8 @@ extends Node2D
 @onready var _arena_camera: ArenaCamera = $ArenaCamera
 #Организатор ходов
 @onready var _turn_manager: TurnManager = $TurnManager
-#Вынести в ресурс в будущем!
-@export var actors_ref: Array[PackedScene] = [
-	
-]
+@export var game_config: GameConfig
+
 
 func _ready():
 	#нужно создать арену и дождаться ее полного создания!
@@ -25,12 +23,13 @@ func _ready():
 	
 	#Инициализируем всех актеров
 	var actors: Array[Actor] = []
-	for actor_ref in actors_ref:
-		var actor = actor_ref.instantiate()
+	for actor_config in game_config.actors_data:
+		var actor = actor_config.scene.instantiate()
 		if !actor is Actor:
 			push_warning("Only Actors can be used in Arena")
 			continue
 		add_child(actor)
+		actor.setup(actor_config)
 		actors.append(actor)
 	
 	#Можно начинать игру

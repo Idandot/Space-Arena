@@ -93,7 +93,7 @@ func _on_turn_ended(actor: Actor):
 	_start_next_turn()
 
 func _check_victory_conditions():
-	push_warning("this func isn't written!")
+	pass
 
 func _sort_actors_by_initiative(actors: Array[Actor]) -> Array[Actor]:
 	if actors.size() <= 1:

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ActorConfig" load_steps=3 format=3 uid="uid://cvllx1sht7wlp"]
+
+[ext_resource type="PackedScene" uid="uid://c4kh3mrinecq8" path="res://Base Class/Actor.tscn" id="1_ssagi"]
+[ext_resource type="Script" path="res://Resources/ActorConfigs/ActorConfig.gd" id="2_7fvgc"]
+
+[resource]
+script = ExtResource("2_7fvgc")
+scene = ExtResource("1_ssagi")
+color = Color(0.117647, 1, 0, 1)
+spawn_point = Vector2i(0, 0)

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="TMTexture" load_steps=2 format=3 uid="uid://dkxvnl4kxb403"]
+
+[ext_resource type="Script" path="res://Resources/Textures/TMTexture.gd" id="1_n16ea"]
+
+[resource]
+script = ExtResource("1_n16ea")
+points = [Vector2(-25, -25), Vector2(25, -25), Vector2(0, 50)]
+line_color = Color(0, 0, 0, 1)
+line_width = 5.0
+fill = true
+fill_color = Color(1, 1, 1, 1)

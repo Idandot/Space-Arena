@@ -2,11 +2,13 @@ extends Node
 class_name Actor
 
 var _axial_position: Vector2i
+var _facing: HexOrientation = HexOrientation.new()
 
 #добавить больше сигналов по необходимости
 signal setup_started(config: ActorConfig)
 signal turn_ended(actor: Actor)
 signal turn_started(actor: Actor)
+signal facing_changed(_facing: HexOrientation)
 
 @export var modules: Array[PackedScene] = []
 
@@ -17,6 +19,8 @@ func setup(config: ActorConfig):
 	setup_started.emit(config.duplicate())
 	if config.spawn_point != null:
 		set_position(config.spawn_point)
+	if config.initial_facing != null:
+		set_facing(config.initial_facing)
 
 
 func take_turn():
@@ -40,7 +44,9 @@ func set_position(axial: Vector2i):
 	_axial_position = AxialUtilities.axial_clamp(_axial_position, HexGridClass.get_grid_radius())
 	self.position = AxialUtilities.axial_to_world(_axial_position)
 
-
+func set_facing(value):
+	_facing.set_direction(value)
+	facing_changed.emit(_facing)
 
 
 

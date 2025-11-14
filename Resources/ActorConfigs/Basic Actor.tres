@@ -4,7 +4,9 @@
 [ext_resource type="Script" path="res://Resources/ActorConfigs/ActorConfig.gd" id="2_7fvgc"]
 
 [resource]
+resource_name = "left"
 script = ExtResource("2_7fvgc")
 scene = ExtResource("1_ssagi")
 color = Color(0.117647, 1, 0, 1)
 spawn_point = Vector2i(0, 0)
+initial_facing = "left"

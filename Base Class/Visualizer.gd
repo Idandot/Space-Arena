@@ -10,6 +10,8 @@ func _ready():
 		parent.connect("turn_started", _queue_redraw)
 	if parent.has_signal("setup_started"):
 		parent.connect("setup_started", _setup)
+	if parent.has_signal("facing_changed"):
+		parent.connect("facing_changed", _rotate)
 
 func _draw():
 	if texture == null:
@@ -31,3 +33,18 @@ func _setup(config: ActorConfig):
 		return
 	texture.fill_color = config.color
 	queue_redraw()
+
+func _rotate(facing: HexOrientation):
+	rotation = deg_to_rad(facing.get_current_angle())
+	queue_redraw()
+
+
+
+
+
+
+
+
+
+
+

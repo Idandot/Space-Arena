@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://c4kh3mrinecq8"]
+[gd_scene load_steps=6 format=3 uid="uid://c4kh3mrinecq8"]
 
 [ext_resource type="Script" path="res://Base Class/Actor.gd" id="1_3jj5i"]
 [ext_resource type="Script" path="res://Modules/Controller.gd" id="1_n2rc8"]
 [ext_resource type="Script" path="res://Base Class/Visualizer.gd" id="2_np13p"]
 [ext_resource type="Resource" uid="uid://dkxvnl4kxb403" path="res://Resources/Textures/Ship.tres" id="3_poh3c"]
+[ext_resource type="Script" path="res://Base Class/HexRigidbody.gd" id="5_gwfru"]
 
 [node name="Actor" type="Node2D"]
 script = ExtResource("1_3jj5i")
@@ -14,3 +15,6 @@ start_texture = ExtResource("3_poh3c")
 
 [node name="Controller" type="Node" parent="."]
 script = ExtResource("1_n2rc8")
+
+[node name="HexRigidbody" type="Node" parent="."]
+script = ExtResource("5_gwfru")

@@ -3,10 +3,10 @@ class_name HexRigidbody
 
 var _facing = HexOrientation.new()
 var _axial_position = Vector2i.ZERO
-var _velocity = Vector2i.ZERO
-var _velocities: Array[Vector2i] = []
-var _acceleration = Vector2i.ZERO
-var _accelerations: Array[Vector2i] = []
+#var _velocity = Vector2i.ZERO
+#var _velocities: Array[Vector2i] = []
+#var _acceleration = Vector2i.ZERO
+#var _accelerations: Array[Vector2i] = []
 
 @onready var parent: Node2D = self.get_parent()
 @onready var event_bus: Node
@@ -22,17 +22,3 @@ func set_position(axial: Vector2i):
 func set_facing(value):
 	_facing.set_direction(value)
 	facing_changed.emit(_facing)
-
-
-
-
-
-
-
-
-
-
-
-
-
-

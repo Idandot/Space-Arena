@@ -43,9 +43,3 @@ func get_grid_radius() -> int:
 
 func set_hex_scene(hex: PackedScene):
 	_hex = hex
-
-
-
-
-
-

@@ -30,15 +30,3 @@ func get_initiative():
 
 func is_alive():
 	return _is_alive
-
-
-
-
-
-
-
-
-
-
-
-

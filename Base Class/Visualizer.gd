@@ -37,14 +37,3 @@ func _setup(config: ActorConfig):
 func _rotate(facing: HexOrientation):
 	rotation = deg_to_rad(facing.get_current_angle())
 	queue_redraw()
-
-
-
-
-
-
-
-
-
-
-

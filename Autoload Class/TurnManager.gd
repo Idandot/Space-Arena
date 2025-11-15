@@ -113,9 +113,3 @@ func _create_turn_queue():
 	_alive_actors = _sort_actors_by_initiative(_alive_actors)
 	
 	_turn_queue = _alive_actors.duplicate()
-
-
-
-
-
-

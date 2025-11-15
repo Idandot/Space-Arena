@@ -73,13 +73,3 @@ func turn_left():
 
 func turn_by_index(index):
 	set_direction(_index + index)
-
-
-
-
-
-
-
-
-
-

@@ -34,4 +34,3 @@ func _ready():
 	
 	#Можно начинать игру
 	_turn_manager.start_game(actors)
-

@@ -17,6 +17,7 @@ func setup(config: ActorConfig):
 
 func take_turn():
 	emit_signal("turn_started", self)
+	await get_tree().create_timer(2).timeout
 	end_turn()
 
 func start_movement_phase():
@@ -30,15 +31,3 @@ func get_initiative():
 
 func is_alive():
 	return _is_alive
-
-
-
-
-
-
-
-
-
-
-
-

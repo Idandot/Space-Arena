@@ -2,37 +2,76 @@ extends Node
 class_name HexRigidbody
 
 var _facing = HexOrientation.new()
+#текущее положение обьекта на игровой сетке
 var _axial_position = Vector2i.ZERO
+#Текущая скорость тела, применяется в конце хода
 var _velocity = Vector2i.ZERO
-var _velocities: Array[Vector2i] = []
-var _acceleration = Vector2i.ZERO
-var _accelerations: Array[Vector2i] = []
+#Скорость с прошлого хода
+var _previous_velocity = Vector2i.ZERO
+#Одноразовые изменения скорости
+var _impulse_dict: Dictionary[String, Vector2i] = {}
+#Постоянные силы действующие на тело
+var _force_dict: Dictionary[String, Vector2i] = {}
 
 @onready var parent: Node2D = self.get_parent()
 @onready var event_bus: Node
-#You stopped here
 
 signal facing_changed(_facing: HexOrientation)
+
+func _ready() -> void:
+	if parent.has_signal("turn_ended"):
+		parent.connect("turn_ended", _on_turn_end)
+	if parent.has_signal("setup_started"):
+		parent.connect("setup_started", _on_setup)
 
 func set_position(axial: Vector2i):
 	_axial_position = axial
 	_axial_position = AxialUtilities.axial_clamp(_axial_position, HexGridClass.get_grid_radius())
-	self.position = AxialUtilities.axial_to_world(_axial_position)
+	parent.position = AxialUtilities.axial_to_world(_axial_position)
 
 func set_facing(value):
 	_facing.set_direction(value)
 	facing_changed.emit(_facing)
 
+func calculate_velocity() -> Vector2i:
+	var new_velocity = _previous_velocity
+	for impulse in _impulse_dict.values():
+		new_velocity += impulse
+	for force in _force_dict.values():
+		new_velocity += force
+	return new_velocity
 
+func get_velocity_data() -> Dictionary:
+	return {
+		"previous_velocity": _previous_velocity,
+		"impule_dict": _impulse_dict,
+		"force_dict": _force_dict,
+		"result": calculate_velocity()
+	}
 
+func _commit_velocity():
+	_previous_velocity = _velocity
+	_velocity = calculate_velocity()
+	_impulse_dict.clear()
 
+func _register_impact(dict: Dictionary[String, Vector2i], force_name: String):
+	if !dict.has(force_name):
+		dict.force_name = Vector2i.ZERO
 
+func _apply_velocity():
+	set_position(_axial_position + _velocity)
 
+func add_force(force_name: String, value: Vector2i):
+	_register_impact(_force_dict, force_name)
+	_force_dict.force_name += value
 
+func add_impulse(impulse_name: String, value: Vector2i):
+	_register_impact(_impulse_dict, impulse_name)
+	_impulse_dict.impulse_name += value
 
+func _on_turn_end(_actor: Actor):
+	_commit_velocity()
+	_apply_velocity()
 
-
-
-
-
-
+func _on_setup(_config: ActorConfig):
+	add_force("gravity", Vector2i(0, -1))

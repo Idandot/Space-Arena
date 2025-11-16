@@ -1,11 +1,11 @@
 [gd_scene load_steps=7 format=3 uid="uid://desilnlp5gqtr"]
 
-[ext_resource type="Script" path="res://Base Class/Arena.gd" id="1_q4evv"]
+[ext_resource type="Script" uid="uid://dwvjpdp1pitku" path="res://Base Class/Arena.gd" id="1_q4evv"]
 [ext_resource type="PackedScene" uid="uid://drbie2ve3q7dd" path="res://Base Class/Hex.tscn" id="3_4hi4l"]
 [ext_resource type="Resource" uid="uid://dagje7y2fl2qg" path="res://Resources/Game Configs/Debug.tres" id="4_4lkml"]
-[ext_resource type="Script" path="res://Base Class/ArenaCam.gd" id="4_kmxm0"]
-[ext_resource type="Script" path="res://Autoload Class/HexGrid.gd" id="4_t804p"]
-[ext_resource type="Script" path="res://Autoload Class/TurnManager.gd" id="6_5jmcn"]
+[ext_resource type="Script" uid="uid://bsxmn8p1yrsl7" path="res://Base Class/ArenaCam.gd" id="4_kmxm0"]
+[ext_resource type="Script" uid="uid://ra5ms2jmqdqj" path="res://Autoload Class/HexGrid.gd" id="4_t804p"]
+[ext_resource type="Script" uid="uid://3ie11nou16mr" path="res://Autoload Class/TurnManager.gd" id="6_5jmcn"]
 
 [node name="Arena" type="Node2D"]
 script = ExtResource("1_q4evv")

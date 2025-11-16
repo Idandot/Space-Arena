@@ -6,6 +6,36 @@ const SQRT3 := sqrt(3)
 const HEX_HEIGHT := HEX_SIDE * 2
 const HEX_WIDTH := HEX_SIDE * SQRT3
 
+const MAIN_DIRECTIONS = [
+	{"name": "right", "index": 0, "vector": Vector2i(1,0)},
+	{"name": "rightup", "index": 1, "vector": Vector2i(1,-1)},
+	{"name": "leftup", "index": 2, "vector": Vector2i(0,-1)},
+	{"name": "left", "index": 3, "vector": Vector2i(-1,0)},
+	{"name": "leftdown", "index": 4, "vector": Vector2i(-1,1)},
+	{"name": "rightdown", "index": 5, "vector": Vector2i(0,1)},
+]
+
+static func get_direction_index(value) -> int:
+	var value_type = typeof(value)
+	var key: String
+	match value_type:
+		TYPE_INT:
+			value = (value % 6 + 6) % 6
+			return value
+		TYPE_STRING:
+			key = "name"
+		TYPE_VECTOR2I:
+			key = "vector"
+		_:
+			push_warning("value: ", value, " isn't matching type")
+			return 0
+	
+	for direction in AxialUtilities.MAIN_DIRECTIONS:
+		if direction[key] == value:
+			return direction["index"]
+	push_warning("value: ", value, " not found in table")
+	return 0
+
 static func axial_to_world(axial: Vector2i) -> Vector2:
 	var q = axial.x
 	var r = axial.y

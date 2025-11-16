@@ -23,14 +23,28 @@ func _ready():
 	
 	#Инициализируем всех актеров
 	var actors: Array[Actor] = []
+	var spawn_points = _find_spawn_points()
+	var current_spawn_point = 0
 	for actor_config in game_config.actors_data:
-		var actor = actor_config.scene.instantiate()
-		if !actor is Actor:
+		actor_config = actor_config.duplicate_deep()
+		var actor = actor_config.scene.instantiate() as Actor
+		if !actor:
 			push_warning("Only Actors can be used in Arena")
 			continue
+		if !actor_config.unique_spawnpoint:
+			actor_config.spawn_point = spawn_points[current_spawn_point]
+			current_spawn_point = (current_spawn_point + 1) % 6
 		add_child(actor)
 		actor.setup(actor_config)
 		actors.append(actor)
 	
 	#Можно начинать игру
 	_turn_manager.start_game(actors)
+
+func _find_spawn_points() -> Array[Vector2i]:
+	var spawn_points: Array[Vector2i] = []
+	for direction in AxialUtilities.MAIN_DIRECTIONS:
+		var new_spawn_point = direction["vector"] * arena_radius
+		spawn_points.append(new_spawn_point)
+	
+	return spawn_points

@@ -13,16 +13,16 @@ var _impulse_dict: Dictionary[String, Vector2i] = {}
 #Постоянные силы действующие на тело
 var _force_dict: Dictionary[String, Vector2i] = {}
 
-@onready var parent: Node2D = self.get_parent()
+@onready var parent: Actor = self.get_parent()
 @onready var event_bus: Node
 
 signal facing_changed(_facing: HexOrientation)
 
 func _ready() -> void:
 	if parent.has_signal("turn_ended"):
-		parent.connect("turn_ended", _on_turn_end)
+		parent.turn_ended.connect(_on_turn_end)
 	if parent.has_signal("setup_started"):
-		parent.connect("setup_started", _on_setup)
+		parent.setup_started.connect(_on_setup)
 
 func set_position(axial: Vector2i):
 	_axial_position = axial
@@ -44,8 +44,8 @@ func calculate_velocity() -> Vector2i:
 func get_velocity_data() -> Dictionary:
 	return {
 		"previous_velocity": _previous_velocity,
-		"impule_dict": _impulse_dict,
-		"force_dict": _force_dict,
+		"impule_dict": _impulse_dict.duplicate(),
+		"force_dict": _force_dict.duplicate(),
 		"result": calculate_velocity()
 	}
 
@@ -56,22 +56,25 @@ func _commit_velocity():
 
 func _register_impact(dict: Dictionary[String, Vector2i], force_name: String):
 	if !dict.has(force_name):
-		dict.force_name = Vector2i.ZERO
+		dict[force_name] = Vector2i.ZERO
 
 func _apply_velocity():
 	set_position(_axial_position + _velocity)
 
 func add_force(force_name: String, value: Vector2i):
 	_register_impact(_force_dict, force_name)
-	_force_dict.force_name += value
+	_force_dict[force_name] += value
 
 func add_impulse(impulse_name: String, value: Vector2i):
 	_register_impact(_impulse_dict, impulse_name)
-	_impulse_dict.impulse_name += value
+	_impulse_dict[impulse_name] += value
 
 func _on_turn_end(_actor: Actor):
 	_commit_velocity()
 	_apply_velocity()
 
 func _on_setup(_config: ActorConfig):
+	set_position(_config.spawn_point)
+	
+	#Temporary
 	add_force("gravity", Vector2i(0, -1))

@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://c4kh3mrinecq8"]
+[gd_scene load_steps=7 format=3 uid="uid://c4kh3mrinecq8"]
 
 [ext_resource type="Script" uid="uid://cgvsym4hxgs0s" path="res://Base Class/Actor.gd" id="1_3jj5i"]
 [ext_resource type="Script" uid="uid://dgk6hx0l47mxp" path="res://Modules/Controller.gd" id="1_n2rc8"]
 [ext_resource type="Script" uid="uid://bk5ges4258ki7" path="res://Base Class/Visualizer.gd" id="2_np13p"]
 [ext_resource type="Resource" uid="uid://dkxvnl4kxb403" path="res://Resources/Textures/Ship.tres" id="3_poh3c"]
 [ext_resource type="Script" uid="uid://cpwlg2v1jnfow" path="res://Base Class/HexRigidbody.gd" id="5_gwfru"]
+[ext_resource type="Script" uid="uid://bpovoinqd86cg" path="res://Base Class/VectorVisualizer.gd" id="6_tn1aj"]
 
 [node name="Actor" type="Node2D"]
 script = ExtResource("1_3jj5i")
@@ -16,5 +17,9 @@ start_texture = ExtResource("3_poh3c")
 [node name="Controller" type="Node" parent="."]
 script = ExtResource("1_n2rc8")
 
-[node name="HexRigidbody" type="Node" parent="."]
+[node name="HexRigidbody" type="Node2D" parent="."]
 script = ExtResource("5_gwfru")
+
+[node name="VectorVisualizer" type="Node2D" parent="HexRigidbody" node_paths=PackedStringArray("hex_rigidbody")]
+script = ExtResource("6_tn1aj")
+hex_rigidbody = NodePath("..")

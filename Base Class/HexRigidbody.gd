@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 class_name HexRigidbody
 
 var _facing = HexOrientation.new()
@@ -16,18 +16,24 @@ var _force_dict: Dictionary[String, Vector2i] = {}
 @onready var parent: Actor = self.get_parent()
 @onready var event_bus: Node
 
-signal facing_changed(_facing: HexOrientation)
+signal facing_changed(facing: HexOrientation)
+signal velocity_changed(velocity_data: Dictionary[String, Variant])
 
 func _ready() -> void:
 	if parent.has_signal("turn_ended"):
 		parent.turn_ended.connect(_on_turn_end)
 	if parent.has_signal("setup_started"):
 		parent.setup_started.connect(_on_setup)
+	if parent.has_signal("turn_started"):
+		parent.turn_started.connect(_on_turn_start)
 
-func set_position(axial: Vector2i):
+func set_axial_position(axial: Vector2i):
 	_axial_position = axial
 	_axial_position = AxialUtilities.axial_clamp(_axial_position, HexGridClass.get_grid_radius())
 	parent.position = AxialUtilities.axial_to_world(_axial_position)
+
+func get_axial_position() -> Vector2i:
+	return _axial_position
 
 func set_facing(value):
 	_facing.set_direction(value)
@@ -41,10 +47,10 @@ func calculate_velocity() -> Vector2i:
 		new_velocity += force
 	return new_velocity
 
-func get_velocity_data() -> Dictionary:
+func get_velocity_data() -> Dictionary[String, Variant]:
 	return {
 		"previous_velocity": _previous_velocity,
-		"impule_dict": _impulse_dict.duplicate(),
+		"impulse_dict": _impulse_dict.duplicate(),
 		"force_dict": _force_dict.duplicate(),
 		"result": calculate_velocity()
 	}
@@ -59,22 +65,30 @@ func _register_impact(dict: Dictionary[String, Vector2i], force_name: String):
 		dict[force_name] = Vector2i.ZERO
 
 func _apply_velocity():
-	set_position(_axial_position + _velocity)
+	set_axial_position(_axial_position + _velocity)
 
 func add_force(force_name: String, value: Vector2i):
 	_register_impact(_force_dict, force_name)
 	_force_dict[force_name] += value
+	velocity_changed.emit(get_velocity_data())
 
 func add_impulse(impulse_name: String, value: Vector2i):
 	_register_impact(_impulse_dict, impulse_name)
 	_impulse_dict[impulse_name] += value
+	velocity_changed.emit(get_velocity_data())
 
 func _on_turn_end(_actor: Actor):
-	_commit_velocity()
 	_apply_velocity()
+	_commit_velocity()
+	velocity_changed.emit(get_velocity_data())
+
+func _on_turn_start(_actor: Actor):
+	pass
 
 func _on_setup(_config: ActorConfig):
-	set_position(_config.spawn_point)
+	set_axial_position(_config.spawn_point)
 	
-	#Temporary
-	add_force("gravity", Vector2i(0, -1))
+	add_force("gravity", Vector2i(1, 0))
+	add_impulse("throw", Vector2i(-5, 0))
+	
+	_commit_velocity()

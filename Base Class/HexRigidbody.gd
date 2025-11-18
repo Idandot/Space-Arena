@@ -1,6 +1,8 @@
 extends Node2D
 class_name HexRigidbody
 
+@export var ship_mediator: ShipMediator
+
 var _facing = HexOrientation.new()
 #текущее положение обьекта на игровой сетке
 var _axial_position = Vector2i.ZERO
@@ -12,6 +14,9 @@ var _previous_velocity = Vector2i.ZERO
 var _impulse_dict: Dictionary[String, Vector2i] = {}
 #Постоянные силы действующие на тело
 var _force_dict: Dictionary[String, Vector2i] = {}
+
+var _scal_prev_vel := 0
+var _scal_new_vel := 0
 
 @onready var parent: Actor = self.get_parent()
 @onready var event_bus: Node
@@ -56,8 +61,8 @@ func get_velocity_data() -> Dictionary[String, Variant]:
 	}
 
 func _commit_velocity():
-	_previous_velocity = _velocity
 	_velocity = calculate_velocity()
+	_previous_velocity = _velocity
 	_impulse_dict.clear()
 
 func _register_impact(dict: Dictionary[String, Vector2i], force_name: String):
@@ -65,7 +70,10 @@ func _register_impact(dict: Dictionary[String, Vector2i], force_name: String):
 		dict[force_name] = Vector2i.ZERO
 
 func _apply_velocity():
+	
 	set_axial_position(_axial_position + _velocity)
+	
+	
 
 func add_force(force_name: String, value: Vector2i):
 	_register_impact(_force_dict, force_name)
@@ -79,16 +87,19 @@ func add_impulse(impulse_name: String, value: Vector2i):
 
 func _on_turn_end(_actor: Actor):
 	_apply_velocity()
-	_commit_velocity()
 	velocity_changed.emit(get_velocity_data())
 
 func _on_turn_start(_actor: Actor):
-	pass
+	_commit_velocity()
+	_start_movement_animation()
+	
 
 func _on_setup(_config: ActorConfig):
 	set_axial_position(_config.spawn_point)
-	
 	add_force("gravity", Vector2i(1, 0))
-	add_impulse("throw", Vector2i(-5, 0))
-	
-	_commit_velocity()
+	add_impulse("throw", Vector2i(-6, 2))
+
+func _start_movement_animation():
+	_scal_new_vel = AxialUtilities.distance(_velocity)
+	ship_mediator.call_movement_ended(_velocity, _scal_new_vel - _scal_prev_vel)
+	_scal_prev_vel = _scal_new_vel

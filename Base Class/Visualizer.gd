@@ -1,9 +1,12 @@
 extends Node2D
 
+@export var ship_mediator: ShipMediator
 @export var start_texture: TMTexture
+@export var animation_duration = 1
 
 @onready var texture := start_texture.duplicate(true)
 @onready var parent: Node2D = self.get_parent()
+var tween: Tween
 
 func _ready():
 	if parent.has_signal("turn_started"):
@@ -12,6 +15,7 @@ func _ready():
 		parent.connect("setup_started", _setup)
 	if parent.has_signal("facing_changed"):
 		parent.connect("facing_changed", _rotate)
+	ship_mediator.movement_ended.connect(_movement_animation)
 
 func _draw():
 	if texture == null:
@@ -37,3 +41,25 @@ func _setup(config: ActorConfig):
 func _rotate(facing: HexOrientation):
 	rotation = deg_to_rad(facing.get_current_angle())
 	queue_redraw()
+
+func _movement_animation(to_ax: Vector2i, a_coef:= 0):
+	var to_w = AxialUtilities.axial_to_world(to_ax)
+	
+	var ease_type = _determine_ease_type(a_coef)
+	var duration = animation_duration
+	
+	if tween:
+		tween.kill()
+	
+	tween = create_tween()
+	tween.tween_property(self, "position", to_w, duration).set_ease(ease_type)
+	position = Vector2.ZERO
+
+
+func _determine_ease_type(coeff: int) -> int:
+	if coeff > 1:
+		return Tween.EaseType.EASE_OUT
+	elif coeff < 1:
+		return Tween.EaseType.EASE_IN
+	else:
+		return Tween.EaseType.EASE_IN_OUT

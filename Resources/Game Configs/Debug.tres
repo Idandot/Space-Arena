@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="GameConfig" load_steps=4 format=3 uid="uid://dagje7y2fl2qg"]
 
 [ext_resource type="Resource" uid="uid://cvllx1sht7wlp" path="res://Resources/ActorConfigs/Basic Actor.tres" id="1_737vn"]
-[ext_resource type="Script" path="res://Resources/Game Configs/GameConfig.gd" id="2_ijpqw"]
-[ext_resource type="Resource" uid="uid://gx4pppr0ci3f" path="res://Resources/ActorConfigs/Basic Actor 2.tres" id="2_xmpig"]
+[ext_resource type="Script" uid="uid://daq1waive7xpx" path="res://Resources/ActorConfigs/ActorConfig.gd" id="1_lpy5o"]
+[ext_resource type="Script" uid="uid://cemxx5dpd6xcu" path="res://Resources/Game Configs/GameConfig.gd" id="2_ijpqw"]
 
 [resource]
 script = ExtResource("2_ijpqw")
-actors_data = Array[Resource("res://Resources/ActorConfigs/ActorConfig.gd")]([ExtResource("1_737vn"), ExtResource("2_xmpig")])
+actors_data = Array[ExtResource("1_lpy5o")]([ExtResource("1_737vn")])

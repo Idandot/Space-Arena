@@ -8,4 +8,6 @@ resource_name = "left"
 script = ExtResource("2_7fvgc")
 scene = ExtResource("1_ssagi")
 color = Color(0.117647, 1, 0, 1)
-initial_facing = "l"
+unique_spawnpoint = true
+spawn_point = Vector2i(10, -10)
+initial_facing = "L"

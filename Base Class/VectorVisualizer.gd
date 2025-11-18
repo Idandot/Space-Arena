@@ -46,11 +46,22 @@ func _draw():
 		if !vector_data["arrow"]:
 			draw_line(fromW, toW, vd["color"], vd["width"])
 		else:
-			_draw_arrow(fromW, toW, vd["color"], vd["width"])
+			_draw_arrow(fromW, toW, vd["color"], vd["width"], vd["jagged"])
 		pass
 
-func _draw_arrow(from: Vector2, to: Vector2, col:= Color.WHITE, w:=-1):
-	draw_line(from, to, col, w)
+func _draw_arrow(from: Vector2, to: Vector2, col:= Color.WHITE, w:=5, jagged := false):
+	if !jagged:
+		draw_line(from, to, col, w)
+	else:
+		var axial_vector = AxialUtilities.world_to_axial(to-from)
+		var axial_path = AxialUtilities.decompose_vector(axial_vector)
+		var world_points = [from]
+		var world_sum = Vector2.ZERO
+		for vector in axial_path:
+			var world_vector = AxialUtilities.axial_to_world(vector)
+			world_sum += world_vector
+			world_points.append(world_sum)
+		draw_polyline(world_points, col, w)
 	var direction = (to - from)
 	if direction.length() == 0:
 		return
@@ -74,7 +85,7 @@ func _hex_rigidbody_visualization(velocity_data: Dictionary[String, Variant]):
 		"end": velocity_data["result"],
 		"color": Color.WHITE,
 		"width": 5.0,
-		"arrow": true
+		"arrow": true,
 	})
 	add_vector({
 		"name": "inertial_velocity",
@@ -82,7 +93,8 @@ func _hex_rigidbody_visualization(velocity_data: Dictionary[String, Variant]):
 		"end": velocity_data["previous_velocity"],
 		"color": Color.BLUE,
 		"width": 3.0,
-		"arrow": true
+		"arrow": true,
+		
 	})
 	for impulse_name in velocity_data["impulse_dict"].keys():
 		var impulse: Vector2i = velocity_data["impulse_dict"][impulse_name]

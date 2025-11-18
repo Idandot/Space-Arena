@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c4kh3mrinecq8"]
+[gd_scene load_steps=8 format=3 uid="uid://c4kh3mrinecq8"]
 
 [ext_resource type="Script" uid="uid://cgvsym4hxgs0s" path="res://Base Class/Actor.gd" id="1_3jj5i"]
 [ext_resource type="Script" uid="uid://dgk6hx0l47mxp" path="res://Modules/Controller.gd" id="1_n2rc8"]
@@ -6,20 +6,27 @@
 [ext_resource type="Resource" uid="uid://dkxvnl4kxb403" path="res://Resources/Textures/Ship.tres" id="3_poh3c"]
 [ext_resource type="Script" uid="uid://cpwlg2v1jnfow" path="res://Base Class/HexRigidbody.gd" id="5_gwfru"]
 [ext_resource type="Script" uid="uid://bpovoinqd86cg" path="res://Base Class/VectorVisualizer.gd" id="6_tn1aj"]
+[ext_resource type="Script" uid="uid://cq6i5t0avk767" path="res://Base Class/ShipMediator.gd" id="7_r3n7q"]
 
 [node name="Actor" type="Node2D"]
 script = ExtResource("1_3jj5i")
 
-[node name="Visualizer" type="Node2D" parent="."]
+[node name="Visualizer" type="Node2D" parent="." node_paths=PackedStringArray("ship_mediator")]
 script = ExtResource("2_np13p")
+ship_mediator = NodePath("../ShipMediator")
 start_texture = ExtResource("3_poh3c")
 
 [node name="Controller" type="Node" parent="."]
 script = ExtResource("1_n2rc8")
 
-[node name="HexRigidbody" type="Node2D" parent="."]
+[node name="HexRigidbody" type="Node2D" parent="." node_paths=PackedStringArray("ship_mediator")]
 script = ExtResource("5_gwfru")
+ship_mediator = NodePath("../ShipMediator")
 
 [node name="VectorVisualizer" type="Node2D" parent="HexRigidbody" node_paths=PackedStringArray("hex_rigidbody")]
+z_index = -100
 script = ExtResource("6_tn1aj")
 hex_rigidbody = NodePath("..")
+
+[node name="ShipMediator" type="Node" parent="."]
+script = ExtResource("7_r3n7q")

@@ -2,7 +2,7 @@ extends Node
 class_name TurnManager
 
 #Вынести в ресурс в будущем
-@export var max_round = 10
+@export var max_round = 9
 
 var _starting_actors: Array[Actor] = []
 var _alive_actors: Array[Actor] = []
@@ -16,6 +16,7 @@ var _current_game_state := game_states.INACTIVE
 
 ##начинает игровой цикл
 func start_game(actors: Array[Actor]) -> void:
+	await get_tree().create_timer(2).timeout
 	if _current_game_state != game_states.INACTIVE:
 		push_warning("Game is already started")
 		return
@@ -88,6 +89,7 @@ func _on_turn_ended(actor: Actor):
 	if _current_actor != actor:
 		push_warning("Received turn end from wrong actor")
 		return
+	
 	
 	_check_victory_conditions()
 	_start_next_turn()

@@ -6,7 +6,6 @@ signal setup_started(config: ActorConfig)
 signal turn_ended(actor: Actor)
 signal turn_started(actor: Actor)
 
-
 @export var modules: Array[PackedScene] = []
 
 var _initiative = 0
@@ -17,7 +16,7 @@ func setup(config: ActorConfig):
 
 func take_turn():
 	emit_signal("turn_started", self)
-	await get_tree().create_timer(2).timeout
+	await get_tree().create_timer(1).timeout
 	end_turn()
 
 func start_movement_phase():

@@ -16,12 +16,12 @@ func _get_angle(value) -> int:
 
 func set_direction(value):
 	_index = AxialUtilities.get_direction_index(value)
-	_name = AxialUtilities.MAIN_DIRECTIONS[_index]["name"]
-	_vector = AxialUtilities.MAIN_DIRECTIONS[_index]["vector"]
+	_name = AxialUtilities.get_directions_table()[_index]["name"]
+	_vector = AxialUtilities.get_directions_table()[_index]["vector"]
 	_angle = _get_angle(_index)
 
 func get_direction() -> Dictionary:
-	return AxialUtilities.MAIN_DIRECTIONS[_index]
+	return AxialUtilities.get_directions_table()[_index]
 
 func get_current_index() -> int:
 	return _index

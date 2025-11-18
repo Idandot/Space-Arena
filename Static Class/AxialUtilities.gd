@@ -6,35 +6,40 @@ const SQRT3 := sqrt(3)
 const HEX_HEIGHT := HEX_SIDE * 2
 const HEX_WIDTH := HEX_SIDE * SQRT3
 
-const MAIN_DIRECTIONS = [
-	{"name": "right", "index": 0, "vector": Vector2i(1,0)},
-	{"name": "rightup", "index": 1, "vector": Vector2i(1,-1)},
-	{"name": "leftup", "index": 2, "vector": Vector2i(0,-1)},
-	{"name": "left", "index": 3, "vector": Vector2i(-1,0)},
-	{"name": "leftdown", "index": 4, "vector": Vector2i(-1,1)},
-	{"name": "rightdown", "index": 5, "vector": Vector2i(0,1)},
+const DIRECTIONS: Array[Dictionary]= [
+	{"name": "R", "index": 0, "vector": Vector2i(1,0)},
+	{"name": "RUU", "index": 1, "vector": Vector2i(1,-1)},
+	{"name": "LUU", "index": 2, "vector": Vector2i(0,-1)},
+	{"name": "L", "index": 3, "vector": Vector2i(-1,0)},
+	{"name": "LDD", "index": 4, "vector": Vector2i(-1,1)},
+	{"name": "RDD", "index": 5, "vector": Vector2i(0,1)},
+	{"name": "RRU", "index": 6, "vector": Vector2i(2,-1)},
+	{"name": "U", "index": 7, "vector": Vector2i(1,-2)},
+	{"name": "LLU", "index": 8, "vector": Vector2i(-1,-1)},
+	{"name": "LLD", "index": 9, "vector": Vector2i(-2, 1)},
+	{"name": "D", "index": 10, "vector": Vector2i(-1,2)},
+	{"name": "RRD", "index": 11, "vector": Vector2i(1,1)},
 ]
 
-static func get_direction_index(value) -> int:
-	var value_type = typeof(value)
-	var key: String
-	match value_type:
-		TYPE_INT:
-			value = (value % 6 + 6) % 6
-			return value
-		TYPE_STRING:
-			key = "name"
-		TYPE_VECTOR2I:
-			key = "vector"
-		_:
-			push_warning("value: ", value, " isn't matching type")
-			return 0
+static func get_direction_index(value, extended := false) -> int:
+	if typeof(value) == TYPE_INT:
+		var max_index = 11 if extended else 5
+		return clamp(value, 0, max_index)
 	
-	for direction in AxialUtilities.MAIN_DIRECTIONS:
+	var directions = get_directions_table(extended)
+	var key = "name" if typeof(value) == TYPE_STRING else "vector"
+	
+	for direction in directions:
 		if direction[key] == value:
 			return direction["index"]
-	push_warning("value: ", value, " not found in table")
+	
+	push_warning("value not found: ", value)
 	return 0
+
+static func get_directions_table(extended := false, only_diagonal := false) -> Array[Dictionary]:
+	var slice_start = 0 if !only_diagonal else 6
+	var slice_end = 12 if extended or only_diagonal else 6
+	return DIRECTIONS.slice(slice_start, slice_end)
 
 static func axial_to_world(axial: Vector2i) -> Vector2:
 	var q = axial.x
@@ -136,3 +141,59 @@ static func find_rect(hexes: Array[Vector2i]) -> Rect2:
 	var rect_size = max_point - min_point 
 	
 	return Rect2(rect_position, rect_size)
+
+static func decompose_vector(vector: Vector2i) -> Array[Vector2i]:
+	#Ищем основное направление по максимальному скалярному произведению
+	var main_directions = get_directions_table()
+	var best_dot = -INF
+	var main_dir_vector: Vector2i
+	for i in range(6):
+		var dir_vector = main_directions[i]["vector"]
+		var dir_vectorW = axial_to_world(dir_vector)
+		var vectorW = axial_to_world(vector)
+		var dot = vectorW.x * dir_vectorW.x + vectorW.y * dir_vectorW.y
+		if dot > best_dot:
+			best_dot = dot
+			main_dir_vector = dir_vector
+	
+	#Ищем побочное направление по максимальному скалярному произведению
+	var diagonal_directions = get_directions_table(true, true)
+	best_dot = -INF
+	var sec_dir_vector: Vector2i
+	for i in range(6):
+		var dir_vector = diagonal_directions[i]["vector"]
+		var dir_vectorW = axial_to_world(dir_vector)
+		var vectorW = axial_to_world(vector)
+		var dot = vectorW.x * dir_vectorW.x + vectorW.y * dir_vectorW.y
+		if dot > best_dot:
+			best_dot = dot
+			sec_dir_vector = dir_vector
+	
+	#Теперь нужно определить правильное разложение
+	var final_solution = solve_by_Cramer(main_dir_vector, sec_dir_vector, vector)
+	
+	print("main: ", main_dir_vector, ", sec: ", sec_dir_vector)
+	#Создаем итоговое разложение
+	var result_decomposition: Array[Vector2i] = []
+	for i in range(final_solution.x):
+		result_decomposition.append(main_dir_vector)
+	for i in range(final_solution.y):
+		result_decomposition.append(sec_dir_vector)
+	
+	#Проверка полного совпадения
+	var composed_vector:= Vector2i.ZERO
+	for v in result_decomposition:
+		composed_vector += v
+	if composed_vector != vector:
+		push_error("FUCK, IT DIDN'T WORK")
+	
+	return result_decomposition
+
+static func solve_by_Cramer(colA: Vector2, colB: Vector2, C: Vector2) -> Vector2:
+	var det = colA.x * colB.y - colA.y * colB.x
+	if det == 0:
+		print("linearly dependent")
+		return Vector2.ZERO
+	var A = (C.x * colB.y - C.y * colB.x)/det
+	var B = (colA.x * C.y - colA.y * C.x)/det
+	return Vector2(A, B)

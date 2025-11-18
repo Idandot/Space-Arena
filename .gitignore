@@ -2,3 +2,4 @@
 .godot/
 *.uid
 *.import
+*.tmp

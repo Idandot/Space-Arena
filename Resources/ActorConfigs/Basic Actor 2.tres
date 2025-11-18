@@ -7,4 +7,4 @@
 script = ExtResource("2_6narg")
 scene = ExtResource("1_0u84v")
 color = Color(1, 1, 1, 1)
-initial_facing = "right"
+initial_facing = "r"

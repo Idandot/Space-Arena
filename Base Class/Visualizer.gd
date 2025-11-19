@@ -11,6 +11,8 @@ var tween: Tween
 func _ready():
 	if parent.has_signal("turn_started"):
 		parent.connect("turn_started", _queue_redraw)
+	if parent.has_signal("turn_ended"):
+		parent.connect("turn_ended", _reset_position)
 	if parent.has_signal("setup_started"):
 		parent.connect("setup_started", _setup)
 	if parent.has_signal("facing_changed"):
@@ -30,7 +32,11 @@ func _draw():
 		draw_colored_polygon(texture.points, texture.fill_color)
 
 func _queue_redraw(_actor: Actor) -> void:
+	position = Vector2i.ZERO
 	queue_redraw()
+
+func _reset_position(_actor: Actor) -> void:
+	position = Vector2i.ZERO
 
 func _setup(config: ActorConfig):
 	if texture == null:
@@ -42,24 +48,14 @@ func _rotate(facing: HexOrientation):
 	rotation = deg_to_rad(facing.get_current_angle())
 	queue_redraw()
 
-func _movement_animation(to_ax: Vector2i, a_coef:= 0):
+func _movement_animation(to_ax: Vector2i):
 	var to_w = AxialUtilities.axial_to_world(to_ax)
 	
-	var ease_type = _determine_ease_type(a_coef)
 	var duration = animation_duration
 	
 	if tween:
 		tween.kill()
 	
 	tween = create_tween()
-	tween.tween_property(self, "position", to_w, duration).set_ease(ease_type)
+	tween.tween_property(self, "position", to_w, duration)
 	position = Vector2.ZERO
-
-
-func _determine_ease_type(coeff: int) -> int:
-	if coeff > 1:
-		return Tween.EaseType.EASE_OUT
-	elif coeff < 1:
-		return Tween.EaseType.EASE_IN
-	else:
-		return Tween.EaseType.EASE_IN_OUT

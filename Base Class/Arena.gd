@@ -39,7 +39,7 @@ func _ready():
 		actors.append(actor)
 	
 	#Можно начинать игру
-	_turn_manager.start_game(actors)
+	_turn_manager.start_game(actors, game_config)
 
 func _find_spawn_points() -> Array[Vector2i]:
 	var spawn_points: Array[Vector2i] = []

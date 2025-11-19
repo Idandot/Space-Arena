@@ -73,6 +73,7 @@ func _draw_arrow(from: Vector2, to: Vector2, col:= Color.WHITE, w:=5, jagged := 
 
 func _update_visuals():
 	queue_redraw()
+	position = Vector2.ZERO
 
 func _hex_rigidbody_visualization(velocity_data: Dictionary[String, Variant]):
 	

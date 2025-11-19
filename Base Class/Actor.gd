@@ -5,28 +5,42 @@ class_name Actor
 signal setup_started(config: ActorConfig)
 signal turn_ended(actor: Actor)
 signal turn_started(actor: Actor)
+signal killed(actor: Actor)
 
-@export var modules: Array[PackedScene] = []
+var _initiative: int = 0
+var _is_alive: bool = true
+var _turn_await: float = 1.6
 
-var _initiative = 0
-var _is_alive = true
-
-func setup(config: ActorConfig):
+func setup(config: ActorConfig) -> void:
+	if not config:
+		push_error("no config, setup aborted")
+		return
+	
+	_is_alive = true
+	
 	setup_started.emit(config)
+	_initiative = config.get_meta("initiative", 0)
 
-func take_turn():
+func take_turn() -> void:
+	if !_is_alive:
+		return
+	
 	emit_signal("turn_started", self)
-	await get_tree().create_timer(1).timeout
+	
+	#Временно, будет перемещено в компонент Controller!
+	await get_tree().create_timer(_turn_await).timeout
+	
 	end_turn()
 
-func start_movement_phase():
-	pass
-
-func end_turn():
+func end_turn() -> void:
 	emit_signal("turn_ended", self)
 
-func get_initiative():
+func get_initiative() -> int:
 	return _initiative
 
-func is_alive():
+func is_alive() -> bool:
 	return _is_alive
+
+func kill() -> void:
+	_is_alive = false
+	killed.emit(self)

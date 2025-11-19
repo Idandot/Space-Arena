@@ -7,3 +7,4 @@
 [resource]
 script = ExtResource("2_ijpqw")
 actors_data = Array[ExtResource("1_lpy5o")]([ExtResource("1_737vn")])
+max_round = 9

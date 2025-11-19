@@ -87,6 +87,7 @@ func _hex_rigidbody_visualization(velocity_data: Dictionary[String, Variant]):
 		"color": Color.WHITE,
 		"width": 5.0,
 		"arrow": true,
+		"jagged": false
 	})
 	add_vector({
 		"name": "inertial_velocity",
@@ -95,7 +96,6 @@ func _hex_rigidbody_visualization(velocity_data: Dictionary[String, Variant]):
 		"color": Color.BLUE,
 		"width": 3.0,
 		"arrow": true,
-		
 	})
 	for impulse_name in velocity_data["impulse_dict"].keys():
 		var impulse: Vector2i = velocity_data["impulse_dict"][impulse_name]

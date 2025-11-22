@@ -9,11 +9,9 @@ signal killed(actor: Actor)
 
 var _initiative: int = 0
 var _is_alive: bool = true
-var _turn_await: float = 1.6
 var _state = ActorStates.IDLE
 
 enum ActorStates {MOVEMENT, ANIMATION, IDLE}
-
 
 func setup(config: ActorConfig) -> void:
 	if not config:
@@ -31,11 +29,7 @@ func take_turn() -> void:
 		return
 	
 	emit_signal("turn_started", self)
-	
-	#Временно, будет перемещено в компонент Controller!
-	await get_tree().create_timer(_turn_await).timeout
-	
-	end_turn()
+
 
 func end_turn() -> void:
 	_state = ActorStates.IDLE

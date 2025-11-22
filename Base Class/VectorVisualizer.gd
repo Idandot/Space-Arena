@@ -77,8 +77,38 @@ func _update_visuals():
 
 func _hex_rigidbody_visualization(velocity_data: Dictionary[String, Variant]):
 	
+	
 	for vector_name in vectors.keys():
 		delete_vector(vector_name)
+	
+	add_vector({
+		"name": "inertial_velocity",
+		"start": Vector2i.ZERO,
+		"end": velocity_data["previous_velocity"],
+		"color": Color.BLUE,
+		"width": 3.0,
+		"arrow": false,
+	})
+	for impulse_name in velocity_data["impulse_dict"].keys():
+		var impulse: Vector2i = velocity_data["impulse_dict"][impulse_name]
+		add_vector({
+			"name": "impulse_"+impulse_name,
+			"start": Vector2i.ZERO,
+			"end": impulse,
+			"color": Color.RED,
+			"width": 3.0,
+			"arrow": false
+		})
+	for force_name in velocity_data["force_dict"].keys():
+		var force: Vector2i = velocity_data["force_dict"][force_name]
+		add_vector({
+			"name": "force_"+force_name,
+			"start": Vector2i.ZERO,
+			"end": force,
+			"color": Color.GREEN,
+			"width": 3.0,
+			"arrow": false
+		})
 	
 	add_vector({
 		"name": "velocity",
@@ -89,32 +119,4 @@ func _hex_rigidbody_visualization(velocity_data: Dictionary[String, Variant]):
 		"arrow": true,
 		"jagged": false
 	})
-	add_vector({
-		"name": "inertial_velocity",
-		"start": Vector2i.ZERO,
-		"end": velocity_data["previous_velocity"],
-		"color": Color.BLUE,
-		"width": 3.0,
-		"arrow": true,
-	})
-	for impulse_name in velocity_data["impulse_dict"].keys():
-		var impulse: Vector2i = velocity_data["impulse_dict"][impulse_name]
-		add_vector({
-			"name": "impulse_"+impulse_name,
-			"start": Vector2i.ZERO,
-			"end": impulse,
-			"color": Color.RED,
-			"width": 3.0,
-			"arrow": true
-		})
-	for force_name in velocity_data["force_dict"].keys():
-		var force: Vector2i = velocity_data["force_dict"][force_name]
-		add_vector({
-			"name": "force_"+force_name,
-			"start": Vector2i.ZERO,
-			"end": force,
-			"color": Color.GREEN,
-			"width": 3.0,
-			"arrow": true
-		})
 	_update_visuals()

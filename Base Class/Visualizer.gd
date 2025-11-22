@@ -1,6 +1,7 @@
 extends Node2D
 
 @export var ship_mediator: ShipMediator
+@export var hex_rigidbody: HexRigidbody
 @export var start_texture: TMTexture
 @export var animation_duration = 1
 
@@ -18,6 +19,8 @@ func _ready():
 	if parent.has_signal("facing_changed"):
 		parent.connect("facing_changed", _rotate)
 	ship_mediator.movement_ended.connect(_movement_animation)
+	if hex_rigidbody != null:
+		hex_rigidbody.facing_changed.connect(_rotate)
 
 func _draw():
 	if texture == null:
@@ -45,7 +48,7 @@ func _setup(config: ActorConfig):
 	queue_redraw()
 
 func _rotate(facing: HexOrientation):
-	rotation = deg_to_rad(facing.get_current_angle())
+	rotation = -deg_to_rad(facing.get_current_angle())
 	queue_redraw()
 
 func _movement_animation(to_ax: Vector2i):
@@ -58,4 +61,8 @@ func _movement_animation(to_ax: Vector2i):
 	
 	tween = create_tween()
 	tween.tween_property(self, "position", to_w, duration)
+	
+	await tween.finished
+	
 	position = Vector2.ZERO
+	parent.end_turn()

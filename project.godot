@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 HexGridClass="*res://Autoload Class/HexGrid.gd"
+EventManager="*res://Autoload Class/EventManager.gd"
 
 [display]
 

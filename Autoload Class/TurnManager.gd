@@ -41,7 +41,7 @@ func start_game(actors: Array[Actor], game_config: GameConfig) -> void:
 		actor.turn_ended.connect(_on_turn_ended)
 		actor.killed.connect(_on_actor_killed)
 	
-	print("Turn Manager: turn started with %d actors" % actors.size())
+	print("Turn Manager: game started with %d actors" % actors.size())
 	_start_next_turn()
 	
 	game_started.emit(game_config)

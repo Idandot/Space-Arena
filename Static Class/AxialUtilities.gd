@@ -17,8 +17,7 @@ const DIRECTIONS: Array[Dictionary]= [
 
 static func get_direction_index(value) -> int:
 	if typeof(value) == TYPE_INT:
-		var max_index = 5
-		return clamp(value, 0, max_index)
+		return (value+6) % 6
 	
 	var directions = get_directions_table()
 	var key = "name" if typeof(value) == TYPE_STRING else "vector"

@@ -31,7 +31,7 @@ func get_velocity_data() -> Dictionary[String, Variant]:
 		"previous_velocity": _previous_velocity,
 		"impulse_dict": _impulse_dict.duplicate(),
 		"force_dict": _force_dict.duplicate(),
-		"result": _velocity,
+		"result": _calculate_velocity(),
 	}
 
 func add_force(force_name: String, value: Vector2i):
@@ -55,6 +55,9 @@ func set_facing(value):
 	_facing.set_direction(value)
 	facing_changed.emit(_facing)
 
+func get_facing():
+	return _facing
+
 #ЛОКАЛЬНЫЕ МЕТОДЫ
 
 func _ready() -> void:
@@ -64,6 +67,8 @@ func _ready() -> void:
 		parent.setup_started.connect(_on_setup)
 	if parent.has_signal("turn_started"):
 		parent.turn_started.connect(_on_turn_start)
+	if ship_mediator.has_signal("planning_completed"):
+		ship_mediator.planning_completed.connect(_planning_completed)
 
 ##Фаза инициализации корабля
 func _on_setup(_config: ActorConfig):
@@ -78,10 +83,6 @@ func _on_turn_start(_actor: Actor):
 	_displacement = _calculate_displacement()
 	_velocity = _calculate_velocity()
 	velocity_changed.emit(get_velocity_data())
-	
-	#В будущем заменим на сигнал от контроллера
-	await get_tree().create_timer(0.5).timeout
-	_planning_completed()
 
 ##Фаза анимации перемещения, многие функции не работают правильно в эту фазу
 func _planning_completed():

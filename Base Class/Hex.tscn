@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://drbie2ve3q7dd"]
 
-[ext_resource type="Script" path="res://Base Class/Hex.gd" id="1_0ss7i"]
+[ext_resource type="Script" uid="uid://b0y1ek0gm6aae" path="res://Base Class/Hex.gd" id="1_0ss7i"]
 
 [node name="Hex" type="Node2D"]
 script = ExtResource("1_0ss7i")

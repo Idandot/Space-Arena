@@ -70,6 +70,7 @@ func _on_turn_started(_actor: Actor):
 	if !_active:
 		return
 	_thrust = min(_thrust + engine_config.thrust_regeneration, engine_config.max_thrust)
+	GameEvents.thrust_changed.emit(parent, _thrust, engine_config.max_thrust)
 
 func _try_spend_thrust(amount: int) -> bool:
 	if !_active:
@@ -78,6 +79,7 @@ func _try_spend_thrust(amount: int) -> bool:
 		print("Not enough thrust to make action")
 		return false
 	_thrust -= amount
+	GameEvents.thrust_changed.emit(parent, _thrust, engine_config.max_thrust)
 	return true
 
 func _apply_impulse(power: int):

@@ -1,11 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://desilnlp5gqtr"]
+[gd_scene load_steps=9 format=3 uid="uid://desilnlp5gqtr"]
 
 [ext_resource type="Script" uid="uid://dwvjpdp1pitku" path="res://Base Class/Arena.gd" id="1_q4evv"]
 [ext_resource type="PackedScene" uid="uid://drbie2ve3q7dd" path="res://Base Class/Hex.tscn" id="3_4hi4l"]
 [ext_resource type="Resource" uid="uid://dagje7y2fl2qg" path="res://Resources/Game Configs/Debug.tres" id="4_4lkml"]
 [ext_resource type="Script" uid="uid://bsxmn8p1yrsl7" path="res://Base Class/ArenaCam.gd" id="4_kmxm0"]
 [ext_resource type="Script" uid="uid://ra5ms2jmqdqj" path="res://Autoload Class/HexGrid.gd" id="4_t804p"]
-[ext_resource type="Script" uid="uid://3ie11nou16mr" path="res://Autoload Class/TurnManager.gd" id="6_5jmcn"]
+[ext_resource type="Script" uid="uid://3ie11nou16mr" path="res://Base Class/TurnManager.gd" id="6_5jmcn"]
+[ext_resource type="Script" uid="uid://dvhdky2xyyqyb" path="res://Autoload Class/UIManager.gd" id="7_2o31o"]
 
 [sub_resource type="Theme" id="Theme_s45n5"]
 default_font_size = 24
@@ -24,20 +25,9 @@ script = ExtResource("4_kmxm0")
 [node name="TurnManager" type="Node" parent="."]
 script = ExtResource("6_5jmcn")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="UI" type="Control" parent="CanvasLayer"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -20.0
-offset_top = -20.0
-offset_right = -20.0
-offset_bottom = -20.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="CanvasLayer" type="CanvasLayer" parent="." node_paths=PackedStringArray("thrust_label")]
+script = ExtResource("7_2o31o")
+thrust_label = NodePath("Label")
 
 [node name="Label" type="Label" parent="CanvasLayer"]
 anchors_preset = 1

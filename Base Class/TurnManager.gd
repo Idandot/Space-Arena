@@ -19,8 +19,6 @@ signal game_ended(reason: String)
 
 ##начинает игровой цикл
 func start_game(actors: Array[Actor], game_config: GameConfig) -> void:
-	#Для задержки начала игры, если нужно снять видео
-	#await get_tree().create_timer(2).timeout
 	if _current_game_state != game_states.INACTIVE:
 		push_warning("Game is already started")
 		return

@@ -5,7 +5,7 @@ var turn_phase: Enums.turn_phase = Enums.turn_phase.MOVEMENT:
 	set(value):
 		turn_phase = value
 		GameEvents.phase_changed.emit(parent, turn_phase)
-		print(parent._display_name, "'s turn phase changed to ", turn_phase)
+		print(parent.display_name, "'s turn phase changed to ", turn_phase)
 	get:
 		return turn_phase
 

@@ -7,20 +7,20 @@ class_name UIManager
 
 func _ready() -> void:
 	GameEvents.thrust_changed.connect(_update_thrust_label)
-	GameEvents.round_changed.connect(_update_turn_label)
+	GameEvents.round_changed.connect(_update_round_label)
 	GameEvents.phase_changed.connect(_update_phase_label)
 
 func _update_thrust_label(_actor: Actor, thrust: int, max_thrust: int):
 	if !thrust_label:
 		return
-	thrust_label.text = "Thrust: " + str(thrust) + "/" + str(max_thrust)
+	thrust_label.text = "Thrust: %s/%s" % [thrust, max_thrust]
 
-func _update_turn_label(current_round: int, max_round: int):
+func _update_round_label(current_round: int, max_round: int):
 	if !round_label:
 		return
-	round_label.text = "Round: " + str(current_round) + "/" + str(max_round)
+	round_label.text = "Round: %s/%s" % [current_round, max_round]
 
-func _update_phase_label(_actor: Actor, phase: Enums.turn_phase):
+func _update_phase_label(actor: Actor, phase: Enums.turn_phase):
 	if !phase_label:
 		return
 	var phase_str: String = ""
@@ -29,4 +29,4 @@ func _update_phase_label(_actor: Actor, phase: Enums.turn_phase):
 			phase_str = "movement"
 		Enums.turn_phase.ACTION:
 			phase_str = "action"
-	phase_label.text = _actor._display_name + "'s " + phase_str + " phase"
+	phase_label.text = "%s's %s phase" % [actor.display_name, phase_str]

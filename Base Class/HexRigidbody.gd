@@ -72,10 +72,10 @@ func _ready() -> void:
 ##Фаза инициализации корабля
 func _on_setup(_config: ActorConfig):
 	set_axial_position(_config.spawn_point)
+	set_facing(_config.initial_facing)
 	
 	#Временно для дебага!
 	add_force("gravity", Vector2i(1, 0))
-	add_impulse("throw", Vector2i(-6, 2))
 
 ##Фаза планирования движения
 func _on_turn_start(_actor: Actor):

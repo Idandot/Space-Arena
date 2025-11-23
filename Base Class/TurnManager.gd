@@ -26,11 +26,9 @@ func start_game(actors: Array[Actor], game_config: GameConfig) -> void:
 		push_error("Cannot start game without actors")
 		return
 	
-	if game_config.has_meta("max_round"):
-		_max_round = game_config.max_round
+	_max_round = game_config.max_round
 	
 	_current_game_state = game_states.ACTIVE
-	
 	_current_round = 0
 	
 	_starting_actors = actors

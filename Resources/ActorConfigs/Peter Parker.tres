@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ActorConfig" load_steps=3 format=3 uid="uid://cvllx1sht7wlp"]
+
+[ext_resource type="PackedScene" uid="uid://c4kh3mrinecq8" path="res://Base Class/Actor.tscn" id="1_hwjvr"]
+[ext_resource type="Script" uid="uid://daq1waive7xpx" path="res://Resources/ActorConfigs/ActorConfig.gd" id="2_3rpy7"]
+
+[resource]
+resource_name = "Peter Parker"
+script = ExtResource("2_3rpy7")
+scene = ExtResource("1_hwjvr")
+color = Color(0.7546062, 0.21740559, 0.24173817, 1)
+unique_spawnpoint = true
+spawn_point = Vector2i(10, -10)
+initial_facing = "LDD"
+display_name = "Peter Parker"

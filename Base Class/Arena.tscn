@@ -1,21 +1,41 @@
-[gd_scene load_steps=10 format=3 uid="uid://desilnlp5gqtr"]
+[gd_scene load_steps=15 format=3 uid="uid://desilnlp5gqtr"]
 
 [ext_resource type="Script" uid="uid://dwvjpdp1pitku" path="res://Base Class/Arena.gd" id="1_q4evv"]
 [ext_resource type="PackedScene" uid="uid://drbie2ve3q7dd" path="res://Base Class/Hex.tscn" id="3_4hi4l"]
-[ext_resource type="Resource" uid="uid://dagje7y2fl2qg" path="res://Resources/Game Configs/Debug.tres" id="4_4lkml"]
+[ext_resource type="Script" uid="uid://daq1waive7xpx" path="res://Resources/ActorConfigs/ActorConfig.gd" id="3_7idsn"]
+[ext_resource type="Resource" uid="uid://cvllx1sht7wlp" path="res://Resources/ActorConfigs/Peter Parker.tres" id="4_iroh1"]
 [ext_resource type="Script" uid="uid://bsxmn8p1yrsl7" path="res://Base Class/ArenaCam.gd" id="4_kmxm0"]
 [ext_resource type="Script" uid="uid://ra5ms2jmqdqj" path="res://Autoload Class/HexGrid.gd" id="4_t804p"]
+[ext_resource type="PackedScene" uid="uid://c4kh3mrinecq8" path="res://Base Class/Actor.tscn" id="5_l36q3"]
 [ext_resource type="Script" uid="uid://3ie11nou16mr" path="res://Base Class/TurnManager.gd" id="6_5jmcn"]
+[ext_resource type="Script" uid="uid://cemxx5dpd6xcu" path="res://Resources/Game Configs/GameConfig.gd" id="6_e5ake"]
 [ext_resource type="Script" uid="uid://dvhdky2xyyqyb" path="res://Autoload Class/UIManager.gd" id="7_2o31o"]
 [ext_resource type="Theme" uid="uid://dho5hnu13gwhm" path="res://Themes/Font.tres" id="8_j1a1p"]
 
+[sub_resource type="Resource" id="Resource_4e2fv"]
+script = ExtResource("3_7idsn")
+scene = ExtResource("5_l36q3")
+color = Color(0.05283022, 0.5065593, 0.30418986, 1)
+unique_spawnpoint = true
+spawn_point = Vector2i(-2, -2)
+initial_facing = "LUU"
+initiative = 7
+display_name = "Eren Yeager"
+metadata/_custom_type_script = "uid://daq1waive7xpx"
+
+[sub_resource type="Resource" id="Resource_c5xbw"]
+script = ExtResource("6_e5ake")
+actors_data = Array[ExtResource("3_7idsn")]([ExtResource("4_iroh1"), SubResource("Resource_4e2fv")])
+max_round = 9
+metadata/_custom_type_script = "uid://cemxx5dpd6xcu"
+
 [sub_resource type="Theme" id="Theme_j1a1p"]
-default_font_size = 12
+default_font_size = 20
 
 [node name="Arena" type="Node2D"]
 script = ExtResource("1_q4evv")
 hex_scene = ExtResource("3_4hi4l")
-game_config = ExtResource("4_4lkml")
+game_config = SubResource("Resource_c5xbw")
 
 [node name="HexGrid" type="Node2D" parent="."]
 script = ExtResource("4_t804p")

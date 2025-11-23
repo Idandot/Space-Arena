@@ -7,14 +7,18 @@ signal turn_ended(actor: Actor)
 signal turn_started(actor: Actor)
 signal killed(actor: Actor)
 
-var _display_name: String = ""
+var display_name: String = "":
+	set(value):
+		display_name = value
+	get:
+		return display_name
 var _initiative: int = 0
 var _is_alive: bool = true
 
 var state: Enums.actor_states = Enums.actor_states.IDLE:
 	set(value):
 		state = value
-		print(_display_name, "'s state changed to ", state)
+		print(display_name, "'s state changed to ", state)
 	get:
 		return state
 
@@ -27,7 +31,7 @@ func setup(config: ActorConfig) -> void:
 	
 	setup_started.emit(config)
 	_initiative = config.get_meta("initiative", 0)
-	_display_name = config.get("display_name")
+	display_name = config.get("display_name")
 
 func take_turn() -> void:
 	state = Enums.actor_states.ACTIVE

@@ -6,5 +6,5 @@ func _fire():
 
 func get_available_actions() -> Array[Action]:
 	return [
-		Action.new("weapon_fire", _fire, Enums.turn_phase.ACTION, "fire")
+		#Action.new("weapon_fire", _fire, Enums.turn_phase.ACTION, "fire")
 	]

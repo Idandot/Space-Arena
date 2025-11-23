@@ -95,6 +95,7 @@ func _start_next_turn():
 			end_game(end_game_reason.ALL_DEAD)
 			return
 		round_started.emit(_current_round)
+		GameEvents.round_changed.emit(_current_round, _max_round)
 		print("Turn Manager: round ", _current_round, " started")
 	
 	_current_actor = _turn_queue[0]

@@ -52,7 +52,12 @@ func _rotate(facing: HexOrientation):
 	queue_redraw()
 
 func _movement_animation(to_ax: Vector2i):
+	if to_ax == Vector2i.ZERO:
+		ship_mediator.call_movement_animation_finished()
+		return
+	
 	var to_w = AxialUtilities.axial_to_world(to_ax)
+	
 	
 	var duration = animation_duration
 	
@@ -65,4 +70,5 @@ func _movement_animation(to_ax: Vector2i):
 	await tween.finished
 	
 	position = Vector2.ZERO
-	parent.end_turn()
+	
+	ship_mediator.call_movement_animation_finished()

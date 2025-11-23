@@ -61,8 +61,7 @@ func get_facing():
 #ЛОКАЛЬНЫЕ МЕТОДЫ
 
 func _ready() -> void:
-	if parent.has_signal("turn_ended"):
-		parent.turn_ended.connect(_on_turn_end)
+	ship_mediator.movement_animation_finished.connect(_on_movement_animation_finished)
 	if parent.has_signal("setup_started"):
 		parent.setup_started.connect(_on_setup)
 	if parent.has_signal("turn_started"):
@@ -89,11 +88,11 @@ func _planning_completed():
 	_displacement = _calculate_displacement()
 	_velocity = _calculate_velocity()
 	_commit_velocity()
-	parent.set_state(parent.ActorStates.ANIMATION)
+	parent.state = Enums.actor_states.ANIMATION
 	_start_movement_animation()
 
-##Настоящий конец хода, фактическое перемещение
-func _on_turn_end(_actor: Actor):
+##Конец фазы движения, фактическое перемещение
+func _on_movement_animation_finished():
 	_apply_velocity()
 	velocity_changed.emit(get_velocity_data())
 

@@ -2,11 +2,31 @@ extends Node
 class_name UIManager
 
 @export var thrust_label: Label
+@export var round_label: Label
+@export var phase_label: Label
 
 func _ready() -> void:
 	GameEvents.thrust_changed.connect(_update_thrust_label)
+	GameEvents.round_changed.connect(_update_turn_label)
+	GameEvents.phase_changed.connect(_update_phase_label)
 
 func _update_thrust_label(_actor: Actor, thrust: int, max_thrust: int):
 	if !thrust_label:
 		return
-	thrust_label.text = "thrust: " + str(thrust) + "/" + str(max_thrust)
+	thrust_label.text = "Thrust: " + str(thrust) + "/" + str(max_thrust)
+
+func _update_turn_label(current_round: int, max_round: int):
+	if !round_label:
+		return
+	round_label.text = "Round: " + str(current_round) + "/" + str(max_round)
+
+func _update_phase_label(_actor: Actor, phase: Enums.turn_phase):
+	if !phase_label:
+		return
+	var phase_str: String = ""
+	match phase:
+		Enums.turn_phase.MOVEMENT:
+			phase_str = "movement"
+		Enums.turn_phase.ACTION:
+			phase_str = "action"
+	phase_label.text = _actor._display_name + "'s " + phase_str + " phase"

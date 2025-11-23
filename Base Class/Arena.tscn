@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://desilnlp5gqtr"]
+[gd_scene load_steps=10 format=3 uid="uid://desilnlp5gqtr"]
 
 [ext_resource type="Script" uid="uid://dwvjpdp1pitku" path="res://Base Class/Arena.gd" id="1_q4evv"]
 [ext_resource type="PackedScene" uid="uid://drbie2ve3q7dd" path="res://Base Class/Hex.tscn" id="3_4hi4l"]
@@ -7,9 +7,10 @@
 [ext_resource type="Script" uid="uid://ra5ms2jmqdqj" path="res://Autoload Class/HexGrid.gd" id="4_t804p"]
 [ext_resource type="Script" uid="uid://3ie11nou16mr" path="res://Base Class/TurnManager.gd" id="6_5jmcn"]
 [ext_resource type="Script" uid="uid://dvhdky2xyyqyb" path="res://Autoload Class/UIManager.gd" id="7_2o31o"]
+[ext_resource type="Theme" uid="uid://dho5hnu13gwhm" path="res://Themes/Font.tres" id="8_j1a1p"]
 
-[sub_resource type="Theme" id="Theme_s45n5"]
-default_font_size = 24
+[sub_resource type="Theme" id="Theme_j1a1p"]
+default_font_size = 12
 
 [node name="Arena" type="Node2D"]
 script = ExtResource("1_q4evv")
@@ -25,18 +26,46 @@ script = ExtResource("4_kmxm0")
 [node name="TurnManager" type="Node" parent="."]
 script = ExtResource("6_5jmcn")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." node_paths=PackedStringArray("thrust_label")]
+[node name="CanvasLayer" type="CanvasLayer" parent="." node_paths=PackedStringArray("thrust_label", "round_label", "phase_label")]
 script = ExtResource("7_2o31o")
-thrust_label = NodePath("Label")
+thrust_label = NodePath("ThrustLabel")
+round_label = NodePath("RoundLabel")
+phase_label = NodePath("PhaseLabel")
 
-[node name="Label" type="Label" parent="CanvasLayer"]
+[node name="RoundLabel" type="Label" parent="CanvasLayer"]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -151.0
+offset_left = -190.0
 offset_bottom = 43.0
 grow_horizontal = 0
-theme = SubResource("Theme_s45n5")
-text = "Thrust(max): 0/3"
+theme = ExtResource("8_j1a1p")
+text = "Turn Label"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PhaseLabel" type="Label" parent="CanvasLayer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -190.0
+offset_top = 43.0
+offset_bottom = 86.0
+grow_horizontal = 0
+theme = SubResource("Theme_j1a1p")
+text = "Phase Label"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ThrustLabel" type="Label" parent="CanvasLayer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -190.0
+offset_top = 86.0
+offset_bottom = 129.0
+grow_horizontal = 0
+theme = ExtResource("8_j1a1p")
+text = "Thrust Label"
 horizontal_alignment = 1
 vertical_alignment = 1

@@ -1,10 +1,20 @@
-[gd_resource type="Resource" script_class="GameConfig" load_steps=4 format=3 uid="uid://dagje7y2fl2qg"]
+[gd_resource type="Resource" script_class="GameConfig" load_steps=6 format=3 uid="uid://dagje7y2fl2qg"]
 
 [ext_resource type="Resource" uid="uid://cvllx1sht7wlp" path="res://Resources/ActorConfigs/Basic Actor.tres" id="1_737vn"]
 [ext_resource type="Script" uid="uid://daq1waive7xpx" path="res://Resources/ActorConfigs/ActorConfig.gd" id="1_lpy5o"]
 [ext_resource type="Script" uid="uid://cemxx5dpd6xcu" path="res://Resources/Game Configs/GameConfig.gd" id="2_ijpqw"]
+[ext_resource type="PackedScene" uid="uid://c4kh3mrinecq8" path="res://Base Class/Actor.tscn" id="3_jabdj"]
+
+[sub_resource type="Resource" id="Resource_dslww"]
+script = ExtResource("1_lpy5o")
+scene = ExtResource("3_jabdj")
+color = Color(0.8939935, 0.090469204, 9.62615e-07, 1)
+initial_facing = "R"
+initiative = 5
+display_name = "Mitya"
+metadata/_custom_type_script = "uid://daq1waive7xpx"
 
 [resource]
 script = ExtResource("2_ijpqw")
-actors_data = Array[ExtResource("1_lpy5o")]([ExtResource("1_737vn")])
+actors_data = Array[ExtResource("1_lpy5o")]([ExtResource("1_737vn"), SubResource("Resource_dslww")])
 max_round = 9

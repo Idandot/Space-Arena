@@ -16,3 +16,7 @@ func collect_actions() -> Array[Action]:
 signal planning_completed()
 func call_planning_completed():
 	planning_completed.emit()
+
+signal movement_animation_finished()
+func call_movement_animation_finished():
+	movement_animation_finished.emit()

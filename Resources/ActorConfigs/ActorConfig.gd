@@ -7,3 +7,4 @@ class_name ActorConfig
 @export var spawn_point: Vector2i
 @export var initial_facing: String = "L"
 @export var initiative: int = 0
+@export var display_name: String = ""

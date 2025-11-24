@@ -22,6 +22,7 @@ func get_available_actions() -> Array[Action]:
 
 func _ready() -> void:
 	super._ready()
+	_module_name = "controller"
 	ship_mediator.movement_animation_finished.connect(_on_movement_animation_finished)
 
 func _process(_delta: float) -> void:

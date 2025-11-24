@@ -65,6 +65,7 @@ func _ready():
 	if !engine_config or !hex_rigidbody:
 		_active = false
 	parent.turn_started.connect(_on_turn_started)
+	_module_name = "engine"
 
 func _on_turn_started(_actor: Actor):
 	if !_active:

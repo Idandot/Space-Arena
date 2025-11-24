@@ -16,7 +16,6 @@
 script = ExtResource("3_7idsn")
 scene = ExtResource("5_l36q3")
 color = Color(0.05283022, 0.5065593, 0.30418986, 1)
-unique_spawnpoint = true
 spawn_point = Vector2i(-2, -2)
 initial_facing = "LUU"
 initiative = 7
@@ -34,6 +33,7 @@ default_font_size = 20
 
 [node name="Arena" type="Node2D"]
 script = ExtResource("1_q4evv")
+arena_radius = 8
 hex_scene = ExtResource("3_4hi4l")
 game_config = SubResource("Resource_c5xbw")
 

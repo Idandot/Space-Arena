@@ -18,9 +18,10 @@ func _ready():
 		parent.connect("setup_started", _setup)
 	if parent.has_signal("facing_changed"):
 		parent.connect("facing_changed", _rotate)
-	ship_mediator.movement_ended.connect(_movement_animation)
 	if hex_rigidbody != null:
 		hex_rigidbody.facing_changed.connect(_rotate)
+	
+	ship_mediator.movement_ended.connect(_physics_animation)
 
 func _draw():
 	if texture == null:
@@ -34,7 +35,7 @@ func _draw():
 	if texture.fill:
 		draw_colored_polygon(texture.points, texture.fill_color)
 
-func _queue_redraw(_actor: Actor) -> void:
+func _queue_redraw(_actor: Actor, _phase: Enums.game_states) -> void:
 	position = Vector2i.ZERO
 	queue_redraw()
 
@@ -51,7 +52,8 @@ func _rotate(facing: HexOrientation):
 	rotation = -deg_to_rad(facing.get_current_angle())
 	queue_redraw()
 
-func _movement_animation(to_ax: Vector2i):
+func _physics_animation(to_ax: Vector2i):
+	
 	if to_ax == Vector2i.ZERO:
 		ship_mediator.call_movement_animation_finished()
 		return

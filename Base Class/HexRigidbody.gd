@@ -62,6 +62,7 @@ func get_facing():
 
 func _ready() -> void:
 	ship_mediator.movement_animation_finished.connect(_on_movement_animation_finished)
+	TurnManager.phase_started.connect(_physics_result)
 	if parent.has_signal("setup_started"):
 		parent.setup_started.connect(_on_setup)
 	if parent.has_signal("turn_started"):
@@ -78,7 +79,9 @@ func _on_setup(_config: ActorConfig):
 	add_force("gravity", Vector2i(1, 0))
 
 ##Фаза планирования движения
-func _on_turn_start(_actor: Actor):
+func _on_turn_start(_actor: Actor, _phase: Enums.game_states):
+	if _phase != Enums.game_states.MOVEMENT:
+		return
 	_displacement = _calculate_displacement()
 	_velocity = _calculate_velocity()
 	velocity_changed.emit(get_velocity_data())
@@ -88,8 +91,6 @@ func _planning_completed():
 	_displacement = _calculate_displacement()
 	_velocity = _calculate_velocity()
 	_commit_velocity()
-	parent.state = Enums.actor_states.ANIMATION
-	_start_movement_animation()
 
 ##Конец фазы движения, фактическое перемещение
 func _on_movement_animation_finished():
@@ -129,5 +130,7 @@ func _register_impact(dict: Dictionary[String, Vector2i], force_name: String):
 func _apply_velocity():
 	set_axial_position(_axial_position + _displacement)
 
-func _start_movement_animation():
+func _physics_result(phase: Enums.game_states):
+	if phase != Enums.game_states.PHYSICS:
+		return
 	ship_mediator.call_movement_ended(_velocity)

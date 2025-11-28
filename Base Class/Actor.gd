@@ -4,7 +4,7 @@ class_name Actor
 #добавить больше сигналов по необходимости
 signal setup_started(config: ActorConfig)
 signal turn_ended(actor: Actor)
-signal turn_started(actor: Actor)
+signal turn_started(actor: Actor, phase: Enums.game_states)
 signal killed(actor: Actor)
 
 var display_name: String = "":
@@ -15,12 +15,11 @@ var display_name: String = "":
 var _initiative: int = 0
 var _is_alive: bool = true
 
-var state: Enums.actor_states = Enums.actor_states.IDLE:
+var is_active: bool:
 	set(value):
-		state = value
-		print(display_name, "'s state changed to ", state)
+		is_active = value
 	get:
-		return state
+		return is_active
 
 func setup(config: ActorConfig) -> void:
 	if not config:
@@ -30,19 +29,19 @@ func setup(config: ActorConfig) -> void:
 	_is_alive = true
 	
 	setup_started.emit(config)
-	_initiative = config.get_meta("initiative", 0)
+	_initiative = config.get("initiative")
 	display_name = config.get("display_name")
 
-func take_turn() -> void:
-	state = Enums.actor_states.ACTIVE
+func take_turn(phase: Enums.game_states) -> void:
 	if !_is_alive:
 		return
+	is_active = true
 	
-	emit_signal("turn_started", self)
-
+	emit_signal("turn_started", self, phase)
 
 func end_turn() -> void:
-	state = Enums.actor_states.IDLE
+	is_active = false
+	
 	await get_tree().process_frame
 	emit_signal("turn_ended", self)
 
@@ -53,6 +52,6 @@ func is_alive() -> bool:
 	return _is_alive
 
 func kill() -> void:
-	state = Enums.actor_states.IDLE
+	is_active = false
 	_is_alive = false
 	killed.emit(self)

@@ -20,13 +20,15 @@ func _update_round_label(current_round: int, max_round: int):
 		return
 	round_label.text = "Round: %s/%s" % [current_round, max_round]
 
-func _update_phase_label(actor: Actor, phase: Enums.turn_phase):
+func _update_phase_label(actor: Actor, phase: Enums.game_states):
 	if !phase_label:
 		return
 	var phase_str: String = ""
 	match phase:
-		Enums.turn_phase.MOVEMENT:
+		Enums.game_states.MOVEMENT:
 			phase_str = "movement"
-		Enums.turn_phase.ACTION:
+		Enums.game_states.ACTION:
 			phase_str = "action"
-	phase_label.text = "%s's %s phase" % [actor.display_name, phase_str]
+		_:
+			phase_str = "?"
+	phase_label.text = "%s's %s turn" % [actor.display_name, phase_str]

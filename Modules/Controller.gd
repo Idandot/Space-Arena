@@ -10,4 +10,4 @@ func _ready() -> void:
 	parent.turn_started.connect(_take_control)
 
 @abstract
-func _take_control(_actor: Actor)
+func _take_control(_actor: Actor, _phase: Enums.game_states) -> void

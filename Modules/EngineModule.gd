@@ -15,10 +15,10 @@ func get_available_actions() -> Array[Action]:
 	if !_active:
 		return []
 	return [
-		Action.new("accelerate", _accelerate),
-		Action.new("turn_right", _turn_right),
-		Action.new("turn_left", _turn_left),
-		Action.new("brake", _brake),
+		Action.new("accelerate", _accelerate, Enums.game_states.MOVEMENT),
+		Action.new("turn_right", _turn_right, Enums.game_states.MOVEMENT),
+		Action.new("turn_left", _turn_left, Enums.game_states.MOVEMENT),
+		Action.new("brake", _brake, Enums.game_states.MOVEMENT),
 	]
 
 #ДЕЙСТВИЯ МОДУЛЯ
@@ -67,7 +67,7 @@ func _ready():
 	parent.turn_started.connect(_on_turn_started)
 	_module_name = "engine"
 
-func _on_turn_started(_actor: Actor):
+func _on_turn_started(_actor: Actor, _phase: Enums.game_states):
 	if !_active:
 		return
 	_thrust = min(_thrust + engine_config.thrust_regeneration, engine_config.max_thrust)

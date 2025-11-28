@@ -9,8 +9,6 @@ extends Node2D
 
 #Наблюдатель обязателен
 @onready var _arena_camera: ArenaCamera = $ArenaCamera
-#Организатор ходов
-@onready var _turn_manager: TurnManager = $TurnManager
 @export var game_config: GameConfig
 
 
@@ -39,7 +37,7 @@ func _ready():
 		actors.append(actor)
 	
 	#Можно начинать игру
-	_turn_manager.start_game(actors, game_config)
+	TurnManager.start_game(actors, game_config)
 
 func _find_spawn_points() -> Array[Vector2i]:
 	var spawn_points: Array[Vector2i] = []

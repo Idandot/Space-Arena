@@ -8,7 +8,7 @@ class_name UIManager
 func _ready() -> void:
 	GameEvents.thrust_changed.connect(_update_thrust_label)
 	GameEvents.round_changed.connect(_update_round_label)
-	GameEvents.phase_changed.connect(_update_phase_label)
+	TurnManager.phase_started.connect(_update_phase_label)
 
 func _update_thrust_label(_actor: Actor, thrust: int, max_thrust: int):
 	if !thrust_label:
@@ -20,7 +20,7 @@ func _update_round_label(current_round: int, max_round: int):
 		return
 	round_label.text = "Round: %s/%s" % [current_round, max_round]
 
-func _update_phase_label(actor: Actor, phase: Enums.game_states):
+func _update_phase_label(phase: Enums.game_states):
 	if !phase_label:
 		return
 	var phase_str: String = ""
@@ -29,6 +29,8 @@ func _update_phase_label(actor: Actor, phase: Enums.game_states):
 			phase_str = "movement"
 		Enums.game_states.ACTION:
 			phase_str = "action"
+		Enums.game_states.PHYSICS:
+			phase_str = "physics"
 		_:
 			phase_str = "?"
-	phase_label.text = "%s's %s turn" % [actor.display_name, phase_str]
+	phase_label.text = "%s phase" % phase_str

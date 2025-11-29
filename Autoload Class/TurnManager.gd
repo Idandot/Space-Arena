@@ -1,5 +1,7 @@
 extends Node
 
+@export var physics_phase_duration: float = 0.5
+
 var _starting_actors: Array[Actor] = []
 var _alive_actors: Array[Actor] = []
 var _phase_queue: Array[Actor] = []
@@ -36,7 +38,6 @@ func start_game(actors: Array[Actor], game_config: GameConfig) -> void:
 		actor.turn_ended.connect(_on_turn_ended)
 		actor.killed.connect(_on_actor_killed)
 	
-	print("Turn Manager: game started with %d actors" % actors.size())
 	_start_next_round()
 	
 	game_started.emit(game_config)
@@ -70,7 +71,6 @@ func end_game(eg_reason: end_game_reason) -> void:
 	_alive_actors = []
 	_phase_queue = []
 	
-	print("Turn Manager: game ended")
 	#Возвращаем TurnManager в изначальное состояние чтобы если что ничего не приключилось
 	#Если в будущем нужна инфа об окончании игры, сигналы лучше вставлять перед сбросом
 
@@ -100,7 +100,6 @@ func _start_next_round():
 	
 	round_started.emit(_current_round)
 	GameEvents.round_changed.emit(_current_round, _max_round)
-	print("Turn Manager: round ", _current_round, " started")
 	
 	_start_movement_phase()
 
@@ -113,7 +112,6 @@ func _start_movement_phase():
 	
 	_current_game_state = Enums.game_states.MOVEMENT
 	phase_started.emit(_current_game_state)
-	print("Turn Manager: movement phase started")
 	
 	_start_next_movement_turn()
 
@@ -124,10 +122,8 @@ func _start_physics_phase():
 	
 	_current_game_state = Enums.game_states.PHYSICS
 	phase_started.emit(_current_game_state)
-	print("Turn Manager: physics phase started")
 	
-	await get_tree().create_timer(0.1).timeout
-	#Дождаться всех анимаций
+	await get_tree().create_timer(physics_phase_duration).timeout
 	
 	_start_action_phase()
 
@@ -138,9 +134,8 @@ func _start_action_phase():
 	
 	_phase_queue = _create_phase_queue(_current_game_state)
 	
-	_current_game_state = Enums.game_states.PHYSICS
+	_current_game_state = Enums.game_states.ACTION
 	phase_started.emit(_current_game_state)
-	print("Turn Manager: action phase started")
 	
 	_start_next_action_turn()
 

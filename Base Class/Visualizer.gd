@@ -3,7 +3,6 @@ extends Node2D
 @export var ship_mediator: ShipMediator
 @export var hex_rigidbody: HexRigidbody
 @export var start_texture: TMTexture
-@export var animation_duration = 1
 
 @onready var texture := start_texture.duplicate(true)
 @onready var parent: Node2D = self.get_parent()
@@ -60,14 +59,11 @@ func _physics_animation(to_ax: Vector2i):
 	
 	var to_w = AxialUtilities.axial_to_world(to_ax)
 	
-	
-	var duration = animation_duration
-	
 	if tween:
 		tween.kill()
 	
 	tween = create_tween()
-	tween.tween_property(self, "position", to_w, duration)
+	tween.tween_property(self, "position", to_w, TurnManager.physics_phase_duration)
 	
 	await tween.finished
 	

@@ -5,6 +5,7 @@ class_name EngineModule
 @export var engine_config: EngineConfig
 
 var _thrust: int
+var _initial_thrust: int
 
 const ENGINE_IMPULSE_ID = "engine_acceleration"
 
@@ -19,6 +20,7 @@ func get_available_actions() -> Array[Action]:
 		Action.new("turn_right", _turn_right, Enums.game_states.MOVEMENT),
 		Action.new("turn_left", _turn_left, Enums.game_states.MOVEMENT),
 		Action.new("brake", _brake, Enums.game_states.MOVEMENT),
+		Action.new("reset_move", _reset_move, Enums.game_states.MOVEMENT)
 	]
 
 #ДЕЙСТВИЯ МОДУЛЯ
@@ -59,6 +61,14 @@ func _brake():
 		return
 	_apply_impulse(engine_config.brake_power)
 
+func _reset_move():
+	if !_active:
+		return
+	hex_rigidbody.restore_initial_state()
+	_thrust = _initial_thrust
+	GameEvents.thrust_changed.emit(parent, _thrust, engine_config.max_thrust)
+	GameEvents.log_request.emit("move reset")
+
 #ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ
 
 func _ready():
@@ -71,13 +81,14 @@ func _on_turn_started(_actor: Actor, _phase: Enums.game_states):
 	if !_active:
 		return
 	_thrust = min(_thrust + engine_config.thrust_regeneration, engine_config.max_thrust)
+	_initial_thrust = _thrust
 	GameEvents.thrust_changed.emit(parent, _thrust, engine_config.max_thrust)
 
 func _try_spend_thrust(amount: int) -> bool:
 	if !_active:
 		return false
 	if amount > _thrust:
-		print("Not enough thrust to make action")
+		GameEvents.log_request.emit("Not enough thrust to make action")
 		return false
 	_thrust -= amount
 	GameEvents.thrust_changed.emit(parent, _thrust, engine_config.max_thrust)

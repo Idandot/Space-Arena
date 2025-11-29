@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://desilnlp5gqtr"]
+[gd_scene load_steps=14 format=3 uid="uid://desilnlp5gqtr"]
 
 [ext_resource type="Script" uid="uid://dwvjpdp1pitku" path="res://Base Class/Arena.gd" id="1_q4evv"]
 [ext_resource type="PackedScene" uid="uid://drbie2ve3q7dd" path="res://Base Class/Hex.tscn" id="3_4hi4l"]
@@ -28,9 +28,6 @@ actors_data = Array[ExtResource("3_7idsn")]([ExtResource("4_iroh1"), SubResource
 max_round = 9
 metadata/_custom_type_script = "uid://cemxx5dpd6xcu"
 
-[sub_resource type="Theme" id="Theme_j1a1p"]
-default_font_size = 20
-
 [node name="Arena" type="Node2D"]
 script = ExtResource("1_q4evv")
 arena_radius = 8
@@ -46,11 +43,13 @@ script = ExtResource("4_kmxm0")
 [node name="TurnManager" type="Node" parent="."]
 script = ExtResource("6_5jmcn")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." node_paths=PackedStringArray("thrust_label", "round_label", "phase_label")]
+[node name="CanvasLayer" type="CanvasLayer" parent="." node_paths=PackedStringArray("thrust_label", "round_label", "phase_label", "actor_label", "game_log_label")]
 script = ExtResource("7_2o31o")
 thrust_label = NodePath("ThrustLabel")
 round_label = NodePath("RoundLabel")
 phase_label = NodePath("PhaseLabel")
+actor_label = NodePath("ActorLabel")
+game_log_label = NodePath("GameLogLabel")
 
 [node name="RoundLabel" type="Label" parent="CanvasLayer"]
 anchors_preset = 1
@@ -72,12 +71,12 @@ offset_left = -190.0
 offset_top = 43.0
 offset_bottom = 86.0
 grow_horizontal = 0
-theme = SubResource("Theme_j1a1p")
+theme = ExtResource("8_j1a1p")
 text = "Phase Label"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ThrustLabel" type="Label" parent="CanvasLayer"]
+[node name="ActorLabel" type="Label" parent="CanvasLayer"]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -86,6 +85,34 @@ offset_top = 86.0
 offset_bottom = 129.0
 grow_horizontal = 0
 theme = ExtResource("8_j1a1p")
+text = "Actor Label"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ThrustLabel" type="Label" parent="CanvasLayer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -190.0
+offset_top = 129.0
+offset_bottom = 172.0
+grow_horizontal = 0
+theme = ExtResource("8_j1a1p")
 text = "Thrust Label"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="GameLogLabel" type="RichTextLabel" parent="CanvasLayer"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -190.0
+offset_top = -476.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "BATTLE LOG:
+"
+scroll_following = true
+vertical_alignment = 2

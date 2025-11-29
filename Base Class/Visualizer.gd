@@ -5,7 +5,7 @@ extends Node2D
 @export var start_texture: TMTexture
 
 @onready var texture := start_texture.duplicate(true)
-@onready var parent: Node2D = self.get_parent()
+@onready var parent: Actor = self.get_parent()
 var tween: Tween
 
 func _ready():
@@ -27,6 +27,9 @@ func _draw():
 		print("no assigned texture")
 		return
 	
+	if parent.is_active:
+		draw_circle(Vector2.ZERO, 50, Color(0.71, 0.808, 0.498, 0.239))
+	
 	var closed_points = texture.points.duplicate()
 	if closed_points[0] != closed_points[closed_points.size()-1]:
 		closed_points.append(closed_points[0])
@@ -40,6 +43,7 @@ func _queue_redraw(_actor: Actor, _phase: Enums.game_states) -> void:
 
 func _reset_position(_actor: Actor) -> void:
 	position = Vector2i.ZERO
+	queue_redraw()
 
 func _setup(config: ActorConfig):
 	if texture == null:

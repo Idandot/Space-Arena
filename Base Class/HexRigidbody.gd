@@ -17,6 +17,30 @@ var _impulse_dict: Dictionary[String, Vector2i] = {}
 #Постоянные силы действующие на тело
 var _force_dict: Dictionary[String, Vector2i] = {}
 
+var _hex_rigidbody_state: Dictionary[String, Variant]
+
+func _save_state() -> Dictionary[String, Variant]:
+	return {
+		"_facing": _facing.get_current_name(),
+		"_axial_position": _axial_position,
+		"_velocity": _velocity,
+		"_displacement": _displacement,
+		"_previous_velocity": _previous_velocity,
+		"_impulse_dict": _impulse_dict.duplicate(),
+		"_force_dict": _force_dict.duplicate()
+	}
+
+func restore_initial_state():
+	var state = _hex_rigidbody_state
+	set_facing(state["_facing"])
+	set_axial_position(state["_axial_position"])
+	_previous_velocity = state["_previous_velocity"]
+	_impulse_dict = state["_impulse_dict"].duplicate()
+	_force_dict = state["_force_dict"].duplicate()
+	
+	_velocity = _calculate_velocity()
+	_displacement = _calculate_displacement()
+	velocity_changed.emit(get_velocity_data())
 
 @onready var parent: Actor = self.get_parent()
 @onready var event_bus: Node
@@ -83,6 +107,7 @@ func _on_turn_start(_actor: Actor, _phase: Enums.game_states):
 	_displacement = _calculate_displacement()
 	_velocity = _calculate_velocity()
 	velocity_changed.emit(get_velocity_data())
+	_hex_rigidbody_state = _save_state()
 
 ##Конец фазы движения, фактическое перемещение
 func _on_movement_animation_finished():
@@ -122,6 +147,8 @@ func _register_impact(dict: Dictionary[String, Vector2i], force_name: String):
 
 func _apply_velocity():
 	_displacement = _calculate_displacement()
+	if _displacement != _velocity:
+		GameEvents.log_request.emit("Pushed in the wall")
 	set_axial_position(_axial_position + _displacement)
 
 func _physics_result(phase: Enums.game_states):

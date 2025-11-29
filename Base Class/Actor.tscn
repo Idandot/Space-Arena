@@ -19,24 +19,23 @@ metadata/_custom_type_script = "uid://rgkmbxhqeme2"
 [node name="Actor" type="Node2D"]
 script = ExtResource("1_3jj5i")
 
-[node name="Visualizer" type="Node2D" parent="." node_paths=PackedStringArray("ship_mediator", "hex_rigidbody")]
+[node name="Visualizer" type="Node2D" parent="." node_paths=PackedStringArray("actor_mediator", "hex_rigidbody")]
 script = ExtResource("2_np13p")
-ship_mediator = NodePath("../ShipMediator")
+actor_mediator = NodePath("../ActorMediator")
 hex_rigidbody = NodePath("../HexRigidbody")
 start_texture = ExtResource("3_poh3c")
 
-[node name="HexRigidbody" type="Node2D" parent="." node_paths=PackedStringArray("ship_mediator")]
+[node name="HexRigidbody" type="Node2D" parent="." node_paths=PackedStringArray("actor_mediator")]
 script = ExtResource("5_gwfru")
-ship_mediator = NodePath("../ShipMediator")
+actor_mediator = NodePath("../ActorMediator")
 
 [node name="VectorVisualizer" type="Node2D" parent="HexRigidbody" node_paths=PackedStringArray("hex_rigidbody")]
 z_index = -100
 script = ExtResource("6_tn1aj")
 hex_rigidbody = NodePath("..")
 
-[node name="ShipMediator" type="Node" parent="." node_paths=PackedStringArray("modules")]
+[node name="ActorMediator" type="Node" parent="."]
 script = ExtResource("7_r3n7q")
-modules = [NodePath("../ShipLayout/Engine"), NodePath("../ShipLayout/PlayerController")]
 
 [node name="ShipLayout" type="Node" parent="." node_paths=PackedStringArray("ship_controller", "modules")]
 script = ExtResource("7_cy77k")
@@ -48,24 +47,24 @@ Vector2i(0, 0): NodePath("PlayerController"),
 Vector2i(1, 0): NodePath("Bulkhead")
 }
 
-[node name="Engine" type="Node" parent="ShipLayout" node_paths=PackedStringArray("hex_rigidbody", "ship_mediator")]
+[node name="Engine" type="Node" parent="ShipLayout" node_paths=PackedStringArray("hex_rigidbody", "actor_mediator")]
 script = ExtResource("8_oayqi")
 hex_rigidbody = NodePath("../../HexRigidbody")
 engine_config = SubResource("Resource_cy77k")
-ship_mediator = NodePath("../../ShipMediator")
+actor_mediator = NodePath("../../ActorMediator")
 tags = Array[int]([1])
 
-[node name="Bulkhead" type="Node" parent="ShipLayout" node_paths=PackedStringArray("ship_mediator")]
+[node name="Bulkhead" type="Node" parent="ShipLayout" node_paths=PackedStringArray("actor_mediator")]
 script = ExtResource("10_6h6o8")
-ship_mediator = NodePath("../../ShipMediator")
+actor_mediator = NodePath("../../ActorMediator")
 tags = Array[int]([1])
 
-[node name="Bulkhead2" type="Node" parent="ShipLayout" node_paths=PackedStringArray("ship_mediator")]
+[node name="Bulkhead2" type="Node" parent="ShipLayout" node_paths=PackedStringArray("actor_mediator")]
 script = ExtResource("10_6h6o8")
-ship_mediator = NodePath("../../ShipMediator")
+actor_mediator = NodePath("../../ActorMediator")
 tags = Array[int]([1])
 
-[node name="PlayerController" type="Node" parent="ShipLayout" node_paths=PackedStringArray("ship_mediator")]
+[node name="PlayerController" type="Node" parent="ShipLayout" node_paths=PackedStringArray("actor_mediator")]
 script = ExtResource("7_oayqi")
-ship_mediator = NodePath("../../ShipMediator")
+actor_mediator = NodePath("../../ActorMediator")
 tags = Array[int]([0, 1])

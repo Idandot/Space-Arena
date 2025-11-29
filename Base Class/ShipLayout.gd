@@ -5,6 +5,12 @@ class_name ShipLayout
 @export var modules: Dictionary[Vector2i, Module]
 var parent: Actor
 
+func collect_actions() -> Array[Action]:
+	var actions: Array[Action] = []
+	for module in modules.values():
+		actions.append_array(module.get_available_actions())
+	return actions
+
 func _ready() -> void:
 	parent = self.get_parent()
 	ship_controller = _find_controller()

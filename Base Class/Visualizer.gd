@@ -1,6 +1,6 @@
 extends Node2D
 
-@export var ship_mediator: ShipMediator
+@export var actor_mediator: ActorMediator
 @export var hex_rigidbody: HexRigidbody
 @export var start_texture: TMTexture
 
@@ -20,7 +20,7 @@ func _ready():
 	if hex_rigidbody != null:
 		hex_rigidbody.facing_changed.connect(_rotate)
 	
-	ship_mediator.movement_ended.connect(_physics_animation)
+	actor_mediator.movement_ended.connect(_physics_animation)
 
 func _draw():
 	if texture == null:
@@ -54,7 +54,7 @@ func _rotate(facing: HexOrientation):
 func _physics_animation(to_ax: Vector2i):
 	
 	if to_ax == Vector2i.ZERO:
-		ship_mediator.call_movement_animation_finished()
+		actor_mediator.call_movement_animation_finished()
 		return
 	
 	var to_w = AxialUtilities.axial_to_world(to_ax)
@@ -69,4 +69,4 @@ func _physics_animation(to_ax: Vector2i):
 	
 	position = Vector2.ZERO
 	
-	ship_mediator.call_movement_animation_finished()
+	actor_mediator.call_movement_animation_finished()

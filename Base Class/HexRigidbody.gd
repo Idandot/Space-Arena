@@ -1,7 +1,7 @@
 extends Node2D
 class_name HexRigidbody
 
-@export var ship_mediator: ShipMediator
+@export var actor_mediator: ActorMediator
 
 var _facing = HexOrientation.new()
 #текущее положение обьекта на игровой сетке
@@ -61,7 +61,7 @@ func get_facing():
 #ЛОКАЛЬНЫЕ МЕТОДЫ
 
 func _ready() -> void:
-	ship_mediator.movement_animation_finished.connect(_on_movement_animation_finished)
+	actor_mediator.movement_animation_finished.connect(_on_movement_animation_finished)
 	TurnManager.phase_started.connect(_physics_result)
 	if parent.has_signal("setup_started"):
 		parent.setup_started.connect(_on_setup)
@@ -128,4 +128,4 @@ func _physics_result(phase: Enums.game_states):
 	_velocity = _calculate_velocity()
 	if phase != Enums.game_states.PHYSICS:
 		return
-	ship_mediator.call_movement_ended(_velocity)
+	actor_mediator.call_movement_ended(_velocity)

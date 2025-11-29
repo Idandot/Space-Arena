@@ -2,7 +2,7 @@
 extends Node
 class_name Module
 
-@export var ship_mediator: ShipMediator
+@export var actor_mediator: ActorMediator
 @export var tags: Array[Enums.module_tags]:
 	get():
 		return tags
@@ -13,7 +13,8 @@ var _max_module_integrity: int = 100
 var _active: bool = true
 var _module_name: String
 
-@onready var parent: Actor = ship_mediator.get_parent()
+@onready var parent: Actor = actor_mediator.get_parent()
+@onready var ship_layout: ShipLayout = self.get_parent()
 
 @abstract
 func get_available_actions() -> Array[Action]

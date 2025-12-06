@@ -6,6 +6,11 @@ var _points := []
 var _color: Color = Color.WHITE
 var _coordinates: Vector2i
 
+var fill_color: Color = Color.TRANSPARENT:
+	set(value):
+		fill_color = value
+		queue_redraw()
+
 func setup(pos: Vector2i):
 	_coordinates = pos
 	var side_size = AxialUtilities.HEX_SIDE
@@ -20,3 +25,4 @@ func setup(pos: Vector2i):
 func _draw():
 	if len(_points) != 0:
 		draw_polyline(_points, _color)
+		draw_colored_polygon(_points, fill_color)

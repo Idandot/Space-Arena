@@ -78,11 +78,20 @@ static func round_axial(axial_frac: Vector2) -> Vector2i:
 	
 	return Vector2i(q,r)
 
-static func hexes_in_radius(center: Vector2i, radius: int) -> Array[Vector2i]:
+static func angle_between(v1a: Vector2i, v2a: Vector2i) -> float:
+	var v1w: Vector2 = axial_to_world(v1a)
+	var v2w: Vector2 = axial_to_world(v2a)
+	var angle_rad = v2w.angle() - v1w.angle()
+	
+	return rad_to_deg(angle_rad)
+
+static func hexes_in_radius(center: Vector2i, radius: int, inner_radius: int = 0) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 	
 	for q in range(-radius, +radius +1):
 		for r in range(max(-radius, -q-radius), min(radius, -q+radius)+1):
+			if distance(Vector2i(q, r)) < inner_radius:
+				continue
 			result.append(Vector2i(q, r) + center)
 	
 	return result

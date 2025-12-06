@@ -6,7 +6,7 @@ extends Node2D
 var _hex: PackedScene
 
 var _grid_radius: int
-var _grid: Dictionary #key: Vector2i -> value: Hex object
+var _grid: Dictionary[Vector2i, Hex]
 
 
 func create_grid(radius: int):
@@ -43,3 +43,19 @@ func get_grid_radius() -> int:
 
 func set_hex_scene(hex: PackedScene):
 	_hex = hex
+
+func highlight(hexes: Array[Vector2i],color:= Color.WHITE,force_initial_alpha := false, reset := true) -> void:
+	if reset:
+		reset_highlight()
+	
+	if !force_initial_alpha:
+		color.a = 0.5
+	
+	for hex_position in hexes:
+		if !_grid.has(hex_position):
+			continue
+		_grid[hex_position].fill_color = color
+
+func reset_highlight() -> void:
+	for hex: Hex in _grid.values():
+			hex.fill_color = Color.TRANSPARENT

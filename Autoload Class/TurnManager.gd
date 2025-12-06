@@ -8,19 +8,26 @@ var _phase_queue: Array[Actor] = []
 var _current_actor: Actor
 var _current_round := 0
 var _max_round := 10
-var _current_game_state := Enums.game_states.INACTIVE
+
+var current_game_state := Enums.game_states.INACTIVE:
+	get():
+		return current_game_state
+	set(value):
+		current_game_state = value
+
 enum end_game_reason {ROUND_LIMIT, ALL_DEAD, LAST_STANDING, MANUAL}
 
 signal game_started(game_config: GameConfig)
 signal round_started(new_round: int)
 signal phase_started(phase: Enums.game_states)
-signal movement_turn_started(actor: Actor)
-signal action_turn_started(actor: Actor)
 signal game_ended(reason: String)
+signal turn_started(actor: Actor, phase: Enums.game_states)
+
+#ПУБЛИЧНЫЕ МЕТОДЫ
 
 ##начинает игровой цикл
 func start_game(actors: Array[Actor], game_config: GameConfig) -> void:
-	if _current_game_state != Enums.game_states.INACTIVE:
+	if current_game_state != Enums.game_states.INACTIVE:
 		push_warning("Game is already started")
 		return
 	if actors.is_empty():
@@ -29,7 +36,7 @@ func start_game(actors: Array[Actor], game_config: GameConfig) -> void:
 	
 	_max_round = game_config.max_round
 	
-	_current_game_state = Enums.game_states.MOVEMENT
+	current_game_state = Enums.game_states.MOVEMENT
 	_current_round = 0
 	
 	_starting_actors = actors
@@ -44,7 +51,7 @@ func start_game(actors: Array[Actor], game_config: GameConfig) -> void:
 
 ##завершает игровой цикл
 func end_game(eg_reason: end_game_reason) -> void:
-	if _current_game_state == Enums.game_states.INACTIVE:
+	if current_game_state == Enums.game_states.INACTIVE:
 		return
 	
 	for actor in _starting_actors:
@@ -62,7 +69,7 @@ func end_game(eg_reason: end_game_reason) -> void:
 			reason = "Manual"
 	game_ended.emit(reason)
 	
-	_current_game_state = Enums.game_states.INACTIVE
+	current_game_state = Enums.game_states.INACTIVE
 	
 	_current_round = 0
 	_current_actor = null
@@ -76,15 +83,15 @@ func end_game(eg_reason: end_game_reason) -> void:
 
 ##выдает челика чей сейчас ход
 func get_current_actor_or_null() -> Actor:
-	if _current_game_state in [Enums.game_states.INACTIVE, Enums.game_states.PHYSICS]:
+	if current_game_state in [Enums.game_states.INACTIVE, Enums.game_states.PHYSICS]:
 		return null
 	return _current_actor
 
-func get_current_phase() -> Enums.game_states:
-	return _current_game_state
+#ПРИВАТНЫЕ МЕОТДЫ ДЛЯ УПРАВЛЕНИЯ СОСТОЯНИЕМ
 
+##Начинает следующий раунд
 func _start_next_round():
-	if _current_game_state == Enums.game_states.INACTIVE:
+	if current_game_state == Enums.game_states.INACTIVE:
 		push_warning("Game isn't active")
 		return
 	
@@ -104,60 +111,58 @@ func _start_next_round():
 	_start_movement_phase()
 
 func _start_movement_phase():
-	if _current_game_state == Enums.game_states.INACTIVE:
-		push_warning("Game isn't active")
-		return
 	
-	_phase_queue = _create_phase_queue(_current_game_state)
+	_phase_queue = _create_phase_queue(current_game_state)
 	
-	_current_game_state = Enums.game_states.MOVEMENT
-	phase_started.emit(_current_game_state)
+	current_game_state = Enums.game_states.MOVEMENT
+	phase_started.emit(current_game_state)
 	
-	_start_next_movement_turn()
+	_start_next_turn()
 
 func _start_physics_phase():
-	if _current_game_state == Enums.game_states.INACTIVE:
-		push_warning("Game isn't active")
-		return
 	
-	_current_game_state = Enums.game_states.PHYSICS
-	phase_started.emit(_current_game_state)
+	current_game_state = Enums.game_states.PHYSICS
+	phase_started.emit(current_game_state)
 	
 	await get_tree().create_timer(physics_phase_duration).timeout
 	
-	_start_action_phase()
+	_start_next_phase()
 
 func _start_action_phase():
-	if _current_game_state == Enums.game_states.INACTIVE:
-		push_warning("Game isn't active")
-		return
 	
-	_phase_queue = _create_phase_queue(_current_game_state)
+	_phase_queue = _create_phase_queue(current_game_state)
 	
-	_current_game_state = Enums.game_states.ACTION
-	phase_started.emit(_current_game_state)
+	current_game_state = Enums.game_states.ACTION
+	phase_started.emit(current_game_state)
 	
-	_start_next_action_turn()
+	_start_next_turn()
 
-func _start_next_movement_turn():
+func _start_next_phase():
+	#Вот это клоака
+	match current_game_state:
+		Enums.game_states.MOVEMENT:
+			_start_physics_phase()
+		Enums.game_states.PHYSICS:
+			_start_action_phase()
+		Enums.game_states.ACTION:
+			_start_next_round()
+		Enums.game_states.INACTIVE:
+			push_warning("Game isn't active")
+			return
+		_:
+			push_error("BLYAT")
+
+func _start_next_turn():
 	if _phase_queue.is_empty():
-		_start_physics_phase()
+		_start_next_phase()
 		return
 	
 	_current_actor = _phase_queue[0]
 	_phase_queue.remove_at(0)
-	_current_actor.take_turn(_current_game_state)
-	movement_turn_started.emit(_current_actor)
+	_current_actor.take_turn(current_game_state)
+	turn_started.emit(_current_actor, current_game_state)
 
-func _start_next_action_turn():
-	if _phase_queue.is_empty():
-		_start_next_round()
-		return
-	
-	_current_actor = _phase_queue[0]
-	_phase_queue.remove_at(0)
-	_current_actor.take_turn(_current_game_state)
-	action_turn_started.emit(_current_actor)
+#ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ
 
 func _create_phase_queue(for_phase: Enums.game_states) -> Array[Actor]:
 	var queue = _sort_actors_by_initiative(_alive_actors, for_phase).duplicate()
@@ -177,7 +182,7 @@ func _compare_initiative(a: Actor, b: Actor) -> bool:
 	return a.get_initiative() > b.get_initiative()
 
 func _on_turn_ended(actor: Actor):
-	if _current_game_state == Enums.game_states.INACTIVE:
+	if current_game_state == Enums.game_states.INACTIVE:
 		push_warning("Game isn't active")
 		return
 	
@@ -186,11 +191,7 @@ func _on_turn_ended(actor: Actor):
 		return
 	
 	_check_victory_conditions()
-	match _current_game_state:
-		Enums.game_states.MOVEMENT:
-			_start_next_movement_turn()
-		Enums.game_states.ACTION:
-			_start_next_action_turn()
+	_start_next_turn()
 
 func _check_victory_conditions():
 	#В будущем реализую
@@ -198,7 +199,7 @@ func _check_victory_conditions():
 
 func _on_actor_killed(killed_actor: Actor):
 	if killed_actor == _current_actor:
-		match _current_game_state:
+		match current_game_state:
 			Enums.game_states.MOVEMENT:
 				_start_movement_phase()
 			Enums.game_states.ACTION:

@@ -12,8 +12,7 @@ func _ready() -> void:
 	GameEvents.round_changed.connect(_update_round_label)
 	GameEvents.log_request.connect(_log_message)
 	TurnManager.phase_started.connect(_update_phase_label)
-	TurnManager.action_turn_started.connect(_update_actor_label)
-	TurnManager.movement_turn_started.connect(_update_actor_label)
+	TurnManager.turn_started.connect(_update_actor_label)
 
 func _update_thrust_label(_actor: Actor, thrust: int, max_thrust: int):
 	if !thrust_label:
@@ -42,7 +41,7 @@ func _update_phase_label(phase: Enums.game_states):
 			phase_str = "?"
 	phase_label.text = "%s phase" % phase_str
 
-func _update_actor_label(actor: Actor):
+func _update_actor_label(actor: Actor, _phase):
 	if !actor_label:
 		return
 	actor_label.text = "%s's turn" % actor.display_name

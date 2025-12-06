@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ActorConfig" load_steps=3 format=3 uid="uid://dwpdkom4k88dl"]
+
+[ext_resource type="PackedScene" uid="uid://c4kh3mrinecq8" path="res://Base Class/Actor.tscn" id="1_a2rwf"]
+[ext_resource type="Script" uid="uid://daq1waive7xpx" path="res://Resources/ActorConfigs/ActorConfig.gd" id="2_t56cj"]
+
+[resource]
+resource_name = "Zhemchyzhny"
+script = ExtResource("2_t56cj")
+scene = ExtResource("1_a2rwf")
+color = Color(0.5237394, 0.19316378, 0.879081, 1)
+spawn_point = Vector2i(-2, -2)
+initial_facing = "LUU"
+initiative = 7
+display_name = "Zhemchyzhny"
+metadata/_custom_type_script = "uid://daq1waive7xpx"

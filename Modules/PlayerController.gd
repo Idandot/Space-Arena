@@ -46,7 +46,7 @@ func _handle_input() -> void:
 
 ##Сверяем фазу для действия с текущей фазой
 func _is_action_available(action: Action) -> bool:
-	return action.applicable_state == TurnManager._current_game_state
+	return action.applicable_state == TurnManager.current_game_state
 
 ##Сверяемся с тем может ли в текущей фазе актер выполнять действия
 func _should_handle_input() -> bool:

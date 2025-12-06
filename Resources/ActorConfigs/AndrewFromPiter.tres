@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ActorConfig" load_steps=3 format=3 uid="uid://deq6inrchxfdg"]
+
+[ext_resource type="PackedScene" uid="uid://c4kh3mrinecq8" path="res://Base Class/Actor.tscn" id="1_iwcug"]
+[ext_resource type="Script" uid="uid://daq1waive7xpx" path="res://Resources/ActorConfigs/ActorConfig.gd" id="2_3ya48"]
+
+[resource]
+resource_name = "AndrewFromPiter"
+script = ExtResource("2_3ya48")
+scene = ExtResource("1_iwcug")
+color = Color(0.7742363, 0.12773049, 0.15103745, 1)
+spawn_point = Vector2i(-2, -2)
+initial_facing = "LUU"
+initiative = 7
+display_name = "AndrewFromPiter"
+metadata/_custom_type_script = "uid://daq1waive7xpx"

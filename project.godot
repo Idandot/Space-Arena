@@ -21,6 +21,7 @@ HexGridClass="*res://Autoload Class/HexGrid.gd"
 EventManager="*res://Autoload Class/UIManager.gd"
 GameEvents="*res://Autoload Class/GameEvents.gd"
 TurnManager="*res://Autoload Class/TurnManager.gd"
+HighlightManager="*res://Autoload Class/highlight_manager.gd"
 
 [display]
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://desilnlp5gqtr"]
+[gd_scene load_steps=28 format=3 uid="uid://desilnlp5gqtr"]
 
 [ext_resource type="Script" uid="uid://dwvjpdp1pitku" path="res://Base Class/Arena.gd" id="1_q4evv"]
 [ext_resource type="PackedScene" uid="uid://drbie2ve3q7dd" path="res://Base Class/Hex.tscn" id="3_4hi4l"]
@@ -22,6 +22,7 @@
 [ext_resource type="Script" uid="uid://b7cgtdinx7f7p" path="res://Modules/Bulkhead.gd" id="13_t0blq"]
 [ext_resource type="Script" uid="uid://cbpkr8ioimvfb" path="res://Modules/PlayerController.gd" id="14_fdt8u"]
 [ext_resource type="Script" uid="uid://b7ooaq8473noy" path="res://Autoload Class/highlight_manager.gd" id="20_7auo3"]
+[ext_resource type="PackedScene" uid="uid://cyeegvoov25bo" path="res://UI/inspection_window.tscn" id="23_0x5v4"]
 
 [sub_resource type="Resource" id="Resource_cy77k"]
 script = ExtResource("12_ge3f4")
@@ -153,3 +154,9 @@ text = "BATTLE LOG:
 "
 scroll_following = true
 vertical_alignment = 2
+
+[node name="Control" parent="." instance=ExtResource("23_0x5v4")]
+offset_left = -516.0
+offset_top = -214.0
+offset_right = -516.0
+offset_bottom = -214.0

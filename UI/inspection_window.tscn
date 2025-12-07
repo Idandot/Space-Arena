@@ -1,0 +1,55 @@
+[gd_scene load_steps=3 format=3 uid="uid://cyeegvoov25bo"]
+
+[ext_resource type="Script" uid="uid://b4t3dbbyaogwk" path="res://inspection_window.gd" id="1_sv08r"]
+[ext_resource type="Theme" uid="uid://dho5hnu13gwhm" path="res://Themes/Font.tres" id="2_vdbsl"]
+
+[node name="Control" type="Control" node_paths=PackedStringArray("title_label", "close_button", "minimize_button", "margin_container", "content_area")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_sv08r")
+title = "Окно инспектора"
+title_label = NodePath("Panel/Header/TitleLabel")
+close_button = NodePath("Panel/Header/CloseButton")
+minimize_button = NodePath("Panel/Header/MinimizeButton")
+margin_container = NodePath("Panel/MarginContainer")
+content_area = NodePath("Panel/MarginContainer/Content Area")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+offset_right = 640.0
+offset_bottom = 640.0
+
+[node name="Header" type="HBoxContainer" parent="Panel"]
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 80.0
+
+[node name="CloseButton" type="Button" parent="Panel/Header"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+text = "X"
+
+[node name="MinimizeButton" type="Button" parent="Panel/Header"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+text = "--"
+
+[node name="TitleLabel" type="Label" parent="Panel/Header"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme = ExtResource("2_vdbsl")
+text = "Окно внутриигрового инспектора"
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 0
+offset_top = 80.0
+offset_right = 640.0
+offset_bottom = 640.0
+
+[node name="Content Area" type="Control" parent="Panel/MarginContainer"]
+layout_mode = 2

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://b4t3dbbyaogwk" path="res://inspection_window.gd" id="1_sv08r"]
 [ext_resource type="Theme" uid="uid://dho5hnu13gwhm" path="res://Themes/Font.tres" id="2_vdbsl"]
 
-[node name="Control" type="Control" node_paths=PackedStringArray("title_label", "close_button", "minimize_button", "margin_container", "content_area")]
+[node name="Control" type="Control" node_paths=PackedStringArray("title_label", "close_button", "minimize_button", "body_panel", "container")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,13 +15,13 @@ title = "Окно инспектора"
 title_label = NodePath("Panel/Header/TitleLabel")
 close_button = NodePath("Panel/Header/CloseButton")
 minimize_button = NodePath("Panel/Header/MinimizeButton")
-margin_container = NodePath("Panel/MarginContainer")
-content_area = NodePath("Panel/MarginContainer/Content Area")
+body_panel = NodePath("Body")
+container = NodePath("Body/MarginContainer/VBoxContainer")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
 offset_right = 640.0
-offset_bottom = 640.0
+offset_bottom = 80.0
 
 [node name="Header" type="HBoxContainer" parent="Panel"]
 layout_mode = 0
@@ -41,15 +41,21 @@ text = "--"
 [node name="TitleLabel" type="Label" parent="Panel/Header"]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
+mouse_filter = 1
 theme = ExtResource("2_vdbsl")
 text = "Окно внутриигрового инспектора"
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+[node name="Body" type="Panel" parent="."]
 layout_mode = 0
 offset_top = 80.0
 offset_right = 640.0
 offset_bottom = 640.0
 
-[node name="Content Area" type="Control" parent="Panel/MarginContainer"]
+[node name="MarginContainer" type="ScrollContainer" parent="Body"]
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 560.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Body/MarginContainer"]
 layout_mode = 2

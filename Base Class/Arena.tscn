@@ -156,7 +156,7 @@ scroll_following = true
 vertical_alignment = 2
 
 [node name="Control" parent="." instance=ExtResource("23_0x5v4")]
-offset_left = -516.0
-offset_top = -214.0
-offset_right = -516.0
-offset_bottom = -214.0
+offset_left = 206.0
+offset_top = 223.0
+offset_right = 206.0
+offset_bottom = 223.0

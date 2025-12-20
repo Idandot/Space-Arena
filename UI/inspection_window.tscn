@@ -8,37 +8,41 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -512.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_sv08r")
 title = "Окно инспектора"
-title_label = NodePath("Panel/Header/TitleLabel")
-close_button = NodePath("Panel/Header/CloseButton")
-minimize_button = NodePath("Panel/Header/MinimizeButton")
+title_label = NodePath("Header/Header/TitleLabel")
+close_button = NodePath("Header/Header/CloseButton")
+minimize_button = NodePath("Header/Header/MinimizeButton")
 body_panel = NodePath("Body")
-container = NodePath("Body/MarginContainer/VBoxContainer")
+container = NodePath("Body/Body/VBoxContainer")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Header" type="Panel" parent="."]
 layout_mode = 1
 offset_right = 640.0
 offset_bottom = 80.0
 
-[node name="Header" type="HBoxContainer" parent="Panel"]
+[node name="Header" type="HBoxContainer" parent="Header"]
 layout_mode = 0
-offset_right = 640.0
+offset_right = 722.0
 offset_bottom = 80.0
 
-[node name="CloseButton" type="Button" parent="Panel/Header"]
+[node name="CloseButton" type="Button" parent="Header/Header"]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
+focus_mode = 0
 text = "X"
 
-[node name="MinimizeButton" type="Button" parent="Panel/Header"]
+[node name="MinimizeButton" type="Button" parent="Header/Header"]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
+focus_mode = 0
 text = "--"
 
-[node name="TitleLabel" type="Label" parent="Panel/Header"]
+[node name="TitleLabel" type="Label" parent="Header/Header"]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
 mouse_filter = 1
@@ -52,10 +56,10 @@ offset_top = 80.0
 offset_right = 640.0
 offset_bottom = 640.0
 
-[node name="MarginContainer" type="ScrollContainer" parent="Body"]
+[node name="Body" type="ScrollContainer" parent="Body"]
 layout_mode = 0
 offset_right = 640.0
 offset_bottom = 560.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Body/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Body/Body"]
 layout_mode = 2

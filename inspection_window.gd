@@ -32,6 +32,7 @@ func setup(object: Object, setup_title: String, content: PackedScene):
 	title = setup_title
 	_inspected_object = object
 	window_content = content.instantiate()
+	window_content.setup(_inspected_object)
 	container.add_child(window_content)
 
 func _on_close_button_pressed():
@@ -55,11 +56,3 @@ func _on_title_label_gui_input(event):
 	if event is InputEventMouseMotion:
 		if drag_offset != Vector2.ZERO:
 			global_position = get_global_mouse_position() - drag_offset
-			_clamp_to_screen()
-
-func _clamp_to_screen():
-	var viewport_size = get_viewport().get_visible_rect().size
-	var window_size = size
-	
-	position.x = clamp(position.x, 0, viewport_size.x - window_size.x)
-	position.y = clamp(position.y, 0, viewport_size.y - window_size.y)

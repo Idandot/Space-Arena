@@ -12,14 +12,19 @@ var display_name: String = "":
 		display_name = value
 	get:
 		return display_name
-var _initiative: int = 0
-var _is_alive: bool = true
-
+var description: String = "":
+	set(value):
+		description = value
+	get:
+		return description
 var is_active: bool:
 	set(value):
 		is_active = value
 	get:
 		return is_active
+
+var _initiative: int = 0
+var _is_alive: bool = true
 
 func setup(config: ActorConfig) -> void:
 	if not config:
@@ -31,6 +36,7 @@ func setup(config: ActorConfig) -> void:
 	setup_started.emit(config)
 	_initiative = config.get("initiative")
 	display_name = config.get("display_name")
+	description = config.get("description")
 
 func take_turn(phase: Enums.game_states) -> void:
 	if !_is_alive:

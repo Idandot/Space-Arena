@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://bnv8yabjdd0px"]
+[gd_scene load_steps=2 format=3 uid="uid://bnv8yabjdd0px"]
+
+[ext_resource type="Script" uid="uid://bdqkpqmry82ed" path="res://UI/WindowContents/ship_contents.gd" id="1_gdgan"]
 
 [node name="Label" type="Label"]
 offset_right = 640.0
@@ -27,3 +29,4 @@ text = "Не выходи из комнаты, не совершай ошибк�
 Не выходи из комнаты! То есть дай волю мебели,
 слейся лицом с обоями. Запрись и забаррикадируйся
 шкафом от хроноса, космоса, эроса, расы, вируса."
+script = ExtResource("1_gdgan")

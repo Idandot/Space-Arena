@@ -1,60 +1,29 @@
-[gd_scene load_steps=28 format=3 uid="uid://desilnlp5gqtr"]
+[gd_scene load_steps=15 format=3 uid="uid://desilnlp5gqtr"]
 
 [ext_resource type="Script" uid="uid://dwvjpdp1pitku" path="res://Base Class/Arena.gd" id="1_q4evv"]
 [ext_resource type="PackedScene" uid="uid://drbie2ve3q7dd" path="res://Base Class/Hex.tscn" id="3_4hi4l"]
 [ext_resource type="Script" uid="uid://daq1waive7xpx" path="res://Resources/ActorConfigs/ActorConfig.gd" id="3_7idsn"]
 [ext_resource type="Resource" uid="uid://deq6inrchxfdg" path="res://Resources/ActorConfigs/AndrewFromPiter.tres" id="4_8rq1b"]
+[ext_resource type="PackedScene" uid="uid://c4kh3mrinecq8" path="res://Base Class/Actor.tscn" id="4_iroh1"]
 [ext_resource type="Script" uid="uid://bsxmn8p1yrsl7" path="res://Base Class/ArenaCam.gd" id="4_kmxm0"]
 [ext_resource type="Script" uid="uid://ra5ms2jmqdqj" path="res://Autoload Class/HexGrid.gd" id="4_t804p"]
-[ext_resource type="Script" uid="uid://cgvsym4hxgs0s" path="res://Base Class/Actor.gd" id="4_vsp8d"]
-[ext_resource type="Script" uid="uid://bk5ges4258ki7" path="res://Base Class/Visualizer.gd" id="5_7auo3"]
-[ext_resource type="Resource" uid="uid://dkxvnl4kxb403" path="res://Resources/Textures/Ship.tres" id="6_0x5v4"]
 [ext_resource type="Script" uid="uid://3ie11nou16mr" path="res://Autoload Class/TurnManager.gd" id="6_5jmcn"]
 [ext_resource type="Script" uid="uid://cemxx5dpd6xcu" path="res://Resources/Game Configs/GameConfig.gd" id="6_e5ake"]
 [ext_resource type="Script" uid="uid://dvhdky2xyyqyb" path="res://Autoload Class/UIManager.gd" id="7_2o31o"]
-[ext_resource type="Script" uid="uid://cpwlg2v1jnfow" path="res://Base Class/HexRigidbody.gd" id="7_phy6m"]
-[ext_resource type="Script" uid="uid://bpovoinqd86cg" path="res://Base Class/VectorVisualizer.gd" id="8_2uxwk"]
 [ext_resource type="Theme" uid="uid://dho5hnu13gwhm" path="res://Themes/Font.tres" id="8_j1a1p"]
-[ext_resource type="Script" uid="uid://cq6i5t0avk767" path="res://Base Class/ShipMediator.gd" id="9_6ff4a"]
-[ext_resource type="Script" uid="uid://ctbaoqmjpniyw" path="res://Base Class/ShipLayout.gd" id="10_eyakt"]
-[ext_resource type="Script" uid="uid://cn1diyybq86d0" path="res://Modules/EngineModule.gd" id="11_c3jjo"]
-[ext_resource type="Script" uid="uid://rgkmbxhqeme2" path="res://Resources/EngineConfigs/EngineConfig.gd" id="12_ge3f4"]
-[ext_resource type="Script" uid="uid://b7cgtdinx7f7p" path="res://Modules/Bulkhead.gd" id="13_t0blq"]
-[ext_resource type="Script" uid="uid://cbpkr8ioimvfb" path="res://Modules/PlayerController.gd" id="14_fdt8u"]
 [ext_resource type="Script" uid="uid://b7ooaq8473noy" path="res://Autoload Class/highlight_manager.gd" id="20_7auo3"]
-[ext_resource type="PackedScene" uid="uid://cyeegvoov25bo" path="res://UI/inspection_window.tscn" id="23_0x5v4"]
-
-[sub_resource type="Resource" id="Resource_cy77k"]
-script = ExtResource("12_ge3f4")
-metadata/_custom_type_script = "uid://rgkmbxhqeme2"
-
-[sub_resource type="PackedScene" id="PackedScene_j1pv3"]
-_bundled = {
-"conn_count": 0,
-"conns": PackedInt32Array(),
-"editable_instances": [],
-"names": PackedStringArray("Actor", "Node2D", "script", "Visualizer", "Node2D", "script", "actor_mediator", "hex_rigidbody", "start_texture", "HexRigidbody", "Node2D", "script", "actor_mediator", "VectorVisualizer", "Node2D", "z_index", "script", "hex_rigidbody", "ActorMediator", "Node", "script", "ShipLayout", "Node", "script", "ship_controller", "modules", "Engine", "Node", "script", "hex_rigidbody", "engine_config", "actor_mediator", "tags", "Bulkhead", "Node", "script", "actor_mediator", "tags", "Bulkhead2", "Node", "script", "actor_mediator", "tags", "PlayerController", "Node", "script", "actor_mediator", "tags"),
-"node_count": 10,
-"node_paths": [NodePath("."), NodePath("."), NodePath("./HexRigidbody"), NodePath("."), NodePath("."), NodePath("./ShipLayout"), NodePath("./ShipLayout"), NodePath("./ShipLayout"), NodePath("./ShipLayout")],
-"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 1, 2, 0, 0, 1073741824, 0, 4, 3, -1, 4, 5, 1, 1073741830, 2, 1073741831, 3, 8, 4, 0, 1073741825, 0, 10, 9, -1, 2, 11, 5, 1073741836, 6, 0, 1073741826, 0, 14, 13, -1, 3, 15, 7, 16, 8, 1073741841, 9, 0, 1073741827, 0, 19, 18, -1, 1, 20, 10, 0, 1073741828, 0, 22, 21, -1, 3, 23, 11, 1073741848, 12, 1073741849, 13, 0, 1073741829, 0, 27, 26, -1, 5, 28, 14, 1073741853, 15, 30, 16, 1073741855, 17, 32, 18, 0, 1073741830, 0, 34, 33, -1, 3, 35, 19, 1073741860, 20, 37, 21, 0, 1073741831, 0, 39, 38, -1, 3, 40, 22, 1073741865, 23, 42, 24, 0, 1073741832, 0, 44, 43, -1, 3, 45, 25, 1073741870, 26, 47, 27, 0),
-"variants": [ExtResource("4_vsp8d"), ExtResource("5_7auo3"), NodePath("../ActorMediator"), NodePath("../HexRigidbody"), ExtResource("6_0x5v4"), ExtResource("7_phy6m"), NodePath("../ActorMediator"), -100, ExtResource("8_2uxwk"), NodePath(".."), ExtResource("9_6ff4a"), ExtResource("10_eyakt"), NodePath("PlayerController"), {
-Vector2i(-1, 0): NodePath("Bulkhead2"),
-Vector2i(0, -1): NodePath("Engine"),
-Vector2i(0, 0): NodePath("PlayerController"),
-Vector2i(1, 0): NodePath("Bulkhead")
-}, ExtResource("11_c3jjo"), NodePath("../../HexRigidbody"), SubResource("Resource_cy77k"), NodePath("../../ActorMediator"), Array[int]([1]), ExtResource("13_t0blq"), NodePath("../../ActorMediator"), Array[int]([1]), ExtResource("13_t0blq"), NodePath("../../ActorMediator"), Array[int]([1]), ExtResource("14_fdt8u"), NodePath("../../ActorMediator"), Array[int]([0, 1])],
-"version": 3
-}
 
 [sub_resource type="Resource" id="Resource_kujkb"]
 resource_name = "Zhemchyzhny"
 script = ExtResource("3_7idsn")
-scene = SubResource("PackedScene_j1pv3")
+scene = ExtResource("4_iroh1")
 color = Color(0.5237394, 0.19316378, 0.879081, 1)
-spawn_point = Vector2i(-2, -2)
+unique_spawnpoint = true
+spawn_point = Vector2i(2, 2)
 initial_facing = "LUU"
 initiative = 7
 display_name = "Zhemchyzhny"
+description = "Корабль Десептиконов"
 metadata/_custom_type_script = "uid://daq1waive7xpx"
 
 [sub_resource type="Resource" id="Resource_c5xbw"]
@@ -154,9 +123,3 @@ text = "BATTLE LOG:
 "
 scroll_following = true
 vertical_alignment = 2
-
-[node name="Control" parent="." instance=ExtResource("23_0x5v4")]
-offset_left = 206.0
-offset_top = 223.0
-offset_right = 206.0
-offset_bottom = 223.0

@@ -42,6 +42,7 @@ func _on_close_button_pressed():
 func _on_minimize_button_pressed():
 	_is_minimized = !_is_minimized
 	body_panel.visible = !_is_minimized
+	body_panel.mouse_filter = Control.MOUSE_FILTER_PASS if _is_minimized else Control.MOUSE_FILTER_STOP
 	window_is_minimized.emit(self, _is_minimized)
 
 var drag_offset = Vector2.ZERO

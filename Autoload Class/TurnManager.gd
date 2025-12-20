@@ -3,7 +3,6 @@ extends Node
 @export var physics_phase_duration: float = 0.5
 
 var _starting_actors: Array[Actor] = []
-var _alive_actors: Array[Actor] = []
 var _phase_queue: Array[Actor] = []
 var _current_actor: Actor
 var _current_round := 0
@@ -14,6 +13,11 @@ var current_game_state := Enums.game_states.INACTIVE:
 		return current_game_state
 	set(value):
 		current_game_state = value
+var alive_actors: Array[Actor] = []:
+	set(value):
+		alive_actors = value
+	get:
+		return alive_actors
 
 enum end_game_reason {ROUND_LIMIT, ALL_DEAD, LAST_STANDING, MANUAL}
 
@@ -40,7 +44,7 @@ func start_game(actors: Array[Actor], game_config: GameConfig) -> void:
 	_current_round = 0
 	
 	_starting_actors = actors
-	_alive_actors = _starting_actors
+	alive_actors = _starting_actors
 	for actor in _starting_actors:
 		actor.turn_ended.connect(_on_turn_ended)
 		actor.killed.connect(_on_actor_killed)
@@ -75,7 +79,7 @@ func end_game(eg_reason: end_game_reason) -> void:
 	_current_actor = null
 	
 	_starting_actors = []
-	_alive_actors = []
+	alive_actors = []
 	_phase_queue = []
 	
 	#Возвращаем TurnManager в изначальное состояние чтобы если что ничего не приключилось
@@ -100,8 +104,8 @@ func _start_next_round():
 		end_game(end_game_reason.ROUND_LIMIT)
 		return
 	
-	_alive_actors = _starting_actors.filter(func(a): return a.is_alive())
-	if _alive_actors.is_empty():
+	alive_actors = _starting_actors.filter(func(a): return a.is_alive())
+	if alive_actors.is_empty():
 		end_game(end_game_reason.ALL_DEAD)
 		return
 	
@@ -165,7 +169,7 @@ func _start_next_turn():
 #ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ
 
 func _create_phase_queue(for_phase: Enums.game_states) -> Array[Actor]:
-	var queue = _sort_actors_by_initiative(_alive_actors, for_phase).duplicate()
+	var queue = _sort_actors_by_initiative(alive_actors, for_phase).duplicate()
 	return queue
 
 func _sort_actors_by_initiative(actors: Array[Actor], _phase: Enums.game_states) -> Array[Actor]:

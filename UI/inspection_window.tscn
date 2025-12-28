@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cyeegvoov25bo"]
 
-[ext_resource type="Script" uid="uid://b4t3dbbyaogwk" path="res://inspection_window.gd" id="1_sv08r"]
+[ext_resource type="Script" uid="uid://b4t3dbbyaogwk" path="res://Base Class/inspection_window.gd" id="1_sv08r"]
 [ext_resource type="Theme" uid="uid://dho5hnu13gwhm" path="res://Themes/Font.tres" id="2_vdbsl"]
 
 [node name="Control" type="Control" node_paths=PackedStringArray("title_label", "close_button", "minimize_button", "body_panel", "container")]

@@ -39,9 +39,9 @@ func _turn_right():
 		return
 	if !_try_spend_thrust(engine_config.turn_cost):
 		return
-	var facing: HexOrientation = hex_rigidbody.get_facing()
+	var facing: HexOrientation = hex_rigidbody.facing
 	facing.turn_right()
-	_apply_facing(facing)
+	_applyfacing(facing)
 
 ##Действие поворачивающее корабль против часовой
 func _turn_left():
@@ -49,9 +49,9 @@ func _turn_left():
 		return
 	if !_try_spend_thrust(engine_config.turn_cost):
 		return
-	var facing: HexOrientation = hex_rigidbody.get_facing()
+	var facing: HexOrientation = hex_rigidbody.facing
 	facing.turn_left()
-	_apply_facing(facing)
+	_applyfacing(facing)
 
 ##Действие ускоряющее корабль в противоположном направлении от носа
 func _brake():
@@ -97,10 +97,10 @@ func _try_spend_thrust(amount: int) -> bool:
 func _apply_impulse(power: int):
 	if !_active:
 		return
-	var facing: HexOrientation = hex_rigidbody.get_facing()
+	var facing: HexOrientation = hex_rigidbody.facing
 	hex_rigidbody.add_impulse(ENGINE_IMPULSE_ID, power*facing.get_current_vector())
 
-func _apply_facing(facing: HexOrientation):
+func _applyfacing(facing: HexOrientation):
 	if !_active:
 		return
-	hex_rigidbody.set_facing(facing.get_current_name())
+	hex_rigidbody.facing = facing.get_current_name()

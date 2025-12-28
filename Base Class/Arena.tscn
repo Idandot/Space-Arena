@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://desilnlp5gqtr"]
+[gd_scene load_steps=14 format=3 uid="uid://desilnlp5gqtr"]
 
 [ext_resource type="Script" uid="uid://dwvjpdp1pitku" path="res://Base Class/Arena.gd" id="1_q4evv"]
 [ext_resource type="PackedScene" uid="uid://drbie2ve3q7dd" path="res://Base Class/Hex.tscn" id="3_4hi4l"]
@@ -11,7 +11,6 @@
 [ext_resource type="Script" uid="uid://cemxx5dpd6xcu" path="res://Resources/Game Configs/GameConfig.gd" id="6_e5ake"]
 [ext_resource type="Script" uid="uid://dvhdky2xyyqyb" path="res://Autoload Class/UIManager.gd" id="7_2o31o"]
 [ext_resource type="Theme" uid="uid://dho5hnu13gwhm" path="res://Themes/Font.tres" id="8_j1a1p"]
-[ext_resource type="Script" uid="uid://b7ooaq8473noy" path="res://Autoload Class/highlight_manager.gd" id="20_7auo3"]
 
 [sub_resource type="Resource" id="Resource_kujkb"]
 resource_name = "Zhemchyzhny"
@@ -46,9 +45,6 @@ script = ExtResource("4_kmxm0")
 
 [node name="TurnManager" type="Node" parent="."]
 script = ExtResource("6_5jmcn")
-
-[node name="HighlightManager" type="Node" parent="."]
-script = ExtResource("20_7auo3")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." node_paths=PackedStringArray("thrust_label", "round_label", "phase_label", "actor_label", "game_log_label")]
 script = ExtResource("7_2o31o")

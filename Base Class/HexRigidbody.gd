@@ -3,9 +3,7 @@ class_name HexRigidbody
 
 @export var actor_mediator: ActorMediator
 
-var _facing = HexOrientation.new()
-#текущее положение обьекта на игровой сетке
-var _axial_position = Vector2i.ZERO
+
 #Текущая скорость тела, применяется в конце хода
 var _velocity = Vector2i.ZERO
 #Смещение тела с учетом скорости и обьектов на пути
@@ -19,10 +17,25 @@ var _force_dict: Dictionary[String, Vector2i] = {}
 
 var _hex_rigidbody_state: Dictionary[String, Variant]
 
+#текущее положение обьекта на игровой сетке
+var axial_position = Vector2i.ZERO:
+	set(value):
+		axial_position = value
+		parent.position = AxialUtilities.axial_to_world(axial_position)
+	get():
+		return axial_position
+#текущая ориентация обьекта
+var facing = HexOrientation.new():
+	set(value):
+		facing.set_direction(value)
+		facing_changed.emit(facing)
+	get():
+		return facing
+
 func _save_state() -> Dictionary[String, Variant]:
 	return {
-		"_facing": _facing.get_current_name(),
-		"_axial_position": _axial_position,
+		"facing": facing.get_current_name(),
+		"axial_position": axial_position,
 		"_velocity": _velocity,
 		"_displacement": _displacement,
 		"_previous_velocity": _previous_velocity,
@@ -32,8 +45,8 @@ func _save_state() -> Dictionary[String, Variant]:
 
 func restore_initial_state():
 	var state = _hex_rigidbody_state
-	set_facing(state["_facing"])
-	set_axial_position(state["_axial_position"])
+	facing = state["facing"]
+	axial_position = state["axial_position"]
 	_previous_velocity = state["_previous_velocity"]
 	_impulse_dict = state["_impulse_dict"].duplicate()
 	_force_dict = state["_force_dict"].duplicate()
@@ -68,20 +81,6 @@ func add_impulse(impulse_name: String, value: Vector2i):
 	_impulse_dict[impulse_name] += value
 	velocity_changed.emit(get_velocity_data())
 
-func set_axial_position(axial: Vector2i):
-	_axial_position = axial
-	parent.position = AxialUtilities.axial_to_world(_axial_position)
-
-func get_axial_position() -> Vector2i:
-	return _axial_position
-
-func set_facing(value):
-	_facing.set_direction(value)
-	facing_changed.emit(_facing)
-
-func get_facing():
-	return _facing
-
 #ЛОКАЛЬНЫЕ МЕТОДЫ
 
 func _ready() -> void:
@@ -94,8 +93,8 @@ func _ready() -> void:
 
 ##Фаза инициализации корабля
 func _on_setup(_config: ActorConfig):
-	set_axial_position(_config.spawn_point)
-	set_facing(_config.initial_facing)
+	axial_position = _config.spawn_point
+	facing = _config.initial_facing
 	
 	#Временно для дебага!
 	add_force("gravity", Vector2i(1, 0))
@@ -130,7 +129,7 @@ func _calculate_displacement() -> Vector2i:
 	var path = AxialUtilities.decompose_vector(th_velocity)
 	var displacement = Vector2i.ZERO
 	for link in path:
-		var predicted_position = _axial_position + displacement + link
+		var predicted_position = axial_position + displacement + link
 		var clamped_position = AxialUtilities.axial_clamp(predicted_position, HexGridClass.get_grid_radius())
 		if clamped_position != predicted_position:
 			break
@@ -149,7 +148,7 @@ func _apply_velocity():
 	_displacement = _calculate_displacement()
 	if _displacement != _velocity:
 		GameEvents.log_request.emit("Pushed in the wall")
-	set_axial_position(_axial_position + _displacement)
+	axial_position = axial_position + _displacement
 
 func _physics_result(phase: Enums.game_states):
 	_velocity = _calculate_velocity()

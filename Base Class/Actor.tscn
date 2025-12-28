@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cgvsym4hxgs0s" path="res://Base Class/Actor.gd" id="1_3jj5i"]
 [ext_resource type="Script" uid="uid://bk5ges4258ki7" path="res://Base Class/Visualizer.gd" id="2_np13p"]
 [ext_resource type="Resource" uid="uid://dkxvnl4kxb403" path="res://Resources/Textures/Ship.tres" id="3_poh3c"]
-[ext_resource type="Script" uid="uid://b3xumdidevena" path="res://Base Class/window_opener.gd" id="4_hcv5f"]
+[ext_resource type="Script" uid="uid://b3xumdidevena" path="res://UI/window_opener.gd" id="4_hcv5f"]
 [ext_resource type="PackedScene" uid="uid://cyeegvoov25bo" path="res://UI/inspection_window.tscn" id="5_0r5c5"]
 [ext_resource type="Script" uid="uid://cpwlg2v1jnfow" path="res://Base Class/HexRigidbody.gd" id="5_gwfru"]
 [ext_resource type="Script" uid="uid://bpovoinqd86cg" path="res://Base Class/VectorVisualizer.gd" id="6_tn1aj"]

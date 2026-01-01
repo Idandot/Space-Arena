@@ -1,7 +1,6 @@
 extends Module
 class_name Weapon
 
-var target: Actor = null
 @export var weapon_stats: Dictionary[String, Variant] = {
 	"damage": 5,
 	"max_range": 6,
@@ -17,7 +16,10 @@ func get_available_actions() -> Array[Action]:
 	]
 
 func _fire():
-	target = _find_target()
+	var target: Actor = _find_target()
+	if target == null:
+		GameEvents.log_request.emit("No target available")
+		return
 	if !target.has_node("HealthComponent"):
 		print("цель не может получить урон")
 		return
@@ -29,19 +31,28 @@ func _find_target() -> Actor:
 	
 	#временный код, в будущем поиск цели будет реализован более сложно
 	for actor in alive_actors:
-		if actor.display_name != parent.display_name:
-			best_target = actor
+		if actor.display_name == parent.display_name:
+			continue
+		if !actor.has_node("/HexRigidbody"):
+			continue
+		var target_rigidbody: HexRigidbody = actor.find_child("HexRigidbody")
+		if !_is_in_arc(target_rigidbody.axial_position):
+			continue
+		best_target = actor
 	
 	return best_target
 
 func _is_in_arc(target_pos: Vector2i) -> bool:
-	if !hex_rigidbody:
-		return false
-	var origin = hex_rigidbody.axial_position
-	var facing = hex_rigidbody.getfacing()
-	var hexes_in_sector: Array[Vector2i] = AxialUtilities.hexes_in_sector(origin, facing)
 	
-	for hex in hexes_in_sector:
+	for hex in get_arc_hexes():
 		if hex == target_pos:
 			return true
 	return false
+
+func get_arc_hexes() -> Array[Vector2i]:
+	if !hex_rigidbody:
+		return []
+	var origin = hex_rigidbody.axial_position
+	var weapon_facing = hex_rigidbody.facing.turn_by_index(weapon_stats["facing_offset"])
+	return AxialUtilities.hexes_in_sector(origin, weapon_facing, 
+	weapon_stats["arc_degrees"], weapon_stats["min_range"], weapon_stats["max_range"])

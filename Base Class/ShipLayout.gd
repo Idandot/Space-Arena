@@ -35,3 +35,10 @@ func get_modules_by_tag(tag: Enums.module_tags) -> Array[Module]:
 		if tags.has(tag):
 			result.append(module)
 	return result
+
+func get_weapons() -> Array[Weapon]:
+	var result: Array[Weapon] = []
+	for module: Module in modules.values():
+		if module is Weapon:
+			result.append(module)
+	return result

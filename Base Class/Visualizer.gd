@@ -74,3 +74,13 @@ func _physics_animation(to_ax: Vector2i):
 	position = Vector2.ZERO
 	
 	actor_mediator.call_movement_animation_finished()
+
+func _highlight_shooting_arc():
+	var layout: ShipLayout = parent.find_child("ShipLayout")
+	if layout == null:
+		return
+	var weapons: Array[Weapon] = layout.get_weapons()
+	for weapon in weapons:
+		weapon.get_arc_hexes()
+		#ТЫ ОСТАНОВИЛСЯ ТУТ
+	return

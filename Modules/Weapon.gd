@@ -10,6 +10,9 @@ class_name Weapon
 }
 @export var hex_rigidbody: HexRigidbody
 
+func _ready() -> void:
+	module_name = "BIG LASER"
+
 func get_available_actions() -> Array[Action]:
 	return [
 		Action.new("weapon_fire", _fire, Enums.game_states.ACTION, "fire")

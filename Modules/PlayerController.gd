@@ -14,7 +14,7 @@ func get_available_actions() -> Array[Action]:
 
 func _ready() -> void:
 	super._ready()
-	_module_name = "controller"
+	module_name = "controller"
 
 func _process(_delta: float) -> void:
 	if _should_handle_input():

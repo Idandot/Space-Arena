@@ -5,4 +5,4 @@ func get_available_actions() -> Array[Action]:
 	return []
 
 func _ready() -> void:
-	_module_name = "bulkhead"
+	module_name = "bulkhead"

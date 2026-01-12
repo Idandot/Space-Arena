@@ -18,7 +18,7 @@ title_label = NodePath("Header/Header/TitleLabel")
 close_button = NodePath("Header/Header/CloseButton")
 minimize_button = NodePath("Header/Header/MinimizeButton")
 body_panel = NodePath("Body")
-container = NodePath("Body/Body/VBoxContainer")
+container = NodePath("Body/Body")
 
 [node name="Header" type="Panel" parent="."]
 layout_mode = 1
@@ -60,6 +60,3 @@ offset_bottom = 640.0
 layout_mode = 0
 offset_right = 640.0
 offset_bottom = 560.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Body/Body"]
-layout_mode = 2

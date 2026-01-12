@@ -11,7 +11,7 @@ class_name Module
 var _max_module_integrity: int = 100
 @onready var _module_integrity: int = _max_module_integrity
 var _active: bool = true
-var _module_name: String
+var module_name: String
 
 @onready var parent: Actor = actor_mediator.get_parent()
 @onready var ship_layout: ShipLayout = self.get_parent()
@@ -22,7 +22,7 @@ func get_available_actions() -> Array[Action]
 func take_damage(amount: int) -> int:
 	_module_integrity -= amount
 	if _module_integrity <= 0:
-		print(_module_name, " module destroyed")
+		print(module_name, " module destroyed")
 		_active = false
 		return abs(_module_integrity)
 	return 0

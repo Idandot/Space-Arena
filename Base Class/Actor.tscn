@@ -86,8 +86,9 @@ script = ExtResource("7_oayqi")
 actor_mediator = NodePath("../../ActorMediator")
 tags = Array[int]([0, 1])
 
-[node name="Weapon" type="Node" parent="ShipLayout" node_paths=PackedStringArray("actor_mediator")]
+[node name="Weapon" type="Node" parent="ShipLayout" node_paths=PackedStringArray("hex_rigidbody", "actor_mediator")]
 script = ExtResource("12_dwf2m")
+hex_rigidbody = NodePath("../../HexRigidbody")
 actor_mediator = NodePath("../../ActorMediator")
 tags = Array[int]([1])
 metadata/_custom_type_script = "uid://ck20odycxu2yu"

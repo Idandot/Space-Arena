@@ -2,6 +2,7 @@ extends Module
 class_name Weapon
 
 @export var weapon_stats: Dictionary[String, Variant] = {
+	"name": "Big Laser",
 	"damage": 5,
 	"max_range": 6,
 	"min_range": 3,
@@ -11,7 +12,7 @@ class_name Weapon
 @export var hex_rigidbody: HexRigidbody
 
 func _ready() -> void:
-	module_name = "BIG LASER"
+	module_name = weapon_stats["name"]
 
 func get_available_actions() -> Array[Action]:
 	return [

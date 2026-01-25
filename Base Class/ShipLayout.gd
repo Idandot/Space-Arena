@@ -14,6 +14,7 @@ func collect_actions() -> Array[Action]:
 func _ready() -> void:
 	parent = self.get_parent()
 	ship_controller = _find_controller()
+	TurnManager.phase_started.connect(_on_action_phase_started)
 
 func _find_controller() -> Controller:
 	var controllers = get_modules_by_tag(Enums.module_tags.CONTROLLER)
@@ -42,3 +43,11 @@ func get_weapons() -> Array[Weapon]:
 		if module is Weapon:
 			result.append(module)
 	return result
+
+func _on_action_phase_started(phase: Enums.game_states):
+	if phase != Enums.game_states.ACTION:
+		return
+	
+	#запросить Хайлайт
+	
+	pass

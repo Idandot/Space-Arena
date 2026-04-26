@@ -14,7 +14,6 @@ func _input_event(_viewport: Viewport, event: InputEvent, _shape_idx: int) -> vo
 	return
 
 func open_window():
-	print("lol")
 	
 	if !window_reference:
 		push_warning("No reference!")

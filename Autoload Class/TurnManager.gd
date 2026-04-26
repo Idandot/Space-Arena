@@ -84,6 +84,8 @@ func end_game(eg_reason: end_game_reason) -> void:
 	
 	#Возвращаем TurnManager в изначальное состояние чтобы если что ничего не приключилось
 	#Если в будущем нужна инфа об окончании игры, сигналы лучше вставлять перед сбросом
+	
+	GameEvents.game_over.emit()
 
 ##выдает челика чей сейчас ход
 func get_current_actor_or_null() -> Actor:
@@ -163,8 +165,11 @@ func _start_next_turn():
 	
 	_current_actor = _phase_queue[0]
 	_phase_queue.remove_at(0)
-	_current_actor.take_turn(current_game_state)
-	turn_started.emit(_current_actor, current_game_state)
+	if _current_actor.is_alive():
+		_current_actor.take_turn(current_game_state)
+		turn_started.emit(_current_actor, current_game_state)
+	else:
+		_start_next_turn()
 
 #ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ
 
@@ -198,10 +203,11 @@ func _on_turn_ended(actor: Actor):
 	_start_next_turn()
 
 func _check_victory_conditions():
-	#В будущем реализую
-	pass
+	if alive_actors.size() == 1:
+		end_game(end_game_reason.LAST_STANDING)
 
 func _on_actor_killed(killed_actor: Actor):
+	alive_actors = _starting_actors.filter(func(a): return a.is_alive())
 	if killed_actor == _current_actor:
 		match current_game_state:
 			Enums.game_states.MOVEMENT:

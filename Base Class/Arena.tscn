@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://desilnlp5gqtr"]
+[gd_scene load_steps=15 format=3 uid="uid://desilnlp5gqtr"]
 
 [ext_resource type="Script" uid="uid://dwvjpdp1pitku" path="res://Base Class/Arena.gd" id="1_q4evv"]
 [ext_resource type="PackedScene" uid="uid://drbie2ve3q7dd" path="res://Base Class/Hex.tscn" id="3_4hi4l"]
@@ -31,6 +31,9 @@ actors_data = Array[ExtResource("3_7idsn")]([SubResource("Resource_kujkb"), ExtR
 max_round = 9
 metadata/_custom_type_script = "uid://cemxx5dpd6xcu"
 
+[sub_resource type="Theme" id="Theme_7idsn"]
+default_font_size = 128
+
 [node name="Arena" type="Node2D"]
 script = ExtResource("1_q4evv")
 arena_radius = 8
@@ -46,13 +49,14 @@ script = ExtResource("4_kmxm0")
 [node name="TurnManager" type="Node" parent="."]
 script = ExtResource("6_5jmcn")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." node_paths=PackedStringArray("thrust_label", "round_label", "phase_label", "actor_label", "game_log_label")]
+[node name="CanvasLayer" type="CanvasLayer" parent="." node_paths=PackedStringArray("thrust_label", "round_label", "phase_label", "actor_label", "game_log_label", "game_over_label")]
 script = ExtResource("7_2o31o")
 thrust_label = NodePath("ThrustLabel")
 round_label = NodePath("RoundLabel")
 phase_label = NodePath("PhaseLabel")
 actor_label = NodePath("ActorLabel")
 game_log_label = NodePath("GameLogLabel")
+game_over_label = NodePath("GameOverLabel")
 
 [node name="RoundLabel" type="Label" parent="CanvasLayer"]
 anchors_preset = 1
@@ -119,3 +123,12 @@ text = "BATTLE LOG:
 "
 scroll_following = true
 vertical_alignment = 2
+
+[node name="GameOverLabel" type="Label" parent="CanvasLayer"]
+visible = false
+offset_right = 1152.0
+offset_bottom = 648.0
+theme = SubResource("Theme_7idsn")
+text = "GAME OVER"
+horizontal_alignment = 1
+vertical_alignment = 1

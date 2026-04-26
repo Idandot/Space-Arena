@@ -90,7 +90,7 @@ tags = Array[int]([0, 1])
 [node name="Weapon" parent="ShipLayout" node_paths=PackedStringArray("hex_rigidbody", "actor_mediator") instance=ExtResource("16_pkitw")]
 weapon_stats = Dictionary[String, Variant]({
 "arc_degrees": 120,
-"damage": 5,
+"damage": 6,
 "facing_offset": 0,
 "max_range": 6,
 "min_range": 3,

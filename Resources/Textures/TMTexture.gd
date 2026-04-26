@@ -6,3 +6,4 @@ class_name TMTexture
 @export var line_width: float = -1
 @export var fill: bool = false
 @export var fill_color: Color = Color.WHITE
+@export var dead_color: Color = Color.GRAY

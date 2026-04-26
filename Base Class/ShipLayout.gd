@@ -46,6 +46,7 @@ func get_weapons() -> Array[Weapon]:
 
 func _on_action_phase_turn_started(_actor, phase: Enums.game_states):
 	if phase != Enums.game_states.ACTION:
+		HexGridClass.highlight([], Color.GREEN, false, true)
 		return
 	if _actor != parent:
 		return

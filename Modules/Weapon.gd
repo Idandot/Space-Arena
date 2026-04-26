@@ -37,7 +37,8 @@ func _find_target() -> Actor:
 	for actor in alive_actors:
 		if actor.display_name == parent.display_name:
 			continue
-		if !actor.has_node("/HexRigidbody"):
+		if !actor.has_node("HexRigidbody"):
+			print("True")
 			continue
 		var target_rigidbody: HexRigidbody = actor.find_child("HexRigidbody")
 		if !_is_in_arc(target_rigidbody.axial_position):

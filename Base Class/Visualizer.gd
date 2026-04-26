@@ -17,6 +17,8 @@ func _ready():
 		parent.connect("setup_started", _setup)
 	if parent.has_signal("facing_changed"):
 		parent.connect("facing_changed", _rotate)
+	if parent.has_signal("killed"):
+		parent.connect("killed", _killed)
 	if hex_rigidbody != null:
 		hex_rigidbody.facing_changed.connect(_rotate)
 	
@@ -35,7 +37,10 @@ func _draw():
 		closed_points.append(closed_points[0])
 	draw_polyline(closed_points, texture.line_color, texture.line_width)
 	if texture.fill:
-		draw_colored_polygon(texture.points, texture.fill_color)
+		if parent.is_alive():
+			draw_colored_polygon(texture.points, texture.fill_color)
+		else:
+			draw_colored_polygon(texture.points, texture.dead_color)
 
 func _queue_redraw(_actor: Actor, _phase: Enums.game_states) -> void:
 	position = Vector2i.ZERO
@@ -43,6 +48,9 @@ func _queue_redraw(_actor: Actor, _phase: Enums.game_states) -> void:
 
 func _reset_position(_actor: Actor) -> void:
 	position = Vector2i.ZERO
+	queue_redraw()
+
+func _killed(_actor: Actor) -> void:
 	queue_redraw()
 
 func _setup(config: ActorConfig):

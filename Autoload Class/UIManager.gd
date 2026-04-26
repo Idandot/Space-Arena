@@ -6,11 +6,13 @@ class_name UIManager
 @export var phase_label: Label
 @export var actor_label: Label
 @export var game_log_label: RichTextLabel
+@export var game_over_label: Label
 
 func _ready() -> void:
 	GameEvents.thrust_changed.connect(_update_thrust_label)
 	GameEvents.round_changed.connect(_update_round_label)
 	GameEvents.log_request.connect(_log_message)
+	GameEvents.game_over.connect(_show_game_over)
 	TurnManager.phase_started.connect(_update_phase_label)
 	TurnManager.turn_started.connect(_update_actor_label)
 
@@ -50,3 +52,8 @@ func _log_message(message: String):
 	if !game_log_label:
 		return
 	game_log_label.add_text(message + "\n")
+
+func _show_game_over():
+	if !game_over_label:
+		return
+	game_over_label.visible = true

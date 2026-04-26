@@ -47,7 +47,18 @@ func get_weapons() -> Array[Weapon]:
 func _on_action_phase_turn_started(_actor, phase: Enums.game_states):
 	if phase != Enums.game_states.ACTION:
 		return
+	if _actor != parent:
+		return
+	
+	await get_tree().process_frame
 	
 	#запросить Хайлайт
+	var hexes_to_highlight: Array[Vector2i] = []
+	for weapon in get_weapons():
+		var arc = weapon.get_arc_hexes()
+		for hex in arc:
+			if hex not in hexes_to_highlight:
+				hexes_to_highlight.append(hex)
+	HexGridClass.highlight(hexes_to_highlight, Color.GREEN, false, true)
 	
 	pass

@@ -206,15 +206,13 @@ static func hexes_in_sector(origin: Vector2i,
 					arc_degrees: float = 120, 
 					min_range: int = 0, 
 					max_range: int = 50):
-	
 	var _hexes_in_sector: Array[Vector2i] = []
 	
 	var _half_arc = arc_degrees / 2
-	var _hexes_in_radius = hexes_in_radius(origin, min_range, max_range)
-	
+	var _hexes_in_radius = hexes_in_radius(origin, max_range, min_range)
 	for hex_pos in _hexes_in_radius:
 		var angle_degrees = abs(angle_between(hex_pos - origin, facing))
-		if angle_degrees <= _half_arc + 0.001:
+		if angle_degrees <= _half_arc:
 			_hexes_in_sector.append(hex_pos)
 	
 	return _hexes_in_sector

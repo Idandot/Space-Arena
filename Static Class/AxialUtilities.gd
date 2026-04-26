@@ -82,8 +82,13 @@ static func angle_between(v1a: Vector2i, v2a: Vector2i) -> float:
 	var v1w: Vector2 = axial_to_world(v1a)
 	var v2w: Vector2 = axial_to_world(v2a)
 	var angle_rad = v2w.angle() - v1w.angle()
+	var angle_deg = rad_to_deg(angle_rad)
+	if angle_deg > 180:
+		angle_deg -= 360
+	elif angle_deg <-180:
+		angle_deg += 360
 	
-	return rad_to_deg(angle_rad)
+	return angle_deg
 
 static func hexes_in_radius(center: Vector2i, radius: int, inner_radius: int = 0) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []
@@ -212,7 +217,7 @@ static func hexes_in_sector(origin: Vector2i,
 	var _hexes_in_radius = hexes_in_radius(origin, max_range, min_range)
 	for hex_pos in _hexes_in_radius:
 		var angle_degrees = abs(angle_between(hex_pos - origin, facing))
-		if angle_degrees <= _half_arc:
+		if angle_degrees <= _half_arc or is_equal_approx(angle_degrees, _half_arc):
 			_hexes_in_sector.append(hex_pos)
 	
 	return _hexes_in_sector

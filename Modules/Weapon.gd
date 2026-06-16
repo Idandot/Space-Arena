@@ -10,16 +10,27 @@ class_name Weapon
 	"facing_offset": 1, #поворотов на 60 градусов по часовой
 }
 @export var hex_rigidbody: HexRigidbody
+var weapon_active: bool = true
 
 func _ready() -> void:
 	module_name = weapon_stats["name"]
+	TurnManager.phase_started.connect(_on_action_phase_started)
 
 func get_available_actions() -> Array[Action]:
 	return [
-		Action.new("weapon_fire", _fire, Enums.game_states.ACTION, "fire")
+		Action.new(weapon_stats["name"]+"_fire", _fire, Enums.game_states.ACTION, "fire")
 	]
 
+func _on_action_phase_started(phase: Enums.game_states):
+	if phase != Enums.game_states.ACTION:
+		return
+	weapon_active = true
+
 func _fire():
+	if !weapon_active:
+		GameEvents.log_request.emit(weapon_stats["name"]+" is already fired this turn")
+		return
+	
 	var target: Actor = _find_target()
 	if target == null:
 		GameEvents.log_request.emit("No target available")
@@ -28,6 +39,7 @@ func _fire():
 		print("цель не может получить урон")
 		return
 	target.get_node("HealthComponent").take_damage(weapon_stats["damage"])
+	weapon_active = false
 
 func _find_target() -> Actor:
 	var alive_actors = TurnManager.alive_actors

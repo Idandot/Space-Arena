@@ -209,8 +209,4 @@ func _check_victory_conditions():
 func _on_actor_killed(killed_actor: Actor):
 	alive_actors = _starting_actors.filter(func(a): return a.is_alive())
 	if killed_actor == _current_actor:
-		match current_game_state:
-			Enums.game_states.MOVEMENT:
-				_start_movement_phase()
-			Enums.game_states.ACTION:
-				_start_action_phase()
+		_start_next_turn()

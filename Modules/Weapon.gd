@@ -12,21 +12,10 @@ class_name Weapon
 @export var hex_rigidbody: HexRigidbody
 var weapon_active: bool = true
 
-func _ready() -> void:
-	module_name = weapon_stats["name"]
-	TurnManager.phase_started.connect(_on_action_phase_started)
+#ПУБЛИЧНЫЕ МЕТОДЫ
 
-func get_available_actions() -> Array[Action]:
-	return [
-		Action.new(weapon_stats["name"]+"_fire", _fire, Enums.game_states.ACTION, "fire")
-	]
-
-func _on_action_phase_started(phase: Enums.game_states):
-	if phase != Enums.game_states.ACTION:
-		return
-	weapon_active = true
-
-func _fire():
+##Стреляет из оружия, если есть возможность
+func fire():
 	if !weapon_active:
 		GameEvents.log_request.emit(weapon_stats["name"]+" is already fired this turn")
 		return
@@ -41,6 +30,31 @@ func _fire():
 	target.get_node("HealthComponent").take_damage(weapon_stats["damage"])
 	weapon_active = false
 
+##Возвращается доступные действия модуля
+func get_available_actions() -> Array[Action]:
+	return []
+
+##Возвращает координаты гексов в арке стрельбы
+func get_arc_hexes() -> Array[Vector2i]:
+	if !hex_rigidbody:
+		return []
+	var origin = hex_rigidbody.axial_position
+	var weapon_facing: HexOrientation = HexOrientation.new()
+	weapon_facing.set_direction(weapon_stats["facing_offset"]+hex_rigidbody.facing.get_current_index())
+	return AxialUtilities.hexes_in_sector(origin, weapon_facing.get_current_vector(), 
+	weapon_stats["arc_degrees"], weapon_stats["min_range"], weapon_stats["max_range"])
+
+#ПРИВАТНЫЕ МЕТОДЫ
+
+func _ready() -> void:
+	module_name = weapon_stats["name"]
+	TurnManager.phase_started.connect(_on_action_phase_started)
+
+func _on_action_phase_started(phase: Enums.game_states):
+	if phase != Enums.game_states.ACTION:
+		return
+	weapon_active = true
+
 func _find_target() -> Actor:
 	var alive_actors = TurnManager.alive_actors
 	var best_target: Actor = null
@@ -50,7 +64,6 @@ func _find_target() -> Actor:
 		if actor.display_name == parent.display_name:
 			continue
 		if !actor.has_node("HexRigidbody"):
-			print("True")
 			continue
 		var target_rigidbody: HexRigidbody = actor.find_child("HexRigidbody")
 		if !_is_in_arc(target_rigidbody.axial_position):
@@ -65,12 +78,3 @@ func _is_in_arc(target_pos: Vector2i) -> bool:
 		if hex == target_pos:
 			return true
 	return false
-
-func get_arc_hexes() -> Array[Vector2i]:
-	if !hex_rigidbody:
-		return []
-	var origin = hex_rigidbody.axial_position
-	var weapon_facing: HexOrientation = HexOrientation.new()
-	weapon_facing.set_direction(weapon_stats["facing_offset"]+hex_rigidbody.facing.get_current_index())
-	return AxialUtilities.hexes_in_sector(origin, weapon_facing.get_current_vector(), 
-	weapon_stats["arc_degrees"], weapon_stats["min_range"], weapon_stats["max_range"])

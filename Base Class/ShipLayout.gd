@@ -5,16 +5,31 @@ class_name ShipLayout
 @export var modules: Dictionary[Vector2i, Module]
 var parent: Actor
 
+#Централизованное управление оружием
+var _weapons: Array[Weapon] = []
+var _current_weapon_index: int = -1
+
 func collect_actions() -> Array[Action]:
 	var actions: Array[Action] = []
 	for module in modules.values():
 		actions.append_array(module.get_available_actions())
+	
+	var owc = _get_operational_weapons_count()
+	if owc > 0:
+		actions.append(Action.new("fire_current_weapon", _fire_current_weapon, Enums.game_states.ACTION, "fire"))
+		
+		if owc > 1:
+			actions.append(Action.new("next_weapon", _next_weapon, Enums.game_states.ACTION, "next_weapon"))
+	
 	return actions
 
 func _ready() -> void:
 	parent = self.get_parent()
 	ship_controller = _find_controller()
 	TurnManager.turn_started.connect(_on_action_phase_turn_started)
+	
+	_weapons = get_weapons()
+	_select_next_operational_weapon()
 
 func _find_controller() -> Controller:
 	var controllers = get_modules_by_tag(Enums.module_tags.CONTROLLER)
@@ -53,13 +68,53 @@ func _on_action_phase_turn_started(_actor, phase: Enums.game_states):
 	
 	await get_tree().process_frame
 	
-	#запросить Хайлайт
-	var hexes_to_highlight: Array[Vector2i] = []
-	for weapon in get_weapons():
-		var arc = weapon.get_arc_hexes()
-		for hex in arc:
-			if hex not in hexes_to_highlight:
-				hexes_to_highlight.append(hex)
-	HexGridClass.highlight(hexes_to_highlight, Color.GREEN, false, true)
+	_update_weapon_highlight()
+
+#ДЕЙСТВИЯ
+
+func _fire_current_weapon() -> void:
+	print("fire current weapon")
+	if _current_weapon_index >= 0 and _current_weapon_index<_weapons.size():
+		_weapons[_current_weapon_index].fire()
+
+func _next_weapon() -> void:
+	print("next weapon")
+	_select_next_operational_weapon()
+	_update_weapon_highlight()
+
+#ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ ДЛЯ ЦСУО (Централизованная система управления оружием)
+
+func _select_next_operational_weapon() -> void:
+	if _weapons.is_empty():
+		_current_weapon_index = -1
+		return
 	
-	pass
+	var _start_index = _current_weapon_index
+	var _count: int = _weapons.size()
+	
+	for i in _count:
+		_current_weapon_index = (_current_weapon_index + 1) % _count
+		if _weapons[_current_weapon_index].weapon_active:
+			return
+	
+	_current_weapon_index = -1
+
+func _get_operational_weapons_count() -> int:
+	var count = 0
+	for weapon: Weapon in _weapons:
+		if weapon.weapon_active:
+			count += 1
+	return count
+
+func _get_current_weapon() -> Weapon:
+	if _current_weapon_index >= 0 and _current_weapon_index<_weapons.size():
+		return _weapons[_current_weapon_index]
+	return null
+
+func _update_weapon_highlight() -> void:
+	var arc_hexes: Array[Vector2i] = []
+	
+	var current_weapon = _get_current_weapon()
+	if current_weapon:
+		arc_hexes = current_weapon.get_arc_hexes()
+	HexGridClass.highlight(arc_hexes, Color.GREEN, false, true)

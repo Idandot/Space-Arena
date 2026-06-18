@@ -50,8 +50,9 @@ hex_rigidbody = NodePath("..")
 [node name="ActorMediator" type="Node" parent="."]
 script = ExtResource("7_r3n7q")
 
-[node name="HealthComponent" type="Node" parent="."]
+[node name="HealthComponent" type="Node" parent="." node_paths=PackedStringArray("hex_rigidbody")]
 script = ExtResource("10_pkitw")
+hex_rigidbody = NodePath("../HexRigidbody")
 
 [node name="ShipLayout" type="Node" parent="." node_paths=PackedStringArray("ship_controller", "modules")]
 script = ExtResource("7_cy77k")

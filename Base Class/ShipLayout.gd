@@ -73,12 +73,10 @@ func _on_action_phase_turn_started(_actor, phase: Enums.game_states):
 #ДЕЙСТВИЯ
 
 func _fire_current_weapon() -> void:
-	print("fire current weapon")
 	if _current_weapon_index >= 0 and _current_weapon_index<_weapons.size():
 		_weapons[_current_weapon_index].fire()
 
 func _next_weapon() -> void:
-	print("next weapon")
 	_select_next_operational_weapon()
 	_update_weapon_highlight()
 

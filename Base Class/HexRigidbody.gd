@@ -97,7 +97,7 @@ func _on_setup(_config: ActorConfig):
 	facing = _config.initial_facing
 	
 	#Временно для дебага!
-	add_force("gravity", Vector2i(1, 0))
+	#add_force("gravity", Vector2i(1, 0))
 
 ##Фаза планирования движения
 func _on_turn_start(_actor: Actor, _phase: Enums.game_states):

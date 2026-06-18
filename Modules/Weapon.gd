@@ -27,7 +27,7 @@ func fire():
 	if !target.has_node("HealthComponent"):
 		print("цель не может получить урон")
 		return
-	target.get_node("HealthComponent").take_damage(weapon_stats["damage"])
+	target.get_node("HealthComponent").take_damage_from_position(weapon_stats["damage"], hex_rigidbody.axial_position)
 	weapon_active = false
 
 ##Возвращается доступные действия модуля

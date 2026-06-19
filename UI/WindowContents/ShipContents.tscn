@@ -3,20 +3,8 @@
 [ext_resource type="Script" uid="uid://dpy2d62b47o2b" path="res://UI/WindowContents/ship_contents.gd" id="1_gdgan"]
 [ext_resource type="Theme" uid="uid://dho5hnu13gwhm" path="res://Themes/Font.tres" id="2_s5j1w"]
 
-[node name="VBoxContainer" type="VBoxContainer" node_paths=PackedStringArray("labels")]
+[node name="VBoxContainer" type="VBoxContainer"]
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_gdgan")
-labels = [NodePath("Description"), NodePath("Modules"), NodePath("Weapons")]
-
-[node name="Description" type="Label" parent="."]
-layout_mode = 2
-theme = ExtResource("2_s5j1w")
-
-[node name="Modules" type="Label" parent="."]
-layout_mode = 2
-theme = ExtResource("2_s5j1w")
-
-[node name="Weapons" type="Label" parent="."]
-layout_mode = 2
-theme = ExtResource("2_s5j1w")
+label_theme = ExtResource("2_s5j1w")

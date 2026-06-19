@@ -24,6 +24,7 @@ var is_active: bool:
 		return is_active
 
 var _initiative: int = 0
+var _round_initiative: float
 var _is_alive: bool = true
 
 func setup(config: ActorConfig) -> void:
@@ -35,8 +36,11 @@ func setup(config: ActorConfig) -> void:
 	
 	setup_started.emit(config)
 	_initiative = config.get("initiative")
+	_round_initiative = _initiative
 	display_name = config.get("display_name")
 	description = config.get("description")
+	
+	TurnManager.round_started.connect(_calculate_round_initiative)
 
 func take_turn(phase: Enums.game_states) -> void:
 	if !_is_alive:
@@ -51,8 +55,8 @@ func end_turn() -> void:
 	await get_tree().process_frame
 	emit_signal("turn_ended", self)
 
-func get_initiative() -> int:
-	return _initiative
+func get_initiative() -> float:
+	return _round_initiative
 
 func is_alive() -> bool:
 	return _is_alive
@@ -61,3 +65,7 @@ func kill() -> void:
 	is_active = false
 	_is_alive = false
 	killed.emit(self)
+
+func _calculate_round_initiative(_new_round: int) -> void:
+	_round_initiative = _initiative + randf()
+	GameEvents.log_request.emit("%s's this round initiative is %.2f" % [display_name, _round_initiative])

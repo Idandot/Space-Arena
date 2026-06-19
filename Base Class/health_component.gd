@@ -1,13 +1,15 @@
 extends Node
 class_name HealthComponent
 
+signal structure_changed
+
 @export var hex_rigidbody: HexRigidbody
 @export var starting_structure: Dictionary[String, int] = {
-	"nose": 20,
-	"starboard": 25,
-	"port": 25,
-	"aft": 15,
-	"inner structure": 30
+	"nose": 12,
+	"starboard": 15,
+	"port": 15,
+	"aft": 10,
+	"inner structure": 15
 }
 
 var structure: Dictionary[String, int]
@@ -37,6 +39,8 @@ func take_damage_from_position(amount: int, from_ax: Vector2i) -> void:
 		GameEvents.log_request.emit(str(parent.display_name, " had taken ",excess_damage, " damage in inner structure"))
 		GameEvents.log_request.emit(str(structure["inner structure"], "/",
 		starting_structure["inner structure"], " inner structure integrity left"))
+	
+	structure_changed.emit()
 
 func get_hit_zone(attacker_position: Vector2i) -> String:
 	var to_attacker = attacker_position - hex_rigidbody.axial_position
@@ -51,9 +55,9 @@ func get_hit_zone(attacker_position: Vector2i) -> String:
 	var port_arc_diff = _angle_difference(port_angle, attack_angle)
 	var starboard_arc_diff = _angle_difference(starboard_angle, attack_angle)
 	
-	if port_arc_diff <= 30:
+	if port_arc_diff <= 30 or is_equal_approx(port_arc_diff, 30):
 		return "port"
-	elif starboard_arc_diff <= 30:
+	elif starboard_arc_diff <= 30 or is_equal_approx(starboard_arc_diff, 30):
 		return "starboard"
 	elif nose_arc_diff <= 90:
 		return "nose"

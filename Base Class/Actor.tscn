@@ -59,11 +59,11 @@ script = ExtResource("7_cy77k")
 ship_controller = NodePath("PlayerController")
 modules = {
 Vector2i(-1, 0): NodePath("Bulkhead2"),
+Vector2i(-1, 1): NodePath("Weapon"),
 Vector2i(0, -1): NodePath("Engine"),
 Vector2i(0, 0): NodePath("PlayerController"),
-Vector2i(0, 1): NodePath("Weapon"),
-Vector2i(1, 0): NodePath("Bulkhead"),
-Vector2i(1, 1): NodePath("Weapon2")
+Vector2i(0, 1): NodePath("Weapon2"),
+Vector2i(1, 0): NodePath("Bulkhead")
 }
 
 [node name="Engine" type="Node" parent="ShipLayout" node_paths=PackedStringArray("hex_rigidbody", "actor_mediator")]

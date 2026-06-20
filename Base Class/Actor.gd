@@ -6,6 +6,7 @@ signal setup_started(config: ActorConfig)
 signal turn_ended(actor: Actor)
 signal turn_started(actor: Actor, phase: Enums.game_states)
 signal killed(actor: Actor)
+signal initiative_changed()
 
 var display_name: String = "":
 	set(value):
@@ -69,3 +70,4 @@ func kill() -> void:
 func _calculate_round_initiative(_new_round: int) -> void:
 	_round_initiative = _initiative + randf()
 	GameEvents.log_request.emit("%s's this round initiative is %.2f" % [display_name, _round_initiative])
+	initiative_changed.emit()

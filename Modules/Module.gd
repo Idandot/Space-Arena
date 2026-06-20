@@ -8,7 +8,7 @@ class_name Module
 		return tags
 
 
-var _max_module_integrity: int = 100
+var _max_module_integrity: int = 5
 @onready var _module_integrity: int = _max_module_integrity
 var _active: bool = true
 var module_name: String

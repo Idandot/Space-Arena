@@ -3,3 +3,4 @@
 *.uid
 *.import
 *.tmp
+/Bin

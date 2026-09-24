@@ -10,6 +10,7 @@ signal window_is_minimized(window_instance, is_is_minimized)
 		if is_instance_valid(title_label):
 			title_label.text = title
 
+@export var title_container: Container
 @export var title_label: Label
 @export var close_button: Button
 @export var minimize_button: Button
@@ -26,7 +27,7 @@ func _ready() -> void:
 	
 	close_button.pressed.connect(_on_close_button_pressed)
 	minimize_button.pressed.connect(_on_minimize_button_pressed)
-	title_label.gui_input.connect(_on_title_label_gui_input)
+	title_container.gui_input.connect(_on_title_container_gui_input)
 
 func setup(object: Object, setup_title: String, content: PackedScene):
 	title = setup_title
@@ -47,7 +48,7 @@ func _on_minimize_button_pressed():
 
 var drag_offset = Vector2.ZERO
 
-func _on_title_label_gui_input(event):
+func _on_title_container_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:

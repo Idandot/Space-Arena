@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://desilnlp5gqtr"]
+[gd_scene load_steps=14 format=3 uid="uid://desilnlp5gqtr"]
 
 [ext_resource type="Script" uid="uid://dwvjpdp1pitku" path="res://Base Class/Arena.gd" id="1_q4evv"]
 [ext_resource type="PackedScene" uid="uid://drbie2ve3q7dd" path="res://Base Class/Hex.tscn" id="3_4hi4l"]
@@ -10,7 +10,6 @@
 [ext_resource type="Script" uid="uid://3ie11nou16mr" path="res://Autoload Class/TurnManager.gd" id="6_5jmcn"]
 [ext_resource type="Script" uid="uid://cemxx5dpd6xcu" path="res://Resources/Game Configs/GameConfig.gd" id="6_e5ake"]
 [ext_resource type="Script" uid="uid://dvhdky2xyyqyb" path="res://Autoload Class/UIManager.gd" id="7_2o31o"]
-[ext_resource type="Theme" uid="uid://dho5hnu13gwhm" path="res://Themes/Font.tres" id="8_j1a1p"]
 
 [sub_resource type="Resource" id="Resource_kujkb"]
 resource_name = "Zhemchyzhny"
@@ -86,28 +85,24 @@ layout_mode = 2
 
 [node name="RoundLabel" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("8_j1a1p")
 text = "Turn Label"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="PhaseLabel" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("8_j1a1p")
 text = "Phase Label"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ActorLabel" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("8_j1a1p")
 text = "Actor Label"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ThrustLabel" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("8_j1a1p")
 text = "Thrust Label"
 horizontal_alignment = 1
 vertical_alignment = 1

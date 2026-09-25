@@ -1,7 +1,7 @@
 extends Module
 class_name EngineModule
 
-@export var hex_rigidbody: HexRigidbody
+var hex_rigidbody: HexRigidbody
 @export var engine_config: EngineConfig
 
 var _thrust: int
@@ -10,6 +10,15 @@ var _initial_thrust: int
 const ENGINE_IMPULSE_ID = "engine_acceleration"
 
 #ПУБЛИЧНЫЕ МЕТОДЫ
+
+func setup(config: Resource) -> void:
+	engine_config = config
+	hex_rigidbody = parent.find_child("HexRigidbody")
+	
+	if !engine_config or !hex_rigidbody:
+		_active = false
+	parent.turn_started.connect(_on_turn_started)
+	module_name = "engine"
 
 ##Возвращает доступные действия модуля
 func get_available_actions() -> Array[Action]:
@@ -70,12 +79,6 @@ func _reset_move():
 	GameEvents.log_request.emit("move reset")
 
 #ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ
-
-func _ready():
-	if !engine_config or !hex_rigidbody:
-		_active = false
-	parent.turn_started.connect(_on_turn_started)
-	module_name = "engine"
 
 func _on_turn_started(_actor: Actor, _phase: Enums.game_states):
 	if !_active:

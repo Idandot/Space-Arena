@@ -1,23 +1,22 @@
 extends Module
 class_name Weapon
 
-@export var weapon_stats: Dictionary[String, Variant] = {
-	"name": "Big Laser",
-	"damage": 5,
-	"max_range": 6,
-	"min_range": 3,
-	"arc_degrees": 120,
-	"facing_offset": 1, #поворотов на 60 градусов по часовой
-}
-@export var hex_rigidbody: HexRigidbody
+@export var weapon_stats: WeaponConfig
+var hex_rigidbody: HexRigidbody
 var weapon_active: bool = true
 
 #ПУБЛИЧНЫЕ МЕТОДЫ
 
+func setup(new_weapon_stats) -> void:
+	weapon_stats = new_weapon_stats
+	hex_rigidbody = parent.find_child("HexRigidbody")
+	module_name = weapon_stats.name
+	TurnManager.phase_started.connect(_on_action_phase_started)
+
 ##Стреляет из оружия, если есть возможность
 func fire():
 	if !weapon_active:
-		GameEvents.log_request.emit(weapon_stats["name"]+" is already fired this turn")
+		GameEvents.log_request.emit(weapon_stats.name +" is already fired this turn")
 		return
 	
 	var target: Actor = _find_target()
@@ -27,7 +26,7 @@ func fire():
 	if !target.has_node("HealthComponent"):
 		print("цель не может получить урон")
 		return
-	target.get_node("HealthComponent").take_damage_from_position(weapon_stats["damage"], hex_rigidbody.axial_position)
+	target.get_node("HealthComponent").take_damage_from_position(weapon_stats.damage, hex_rigidbody.axial_position)
 	weapon_active = false
 
 ##Возвращается доступные действия модуля
@@ -40,15 +39,11 @@ func get_arc_hexes() -> Array[Vector2i]:
 		return []
 	var origin = hex_rigidbody.axial_position
 	var weapon_facing: HexOrientation = HexOrientation.new()
-	weapon_facing.set_direction(weapon_stats["facing_offset"]+hex_rigidbody.facing.get_current_index())
+	weapon_facing.set_direction(weapon_stats.facing_offset+hex_rigidbody.facing.get_current_index())
 	return AxialUtilities.hexes_in_sector(origin, weapon_facing.get_current_vector(), 
-	weapon_stats["arc_degrees"], weapon_stats["min_range"], weapon_stats["max_range"])
+	weapon_stats.arc_degrees, weapon_stats.min_range, weapon_stats.max_range)
 
 #ПРИВАТНЫЕ МЕТОДЫ
-
-func _ready() -> void:
-	module_name = weapon_stats["name"]
-	TurnManager.phase_started.connect(_on_action_phase_started)
 
 func _on_action_phase_started(phase: Enums.game_states):
 	if phase != Enums.game_states.ACTION:
@@ -61,7 +56,7 @@ func _find_target() -> Actor:
 	
 	#временный код, в будущем поиск цели будет реализован более сложно
 	for actor in alive_actors:
-		if actor.display_name == parent.display_name:
+		if actor == parent:
 			continue
 		if !actor.has_node("HexRigidbody"):
 			continue

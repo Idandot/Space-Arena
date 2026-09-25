@@ -1,15 +1,64 @@
-[gd_resource type="Resource" script_class="ActorConfig" load_steps=3 format=3 uid="uid://dwpdkom4k88dl"]
+[gd_resource type="Resource" script_class="ActorConfig" load_steps=14 format=3 uid="uid://dwpdkom4k88dl"]
 
+[ext_resource type="Script" uid="uid://ceydj021o6i55" path="res://Resources/ArmorConfig.gd" id="1_7esn5"]
 [ext_resource type="PackedScene" uid="uid://c4kh3mrinecq8" path="res://Base Class/Actor.tscn" id="1_a2rwf"]
-[ext_resource type="Script" uid="uid://daq1waive7xpx" path="res://Resources/ActorConfigs/ActorConfig.gd" id="2_t56cj"]
+[ext_resource type="Script" uid="uid://dbjly20k4n8n4" path="res://Data Class/ModulePlacement.gd" id="1_ow6hf"]
+[ext_resource type="Resource" uid="uid://cuwftjygcwr0x" path="res://Resources/EngineConfigs/BasicEngineStats.tres" id="2_0h2a1"]
+[ext_resource type="Resource" uid="uid://dwkccqcx3iii4" path="res://Resources/WeaponConfigs/BigLaser.tres" id="3_7esn5"]
+[ext_resource type="Script" uid="uid://daq1waive7xpx" path="res://Resources/ActorConfig.gd" id="4_0h2a1"]
+[ext_resource type="Resource" uid="uid://cxhbpb4fi2vdl" path="res://Resources/WeaponConfigs/GaussCannon.tres" id="4_wpohh"]
+
+[sub_resource type="Resource" id="Resource_wpohh"]
+script = ExtResource("1_7esn5")
+nose = 10
+starboard = 20
+port = 20
+aft = 5
+metadata/_custom_type_script = "uid://ceydj021o6i55"
+
+[sub_resource type="Resource" id="Resource_ow6hf"]
+script = ExtResource("1_ow6hf")
+type = &"controller"
+metadata/_custom_type_script = "uid://dbjly20k4n8n4"
+
+[sub_resource type="Resource" id="Resource_7esn5"]
+script = ExtResource("1_ow6hf")
+type = &"engine"
+position = Vector2i(0, -1)
+config = ExtResource("2_0h2a1")
+metadata/_custom_type_script = "uid://dbjly20k4n8n4"
+
+[sub_resource type="Resource" id="Resource_ju5cg"]
+script = ExtResource("1_ow6hf")
+type = &"weapon"
+position = Vector2i(0, 1)
+config = ExtResource("3_7esn5")
+metadata/_custom_type_script = "uid://dbjly20k4n8n4"
+
+[sub_resource type="Resource" id="Resource_q4k3m"]
+script = ExtResource("1_ow6hf")
+type = &"weapon"
+position = Vector2i(-1, 0)
+config = ExtResource("4_wpohh")
+metadata/_custom_type_script = "uid://dbjly20k4n8n4"
+
+[sub_resource type="Resource" id="Resource_kygjf"]
+script = ExtResource("1_ow6hf")
+type = &"bulkhead"
+position = Vector2i(1, 0)
+metadata/_custom_type_script = "uid://dbjly20k4n8n4"
 
 [resource]
 resource_name = "Zhemchyzhny"
-script = ExtResource("2_t56cj")
+script = ExtResource("4_0h2a1")
 scene = ExtResource("1_a2rwf")
 color = Color(0.5237394, 0.19316378, 0.879081, 1)
+unique_spawnpoint = true
 spawn_point = Vector2i(-2, -2)
-initial_facing = "LUU"
+initial_facing = "RDD"
 initiative = 7
 display_name = "Zhemchyzhny"
+description = "Корабль Десептиконов"
+modules = Array[ExtResource("1_ow6hf")]([SubResource("Resource_ow6hf"), SubResource("Resource_7esn5"), SubResource("Resource_ju5cg"), SubResource("Resource_q4k3m"), SubResource("Resource_kygjf")])
+armor_config = SubResource("Resource_wpohh")
 metadata/_custom_type_script = "uid://daq1waive7xpx"

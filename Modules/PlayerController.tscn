@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://csxtiwf8s56rc"]
+
+[ext_resource type="Script" uid="uid://cbpkr8ioimvfb" path="res://Modules/PlayerController.gd" id="1_q1rx7"]
+
+[node name="PlayerController" type="Node" node_paths=PackedStringArray("actor_mediator")]
+script = ExtResource("1_q1rx7")
+actor_mediator = NodePath("")
+tags = Array[int]([0, 1])

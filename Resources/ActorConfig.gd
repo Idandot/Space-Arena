@@ -9,3 +9,6 @@ class_name ActorConfig
 @export var initiative: int = 0
 @export var display_name: String = ""
 @export var description: String = ""
+
+@export var modules: Array[ModulePlacement]
+@export var armor_config: ArmorConfig

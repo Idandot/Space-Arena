@@ -75,8 +75,16 @@ func _format_section_text(header: String, lines: Array[String]) -> String:
 
 func _build_armor_text() -> Array[String]:
 	var armor_text: Array[String] = []
-	var starting: Dictionary[String, int] = _health_component.starting_structure
-	var current: Dictionary[String, int] = _health_component.structure
+	var starting: Dictionary[String, int] = {}
+	var current: Dictionary[String, int] = {}
+	for property in _health_component.starting_structure.get_property_list():
+		if !property.usage & PROPERTY_USAGE_SCRIPT_VARIABLE:
+			continue
+		if property.type != TYPE_INT:
+			continue
+		
+		starting[property.name] = _health_component.starting_structure.get(property.name)
+		current[property.name] = _health_component.structure.get(property.name)
 	
 	for location: String in starting.keys():
 		var current_hp: int = current.get(location, 0)

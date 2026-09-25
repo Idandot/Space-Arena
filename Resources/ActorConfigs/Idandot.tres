@@ -1,0 +1,65 @@
+[gd_resource type="Resource" script_class="ActorConfig" load_steps=13 format=3 uid="uid://b0rvuhkbh4shv"]
+
+[ext_resource type="Script" uid="uid://ceydj021o6i55" path="res://Resources/ArmorConfig.gd" id="1_1dc8u"]
+[ext_resource type="Script" uid="uid://dbjly20k4n8n4" path="res://Data Class/ModulePlacement.gd" id="1_3o6h4"]
+[ext_resource type="Resource" uid="uid://b2idh7f108a85" path="res://Resources/EngineConfigs/AdvancedEngineStats.tres" id="3_1dc8u"]
+[ext_resource type="Resource" uid="uid://cxhbpb4fi2vdl" path="res://Resources/WeaponConfigs/GaussCannon.tres" id="4_0llsu"]
+[ext_resource type="PackedScene" uid="uid://c4kh3mrinecq8" path="res://Base Class/Actor.tscn" id="4_cgs4t"]
+[ext_resource type="Script" uid="uid://daq1waive7xpx" path="res://Resources/ActorConfig.gd" id="5_sk3nh"]
+
+[sub_resource type="Resource" id="Resource_cgs4t"]
+script = ExtResource("1_1dc8u")
+nose = 15
+starboard = 20
+port = 20
+aft = 12
+inner_structure = 20
+metadata/_custom_type_script = "uid://ceydj021o6i55"
+
+[sub_resource type="Resource" id="Resource_ow6hf"]
+script = ExtResource("1_3o6h4")
+type = &"controller"
+metadata/_custom_type_script = "uid://dbjly20k4n8n4"
+
+[sub_resource type="Resource" id="Resource_7esn5"]
+script = ExtResource("1_3o6h4")
+type = &"engine"
+position = Vector2i(0, -1)
+config = ExtResource("3_1dc8u")
+metadata/_custom_type_script = "uid://dbjly20k4n8n4"
+
+[sub_resource type="Resource" id="Resource_ju5cg"]
+script = ExtResource("1_3o6h4")
+type = &"weapon"
+position = Vector2i(0, 1)
+config = ExtResource("4_0llsu")
+metadata/_custom_type_script = "uid://dbjly20k4n8n4"
+
+[sub_resource type="Resource" id="Resource_q4k3m"]
+script = ExtResource("1_3o6h4")
+type = &"weapon"
+position = Vector2i(-1, 0)
+config = ExtResource("4_0llsu")
+metadata/_custom_type_script = "uid://dbjly20k4n8n4"
+
+[sub_resource type="Resource" id="Resource_kygjf"]
+script = ExtResource("1_3o6h4")
+type = &"weapon"
+position = Vector2i(1, 0)
+config = ExtResource("4_0llsu")
+metadata/_custom_type_script = "uid://dbjly20k4n8n4"
+
+[resource]
+resource_name = "AndrewFromPiter"
+script = ExtResource("5_sk3nh")
+scene = ExtResource("4_cgs4t")
+color = Color(0.23760805, 0.29371986, 1, 1)
+unique_spawnpoint = true
+spawn_point = Vector2i(-4, 2)
+initial_facing = "RUU"
+initiative = 8
+display_name = "Idandot"
+description = "Бог"
+modules = Array[ExtResource("1_3o6h4")]([SubResource("Resource_ow6hf"), SubResource("Resource_7esn5"), SubResource("Resource_ju5cg"), SubResource("Resource_q4k3m"), SubResource("Resource_kygjf")])
+armor_config = SubResource("Resource_cgs4t")
+metadata/_custom_type_script = "uid://daq1waive7xpx"

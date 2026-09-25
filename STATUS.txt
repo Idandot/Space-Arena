@@ -1,3 +1,8 @@
+TODO:
+	Weaponstats -> Resource
+	ActorConfigs -> Upgrade
+
+
 Autoload'ы:
 	GameEvents - выглядит как посредник
 	HexGrid - чистый красивый

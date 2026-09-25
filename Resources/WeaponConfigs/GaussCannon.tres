@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="WeaponConfig" load_steps=2 format=3 uid="uid://cxhbpb4fi2vdl"]
+
+[ext_resource type="Script" uid="uid://ceiaskrajdh8i" path="res://Resources/WeaponConfig.gd" id="1_bxunw"]
+
+[resource]
+script = ExtResource("1_bxunw")
+name = "Gauss Cannon"
+damage = 6
+max_range = 7
+min_range = 2
+facing_offset = 0
+metadata/_custom_type_script = "uid://ceiaskrajdh8i"

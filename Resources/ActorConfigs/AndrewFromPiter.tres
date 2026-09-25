@@ -1,7 +1,51 @@
-[gd_resource type="Resource" script_class="ActorConfig" load_steps=3 format=3 uid="uid://deq6inrchxfdg"]
+[gd_resource type="Resource" script_class="ActorConfig" load_steps=13 format=3 uid="uid://deq6inrchxfdg"]
 
+[ext_resource type="Script" uid="uid://dbjly20k4n8n4" path="res://Data Class/ModulePlacement.gd" id="1_3ya48"]
+[ext_resource type="Script" uid="uid://ceydj021o6i55" path="res://Resources/ArmorConfig.gd" id="1_gekcw"]
 [ext_resource type="PackedScene" uid="uid://c4kh3mrinecq8" path="res://Base Class/Actor.tscn" id="1_iwcug"]
-[ext_resource type="Script" uid="uid://daq1waive7xpx" path="res://Resources/ActorConfigs/ActorConfig.gd" id="2_3ya48"]
+[ext_resource type="Script" uid="uid://daq1waive7xpx" path="res://Resources/ActorConfig.gd" id="2_3ya48"]
+[ext_resource type="Resource" uid="uid://cuwftjygcwr0x" path="res://Resources/EngineConfigs/BasicEngineStats.tres" id="2_ek5eo"]
+[ext_resource type="Resource" uid="uid://dwkccqcx3iii4" path="res://Resources/WeaponConfigs/BigLaser.tres" id="3_gekcw"]
+
+[sub_resource type="Resource" id="Resource_57ty5"]
+script = ExtResource("1_gekcw")
+nose = 20
+starboard = 12
+port = 12
+aft = 12
+metadata/_custom_type_script = "uid://ceydj021o6i55"
+
+[sub_resource type="Resource" id="Resource_ow6hf"]
+script = ExtResource("1_3ya48")
+type = &"controller"
+metadata/_custom_type_script = "uid://dbjly20k4n8n4"
+
+[sub_resource type="Resource" id="Resource_7esn5"]
+script = ExtResource("1_3ya48")
+type = &"engine"
+position = Vector2i(0, -1)
+config = ExtResource("2_ek5eo")
+metadata/_custom_type_script = "uid://dbjly20k4n8n4"
+
+[sub_resource type="Resource" id="Resource_ju5cg"]
+script = ExtResource("1_3ya48")
+type = &"weapon"
+position = Vector2i(0, 1)
+config = ExtResource("3_gekcw")
+metadata/_custom_type_script = "uid://dbjly20k4n8n4"
+
+[sub_resource type="Resource" id="Resource_gekcw"]
+script = ExtResource("1_3ya48")
+type = &"weapon"
+position = Vector2i(-1, 0)
+config = ExtResource("3_gekcw")
+metadata/_custom_type_script = "uid://dbjly20k4n8n4"
+
+[sub_resource type="Resource" id="Resource_kygjf"]
+script = ExtResource("1_3ya48")
+type = &"bulkhead"
+position = Vector2i(1, 0)
+metadata/_custom_type_script = "uid://dbjly20k4n8n4"
 
 [resource]
 resource_name = "AndrewFromPiter"
@@ -9,9 +53,11 @@ script = ExtResource("2_3ya48")
 scene = ExtResource("1_iwcug")
 color = Color(0.7742363, 0.12773049, 0.15103745, 1)
 unique_spawnpoint = true
-spawn_point = Vector2i(-2, -2)
-initial_facing = "RDD"
+spawn_point = Vector2i(2, 2)
+initial_facing = "LUU"
 initiative = 7
 display_name = "AndrewFromPiter"
 description = "Корабль из папье-маше"
+modules = Array[ExtResource("1_3ya48")]([SubResource("Resource_ow6hf"), SubResource("Resource_7esn5"), SubResource("Resource_ju5cg"), SubResource("Resource_gekcw"), SubResource("Resource_kygjf")])
+armor_config = SubResource("Resource_57ty5")
 metadata/_custom_type_script = "uid://daq1waive7xpx"

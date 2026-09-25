@@ -23,6 +23,7 @@ var is_active: bool:
 		is_active = value
 	get:
 		return is_active
+var actor_config: ActorConfig
 
 var _initiative: int = 0
 var _round_initiative: float
@@ -40,6 +41,7 @@ func setup(config: ActorConfig) -> void:
 	_round_initiative = _initiative
 	display_name = config.get("display_name")
 	description = config.get("description")
+	actor_config = config
 	
 	TurnManager.round_started.connect(_calculate_round_initiative)
 

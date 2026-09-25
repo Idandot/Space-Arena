@@ -1,7 +1,7 @@
 extends Node
 class_name ShipLayout
 
-@export var ship_controller: Controller
+var ship_controller: Controller
 @export var modules: Dictionary[Vector2i, Module]
 var parent: Actor
 
@@ -23,6 +23,10 @@ func collect_actions() -> Array[Action]:
 
 func _ready() -> void:
 	parent = self.get_parent()
+	parent.setup_started.connect(_setup)
+
+func _setup(config: ActorConfig) -> void:
+	_build_from_config(config)
 	ship_controller = _find_controller()
 	TurnManager.turn_started.connect(_on_action_phase_turn_started)
 	
@@ -39,6 +43,26 @@ func get_module_or_null(position: Vector2i) -> Module:
 		return modules[position]
 	print("Position is empty")
 	return null
+
+func _build_from_config(config: ActorConfig) -> void:
+	modules.clear()
+	if config.modules == null:
+		push_warning("ShipLayout: config is not provided")
+	
+	for placement in config.modules:
+		if modules.has(placement.position):
+			push_warning("ShipLayout: %s is already taken"% placement.position)
+		
+		var module = ModuleFactory.create(parent, placement.type, placement.config)
+		if module == null:
+			continue
+		
+		module.grid_position = placement.position
+		module.ship_layout = self
+		add_child(module)
+		modules[placement.position] = module
+	
+	return
 
 func get_modules_by_tag(tag: Enums.module_tags) -> Array[Module]:
 	var result: Array[Module] = []

@@ -4,18 +4,16 @@ class_name HealthComponent
 signal structure_changed
 
 @export var hex_rigidbody: HexRigidbody
-@export var starting_structure: Dictionary[String, int] = {
-	"nose": 12,
-	"starboard": 15,
-	"port": 15,
-	"aft": 10,
-	"inner structure": 15
-}
+@export var starting_structure: ArmorConfig
 
-var structure: Dictionary[String, int]
+var structure: ArmorConfig
 @onready var parent: Actor = self.get_parent()
 
 func _ready() -> void:
+	parent.setup_started.connect(_setup)
+
+func _setup(config: ActorConfig) -> void:
+	starting_structure = config.armor_config
 	structure = starting_structure.duplicate()
 
 func take_damage_from_position(amount: int, from_ax: Vector2i) -> void:
@@ -30,15 +28,15 @@ func take_damage_from_position(amount: int, from_ax: Vector2i) -> void:
 	GameEvents.log_request.emit(str(parent.display_name, " had taken ",amount-excess_damage, " damage in location ", location))
 	GameEvents.log_request.emit(str(structure[location], "/",starting_structure[location]," ",location, " integrity left"))
 	
-	structure["inner structure"] -= excess_damage
-	if structure["inner structure"] <= 0:
-		GameEvents.log_request.emit(str(parent.display_name, " is destroyed"))
-		parent.kill()
-	
+	structure.inner_structure -= excess_damage
 	if excess_damage != 0:
 		GameEvents.log_request.emit(str(parent.display_name, " had taken ",excess_damage, " damage in inner structure"))
-		GameEvents.log_request.emit(str(structure["inner structure"], "/",
-		starting_structure["inner structure"], " inner structure integrity left"))
+		GameEvents.log_request.emit(str(structure.inner_structure, "/",
+		starting_structure.inner_structure, " inner structure integrity left"))
+	
+	if structure.inner_structure <= 0:
+		GameEvents.log_request.emit(str(parent.display_name, " is destroyed"))
+		parent.kill()
 	
 	structure_changed.emit()
 

@@ -12,8 +12,9 @@ func get_available_actions() -> Array[Action]:
 
 #ОСНОВНЫЕ МЕТОДЫ
 
-func _ready() -> void:
-	super._ready()
+func setup(_config: Resource) -> void:
+	super.setup(null)
+	tags.append(Enums.module_tags.CONTROLLER)
 	module_name = "controller"
 
 func _process(_delta: float) -> void:

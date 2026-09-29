@@ -1,79 +1,118 @@
 extends Content
 
+#КОНСТАНТЫ
 const SECTION_DESCRIPTION = "/DESCRIPTION/"
 const SECTION_STATS = "/STATS/"
 const SECTION_ARMOR = "/ARMOR/"
-const SECTION_MODULES = "/MODULES/"
-const SECTION_WEAPONS = "/WEAPONS/"
 
+#ЭКСПОРТЫ
 @export var label_theme: Theme
+@export var empty_cell_color:= Color(0.2, 0.2, 0.2, 0.5)
+@export var cell_size:= Vector2(48,48)
 
+#ССЫЛКИ НА НОДЫ
+@export var ship_grid: GridContainer
+@export var description_label: Label
+@export var stats_label: Label
+@export var armor_label: Label
+@export var module_details_label: RichTextLabel
+
+#СОСТОЯНИЕ
 var _actor: Actor
 var _health_component: HealthComponent
-var _labels: Dictionary[StringName, Label] = {}
+var _ship_layout: ShipLayout
+var _selected_module: Module
 
 func setup(actor: Actor) -> void:
 	if not is_instance_valid(actor):
 		return
 	
-	_clear()
+	_clear_state()
 	_actor = actor
 	
-	_add_section(SECTION_DESCRIPTION, [_actor.description])
-	_setup_stats()
-	_setup_armor()
-	_setup_ship_modules()
-
-#НАСТРОЙКА СЕКЦИЙ
-
-func _setup_stats() -> void:
 	_actor.initiative_changed.connect(_update_initiative)
-	var stats_text: Array[String] = ["initiative: %.2f" % _actor.get_initiative()]
-	_add_section(SECTION_STATS, stats_text)
-
-func _setup_armor() -> void:
+	
 	_health_component = _actor.get_node_or_null("HealthComponent") as HealthComponent
+	if _health_component:
+		_health_component.structure_changed.connect(_update_armor)
+	
+	_ship_layout = _actor.get_node_or_null("ShipLayout") as ShipLayout
+	
+	_populate_ui()
+
+func _populate_ui() -> void:
+	description_label.text = "%s\n%s" % [SECTION_DESCRIPTION, _actor.description]
+	
+	_update_initiative()
+	
+	_update_armor()
+	
+	if _ship_layout:
+		_build_ship_grid()
+	
+	_update_module_details(null)
+
+#РАБОТА С СЕТКОЙ
+func _build_ship_grid() -> void:
+	for child in ship_grid.get_children():
+		child.queue_free()
+	
+	var modules: Dictionary[Vector2i, Module] = _ship_layout.modules
+	if modules.is_empty():
+		return
+	
+	var min_pos: Vector2i
+	var max_pos: Vector2i
+	for pos in modules.keys():
+		min_pos.x = min(min_pos.x, pos.x)
+		min_pos.y = min(min_pos.y, pos.y)
+		max_pos.x = max(max_pos.x, pos.x)
+		max_pos.y = max(max_pos.y, pos.y)
+	
+	var width = max_pos.x - min_pos.x + 1
+	ship_grid.columns = width
+	
+	for y in range(min_pos.y, max_pos.y +1):
+		for x in range(min_pos.x, max_pos.x +1):
+			var current_pos:= Vector2i(x, y)
+			
+			if modules.has(current_pos):
+				ship_grid.add_child(_create_module_cell(modules[current_pos]))
+			else:
+				ship_grid.add_child(_create_empty_cell())
+
+func _create_module_cell(module: Module) -> Control:
+	var btn: Button = Button.new()
+	btn.custom_minimum_size = cell_size
+	btn.tooltip_text = module.module_name
+	
+	if _health_component:
+		var max_hp := module._max_module_integrity
+		var hp := module._module_integrity
+		var hp_ratio: float = float(hp) / float(max_hp)
+		btn.modulate = Color(1,1,1,1).lerp(Color(1, 0.2, 0.2, 1), 1.0 - hp_ratio)
+	
+	btn.pressed.connect(_on_module_cell_pressed.bind(module))
+	
+	return btn
+
+func _create_empty_cell() -> Control:
+	var panel := Panel.new()
+	panel.custom_minimum_size = cell_size
+	var style := StyleBoxFlat.new()
+	style.bg_color = empty_cell_color
+	panel.add_theme_stylebox_override("panel", style)
+	return panel
+
+#ОБНОВЛЕНИЯ
+func _update_initiative():
+	var stats_text: Array[String] = ["initiative: %.2f" % _actor.get_initiative()]
+	stats_label.text = "%s\n%s" % [SECTION_STATS, "".join(stats_text)]
+
+func _update_armor() -> void:
 	if not _health_component:
 		return
 	
-	_health_component.structure_changed.connect(_update_armor)
-	
-	var armor_text: Array[String] = _build_armor_text()
-	_add_section(SECTION_ARMOR, armor_text)
-
-func _setup_ship_modules() -> void:
-	var ship_layout: ShipLayout = _actor.get_node_or_null("ShipLayout") as ShipLayout
-	if not ship_layout:
-		return
-	
-	var modules_text: Array[String] = []
-	for module: Module in ship_layout.modules.values():
-		modules_text.append(module.module_name)
-	_add_section(SECTION_MODULES, modules_text)
-
-#РАБОТА С UI
-
-func _add_section(section_key: StringName, lines: Array[String] = []) -> void:
-	var label := Label.new()
-	add_child(label)
-	_labels[section_key] = label
-	
-	label.theme = label_theme
-	label.text = _format_section_text(section_key, lines)
-
-func _update_section(section_key: StringName, lines: Array[String] = []) -> void:
-	if not _labels.has(section_key):
-		push_warning("UI Section '%s' not found. Was it initialized?" % section_key)
-		return
-	
-	_labels[section_key].text = _format_section_text(section_key, lines)
-
-func _format_section_text(header: String, lines: Array[String]) -> String:
-	if lines.is_empty():
-		return header
-	return "%s\n%s" % [header, "\n".join(lines)]
-
-func _build_armor_text() -> Array[String]:
 	var armor_text: Array[String] = []
 	var starting: Dictionary[String, int] = {}
 	var current: Dictionary[String, int] = {}
@@ -89,34 +128,49 @@ func _build_armor_text() -> Array[String]:
 	for location: String in starting.keys():
 		var current_hp: int = current.get(location, 0)
 		var max_hp: int = starting[location]
-		armor_text.append("%s: %d/%d" % [location, current_hp, max_hp])
+		var bar: String = _generate_hp_bar(current_hp, max_hp)
+		armor_text.append("%s: %d/%d \n%s" % [location, current_hp, max_hp, bar])
 	
-	return armor_text
+	armor_label.text = "%s\n%s" % [SECTION_ARMOR, "\n".join(armor_text)]
 
-#CALLABLE ДЛЯ СИГНАЛОВ
-
-func _update_initiative():
-	var stats_text: Array[String] = ["initiative: %.2f" % _actor.get_initiative()]
-	_update_section(SECTION_STATS, stats_text)
-
-func _update_armor() -> void:
-	if not _health_component:
+func _update_module_details(module: Module) -> void:
+	if not module:
+		module_details_label.text = "Select module to inspect it"
 		return
 	
-	_update_section(SECTION_ARMOR, _build_armor_text())
+	_selected_module = module
+	var details: String = "%s\n" % module.name
+	details += "%s\n" % module.description
+	
+	if module.has_method("get_stats_text"):
+		details += module.get_stats_text()
+	
+	module_details_label.text = details
 
-#ЧИСТКА И ПАМЯТЬ
+#CALLBACKS
+func _on_module_cell_pressed(module: Module) -> void:
+	_update_module_details(module)
 
-func _clear():
+func _generate_hp_bar(current: int, max: int, length:=5) -> String:
+	if max == 0:
+		return ""
+	
+	var filled: int = int(round(float(current)/float(max)*length))
+	var empty: int = length - filled
+	
+	return "[" + "█".repeat(filled) + "░".repeat(empty) + "]"
+
+
+func _clear_state() -> void:
 	_disconnect_signals()
 	
-	for label: Label in _labels.values():
-		if is_instance_valid(label):
-			label.queue_free()
-	_labels.clear()
+	for child in ship_grid.get_children():
+		child.queue_free()
 	
 	_actor = null
+	_ship_layout = null
 	_health_component = null
+	_selected_module = null
 
 func _disconnect_signals() -> void:
 	if is_instance_valid(_actor) and _actor.initiative_changed.is_connected(_update_initiative):

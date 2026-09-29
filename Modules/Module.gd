@@ -7,6 +7,7 @@ var tags: Array[Enums.module_tags]
 var _max_module_integrity: int = 5
 var _active: bool = true
 var module_name: String
+var description: String
 var grid_position: Vector2i
 var ship_layout: ShipLayout
 var parent: Actor
@@ -19,6 +20,9 @@ func get_available_actions() -> Array[Action]
 #переопределяется у детей
 func setup(_config: Resource) -> void:
 	pass
+
+func get_stats_text() -> String:
+	return ""
 
 func take_damage(amount: int) -> int:
 	_module_integrity -= amount

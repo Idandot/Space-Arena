@@ -39,6 +39,8 @@ func take_damage_from_position(amount: int, from_ax: Vector2i) -> void:
 		parent.kill()
 	
 	structure_changed.emit()
+	
+	##TODO: заменить внутреннюю структуру на систему повреждений модулей
 
 func get_hit_zone(attacker_position: Vector2i) -> String:
 	var to_attacker = attacker_position - hex_rigidbody.axial_position

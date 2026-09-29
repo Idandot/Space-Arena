@@ -32,6 +32,15 @@ func get_available_actions() -> Array[Action]:
 		Action.new("reset_move", _reset_move, Enums.game_states.MOVEMENT)
 	]
 
+func get_stats_text() -> String:
+	var stats_text := ""
+	for property in engine_config.get_property_list():
+		if !property.usage & PROPERTY_USAGE_SCRIPT_VARIABLE:
+			continue
+		
+		stats_text += "%s: %s\n" % [property["name"], engine_config.get(property["name"])]
+	return stats_text
+
 #ДЕЙСТВИЯ МОДУЛЯ
 
 ##Действие ускоряющее корабль в направлении носа

@@ -3,8 +3,78 @@
 [ext_resource type="Script" uid="uid://dpy2d62b47o2b" path="res://UI/WindowContents/ship_contents.gd" id="1_gdgan"]
 [ext_resource type="Theme" uid="uid://dho5hnu13gwhm" path="res://Themes/Font.tres" id="2_s5j1w"]
 
-[node name="VBoxContainer" type="VBoxContainer"]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="ShipInspection" type="Control" node_paths=PackedStringArray("ship_grid", "description_label", "stats_label", "armor_label", "module_details_label")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_gdgan")
 label_theme = ExtResource("2_s5j1w")
+ship_grid = NodePath("HSplitContainer/LeftPanel/GridContainer")
+description_label = NodePath("HSplitContainer/ScrollContainer/RightPanel/DescriptionLabel")
+stats_label = NodePath("HSplitContainer/ScrollContainer/RightPanel/StatsLabel")
+armor_label = NodePath("HSplitContainer/ScrollContainer/RightPanel/ArmorLabel")
+module_details_label = NodePath("HSplitContainer/ScrollContainer/RightPanel/ModuleDetailsLabel")
+
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+dragging_enabled = false
+
+[node name="LeftPanel" type="VBoxContainer" parent="HSplitContainer"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HSplitContainer/LeftPanel"]
+layout_mode = 2
+text = "/SHIP STRUCTURE/"
+horizontal_alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="HSplitContainer/LeftPanel"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RightPanel" type="VBoxContainer" parent="HSplitContainer/ScrollContainer"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="DescriptionLabel" type="Label" parent="HSplitContainer/ScrollContainer/RightPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Fuck"
+
+[node name="StatsLabel" type="Label" parent="HSplitContainer/ScrollContainer/RightPanel"]
+layout_mode = 2
+
+[node name="ArmorLabel" type="Label" parent="HSplitContainer/ScrollContainer/RightPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Bitch"
+
+[node name="DetailsHeader" type="Label" parent="HSplitContainer/ScrollContainer/RightPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "/MODULE DETAILS/"
+
+[node name="ModuleDetailsLabel" type="RichTextLabel" parent="HSplitContainer/ScrollContainer/RightPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+fit_content = true
+scroll_active = false

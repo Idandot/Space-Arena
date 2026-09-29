@@ -9,20 +9,21 @@ signal window_is_minimized(window_instance, is_is_minimized)
 		title = value
 		if is_instance_valid(title_label):
 			title_label.text = title
+@export var min_size: Vector2 = Vector2(400,300)
 
 @export var title_container: Container
 @export var title_label: Label
 @export var close_button: Button
 @export var minimize_button: Button
-@export var body_panel: Panel
-@export var container: Container
+@export var body_panel: PanelContainer
 
-var window_content: Node
-
+var content_node: Node
 var _inspected_object: Object = null
 var _is_minimized: bool = false
+var drag_offset = Vector2.ZERO
 
 func _ready() -> void:
+	
 	title = title
 	
 	close_button.pressed.connect(_on_close_button_pressed)
@@ -32,9 +33,9 @@ func _ready() -> void:
 func setup(object: Object, setup_title: String, content: PackedScene):
 	title = setup_title
 	_inspected_object = object
-	window_content = content.instantiate()
-	window_content.setup(_inspected_object)
-	container.add_child(window_content)
+	content_node = content.instantiate()
+	content_node.setup(_inspected_object)
+	body_panel.add_child(content_node)
 
 func _on_close_button_pressed():
 	queue_free()
@@ -45,8 +46,6 @@ func _on_minimize_button_pressed():
 	body_panel.visible = !_is_minimized
 	body_panel.mouse_filter = Control.MOUSE_FILTER_PASS if _is_minimized else Control.MOUSE_FILTER_STOP
 	window_is_minimized.emit(self, _is_minimized)
-
-var drag_offset = Vector2.ZERO
 
 func _on_title_container_gui_input(event):
 	if event is InputEventMouseButton:

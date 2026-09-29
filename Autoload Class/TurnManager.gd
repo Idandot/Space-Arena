@@ -8,16 +8,8 @@ var _current_actor: Actor
 var _current_round := 0
 var _max_round := 10
 
-var current_game_state := Enums.game_states.INACTIVE:
-	get():
-		return current_game_state
-	set(value):
-		current_game_state = value
-var alive_actors: Array[Actor] = []:
-	set(value):
-		alive_actors = value
-	get:
-		return alive_actors
+var current_game_state := Enums.game_states.INACTIVE
+var alive_actors: Array[Actor] = []
 
 enum end_game_reason {ROUND_LIMIT, ALL_DEAD, LAST_STANDING, MANUAL}
 
@@ -60,6 +52,7 @@ func end_game(eg_reason: end_game_reason) -> void:
 	
 	for actor in _starting_actors:
 		actor.turn_ended.disconnect(_on_turn_ended)
+		actor.killed.disconnect(_on_actor_killed)
 	
 	var reason: String = ""
 	match eg_reason:

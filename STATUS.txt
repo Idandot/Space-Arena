@@ -1,7 +1,5 @@
-TODO:
-	Weaponstats -> Resource
-	ActorConfigs -> Upgrade
-
+Идеи:
+	Продвинутое управление окнами (z index, максимальное количество окон, закрепление, временные окна)
 
 Autoload'ы:
 	GameEvents - выглядит как посредник

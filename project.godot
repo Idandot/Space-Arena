@@ -30,6 +30,10 @@ TurnManager="*res://Autoload Class/TurnManager.gd"
 
 window/stretch/mode="canvas_items"
 
+[gui]
+
+timers/text_edit_idle_detect_sec=100.0
+
 [input]
 
 turn_right={

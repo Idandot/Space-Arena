@@ -4,4 +4,7 @@
 
 [resource]
 script = ExtResource("1_d22kt")
+config_name = "Basic Engine"
+config_acronym = "E1"
+thrust_regeneration = 3
 metadata/_custom_type_script = "uid://rgkmbxhqeme2"

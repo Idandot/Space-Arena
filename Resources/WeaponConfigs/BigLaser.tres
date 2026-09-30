@@ -4,4 +4,6 @@
 
 [resource]
 script = ExtResource("1_q7gqn")
+config_name = "Big Laser"
+config_acronym = "BL"
 metadata/_custom_type_script = "uid://ceiaskrajdh8i"

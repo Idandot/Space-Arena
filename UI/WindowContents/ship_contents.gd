@@ -1,4 +1,5 @@
 extends Content
+class_name ShipContents
 
 #КОНСТАНТЫ
 const SECTION_DESCRIPTION = "/DESCRIPTION/"
@@ -8,14 +9,17 @@ const SECTION_ARMOR = "/ARMOR/"
 #ЭКСПОРТЫ
 @export var label_theme: Theme
 @export var empty_cell_color:= Color(0.2, 0.2, 0.2, 0.5)
-@export var cell_size:= Vector2(48,48)
+@export var cell_size:= Vector2(32,32)
 
 #ССЫЛКИ НА НОДЫ
 @export var ship_grid: GridContainer
 @export var description_label: Label
 @export var stats_label: Label
-@export var armor_label: Label
 @export var module_details_label: RichTextLabel
+
+#ЛОКАЦИИ БРОНИ
+@export var location_labels: Dictionary[String, Control] = {
+}
 
 #СОСТОЯНИЕ
 var _actor: Actor
@@ -72,7 +76,7 @@ func _build_ship_grid() -> void:
 	var width = max_pos.x - min_pos.x + 1
 	ship_grid.columns = width
 	
-	for y in range(min_pos.y, max_pos.y +1):
+	for y in range(max_pos.y, min_pos.y -1, -1):
 		for x in range(min_pos.x, max_pos.x +1):
 			var current_pos:= Vector2i(x, y)
 			
@@ -85,6 +89,7 @@ func _create_module_cell(module: Module) -> Control:
 	var btn: Button = Button.new()
 	btn.custom_minimum_size = cell_size
 	btn.tooltip_text = module.module_name
+	btn.text = module.module_acronym
 	
 	if _health_component:
 		var max_hp := module._max_module_integrity
@@ -92,7 +97,7 @@ func _create_module_cell(module: Module) -> Control:
 		var hp_ratio: float = float(hp) / float(max_hp)
 		btn.modulate = Color(1,1,1,1).lerp(Color(1, 0.2, 0.2, 1), 1.0 - hp_ratio)
 	
-	btn.pressed.connect(_on_module_cell_pressed.bind(module))
+	btn.pressed.connect(_update_module_details.bind(module))
 	
 	return btn
 
@@ -112,8 +117,10 @@ func _update_initiative():
 func _update_armor() -> void:
 	if not _health_component:
 		return
+	print(location_labels)
+	for label in location_labels.values():
+		label.text = ""
 	
-	var armor_text: Array[String] = []
 	var starting: Dictionary[String, int] = {}
 	var current: Dictionary[String, int] = {}
 	for property in _health_component.starting_structure.get_property_list():
@@ -125,13 +132,18 @@ func _update_armor() -> void:
 		starting[property.name] = _health_component.starting_structure.get(property.name)
 		current[property.name] = _health_component.structure.get(property.name)
 	
+	
 	for location: String in starting.keys():
+		if !location_labels.has(location):
+			continue
+		
+		var label = location_labels[location]
+		if not label:
+			continue
+		
 		var current_hp: int = current.get(location, 0)
 		var max_hp: int = starting[location]
-		var bar: String = _generate_hp_bar(current_hp, max_hp)
-		armor_text.append("%s: %d/%d \n%s" % [location, current_hp, max_hp, bar])
-	
-	armor_label.text = "%s\n%s" % [SECTION_ARMOR, "\n".join(armor_text)]
+		label.text = "%s: %d/%d" % [location, current_hp, max_hp]
 
 func _update_module_details(module: Module) -> void:
 	if not module:
@@ -139,7 +151,7 @@ func _update_module_details(module: Module) -> void:
 		return
 	
 	_selected_module = module
-	var details: String = "%s\n" % module.name
+	var details: String = "%s\n" % module.module_name
 	details += "%s\n" % module.description
 	
 	if module.has_method("get_stats_text"):
@@ -147,20 +159,7 @@ func _update_module_details(module: Module) -> void:
 	
 	module_details_label.text = details
 
-#CALLBACKS
-func _on_module_cell_pressed(module: Module) -> void:
-	_update_module_details(module)
-
-func _generate_hp_bar(current: int, max: int, length:=5) -> String:
-	if max == 0:
-		return ""
-	
-	var filled: int = int(round(float(current)/float(max)*length))
-	var empty: int = length - filled
-	
-	return "[" + "█".repeat(filled) + "░".repeat(empty) + "]"
-
-
+#Чистка
 func _clear_state() -> void:
 	_disconnect_signals()
 	

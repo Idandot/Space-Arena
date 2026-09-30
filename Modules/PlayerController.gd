@@ -15,7 +15,8 @@ func get_available_actions() -> Array[Action]:
 func setup(_config: Resource) -> void:
 	super.setup(null)
 	tags.append(Enums.module_tags.CONTROLLER)
-	module_name = "controller"
+	module_name = "Player Controller"
+	module_acronym = "PC"
 
 func _process(_delta: float) -> void:
 	if _should_handle_input():

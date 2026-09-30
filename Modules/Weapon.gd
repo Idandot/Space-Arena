@@ -10,7 +10,8 @@ var weapon_active: bool = true
 func setup(new_weapon_stats) -> void:
 	weapon_stats = new_weapon_stats
 	hex_rigidbody = parent.find_child("HexRigidbody")
-	module_name = weapon_stats.name
+	module_name = weapon_stats.config_name
+	module_acronym = weapon_stats.config_acronym
 	TurnManager.phase_started.connect(_on_action_phase_started)
 
 ##Стреляет из оружия, если есть возможность

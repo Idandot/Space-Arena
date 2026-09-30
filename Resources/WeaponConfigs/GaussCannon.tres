@@ -4,7 +4,8 @@
 
 [resource]
 script = ExtResource("1_bxunw")
-name = "Gauss Cannon"
+config_name = "Gauss Cannon"
+config_acronym = "GC"
 damage = 6
 max_range = 7
 min_range = 2

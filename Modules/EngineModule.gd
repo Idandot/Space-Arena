@@ -18,7 +18,8 @@ func setup(config: Resource) -> void:
 	if !engine_config or !hex_rigidbody:
 		_active = false
 	parent.turn_started.connect(_on_turn_started)
-	module_name = "engine"
+	module_name = engine_config.config_name
+	module_acronym = engine_config.config_acronym
 
 ##Возвращает доступные действия модуля
 func get_available_actions() -> Array[Action]:
@@ -36,6 +37,8 @@ func get_stats_text() -> String:
 	var stats_text := ""
 	for property in engine_config.get_property_list():
 		if !property.usage & PROPERTY_USAGE_SCRIPT_VARIABLE:
+			continue
+		if property.type != TYPE_INT:
 			continue
 		
 		stats_text += "%s: %s\n" % [property["name"], engine_config.get(property["name"])]
@@ -59,7 +62,7 @@ func _turn_right():
 		return
 	var facing: HexOrientation = hex_rigidbody.facing
 	facing.turn_right()
-	_applyfacing(facing)
+	_apply_facing(facing)
 
 ##Действие поворачивающее корабль против часовой
 func _turn_left():
@@ -69,7 +72,7 @@ func _turn_left():
 		return
 	var facing: HexOrientation = hex_rigidbody.facing
 	facing.turn_left()
-	_applyfacing(facing)
+	_apply_facing(facing)
 
 ##Действие ускоряющее корабль в противоположном направлении от носа
 func _brake():
@@ -112,7 +115,7 @@ func _apply_impulse(power: int):
 	var facing: HexOrientation = hex_rigidbody.facing
 	hex_rigidbody.add_impulse(ENGINE_IMPULSE_ID, power*facing.get_current_vector())
 
-func _applyfacing(facing: HexOrientation):
+func _apply_facing(facing: HexOrientation):
 	if !_active:
 		return
 	hex_rigidbody.facing = facing.get_current_name()

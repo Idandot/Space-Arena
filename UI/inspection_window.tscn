@@ -9,7 +9,7 @@ default_font_size = 32
 [sub_resource type="LabelSettings" id="LabelSettings_vdbsl"]
 
 [node name="Control" type="Control" node_paths=PackedStringArray("title_container", "title_label", "close_button", "minimize_button", "body_panel")]
-custom_minimum_size = Vector2(400, 300)
+custom_minimum_size = Vector2(300, 400)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,24 +31,24 @@ body_panel = NodePath("Body")
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 60.0
+offset_bottom = 32.0
 grow_horizontal = 2
 theme = SubResource("Theme_uonaj")
 
 [node name="Header" type="HBoxContainer" parent="Header"]
-custom_minimum_size = Vector2(0, 40)
+custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 theme_override_constants/separation = 4
 
 [node name="CloseButton" type="Button" parent="Header/Header"]
-custom_minimum_size = Vector2(60, 60)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 16
 text = "X"
 
 [node name="MinimizeButton" type="Button" parent="Header/Header"]
-custom_minimum_size = Vector2(60, 60)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 16
@@ -57,10 +57,10 @@ text = "--"
 [node name="MarginContainer" type="MarginContainer" parent="Header/Header"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
 
 [node name="TitleLabel" type="Label" parent="Header/Header/MarginContainer"]
 layout_mode = 2
@@ -78,6 +78,7 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -240.0
+offset_top = -368.0
+offset_bottom = -68.0
 grow_horizontal = 2
 grow_vertical = 0

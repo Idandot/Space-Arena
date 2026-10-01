@@ -1,5 +1,5 @@
 extends Node
-class_name HealthComponent
+class_name DamageResolver
 
 signal structure_changed
 
@@ -7,10 +7,12 @@ signal structure_changed
 @export var starting_structure: ArmorConfig
 
 var structure: ArmorConfig
-@onready var parent: Actor = self.get_parent()
+@onready var _ship_layout: ShipLayout = self.get_parent()
+var actor: Actor
 
 func _ready() -> void:
-	parent.setup_started.connect(_setup)
+	actor = _ship_layout.get_parent()
+	actor.setup_started.connect(_setup)
 
 func _setup(config: ActorConfig) -> void:
 	starting_structure = config.armor_config
@@ -25,18 +27,18 @@ func take_damage_from_position(amount: int, from_ax: Vector2i) -> void:
 		excess_damage = abs(structure[location])
 		structure[location] = 0
 	
-	GameEvents.log_request.emit(str(parent.display_name, " had taken ",amount-excess_damage, " damage in location ", location))
+	GameEvents.log_request.emit(str(actor.display_name, " had taken ",amount-excess_damage, " damage in location ", location))
 	GameEvents.log_request.emit(str(structure[location], "/",starting_structure[location]," ",location, " integrity left"))
 	
 	structure.inner_structure -= excess_damage
 	if excess_damage != 0:
-		GameEvents.log_request.emit(str(parent.display_name, " had taken ",excess_damage, " damage in inner structure"))
+		GameEvents.log_request.emit(str(actor.display_name, " had taken ",excess_damage, " damage in inner structure"))
 		GameEvents.log_request.emit(str(structure.inner_structure, "/",
 		starting_structure.inner_structure, " inner structure integrity left"))
 	
 	if structure.inner_structure <= 0:
-		GameEvents.log_request.emit(str(parent.display_name, " is destroyed"))
-		parent.kill()
+		GameEvents.log_request.emit(str(actor.display_name, " is destroyed"))
+		actor.kill()
 	
 	structure_changed.emit()
 	

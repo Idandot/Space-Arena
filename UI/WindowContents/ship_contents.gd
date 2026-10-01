@@ -24,7 +24,7 @@ const SECTION_MODULE_DETAILS = "/MODULE DETAILS/"
 
 #СОСТОЯНИЕ
 var _actor: Actor
-var _health_component: HealthComponent
+var _health_component: DamageResolver
 var _ship_layout: ShipLayout
 var _selected_module: Module
 
@@ -37,11 +37,12 @@ func setup(actor: Actor) -> void:
 	
 	_actor.initiative_changed.connect(_update_initiative)
 	
-	_health_component = _actor.get_node_or_null("HealthComponent") as HealthComponent
-	if _health_component:
-		_health_component.structure_changed.connect(_update_armor)
-	
 	_ship_layout = _actor.get_node_or_null("ShipLayout") as ShipLayout
+	
+	if _ship_layout != null:
+		_health_component = _ship_layout.get_node_or_null("DamageResolver") as DamageResolver
+		if _health_component:
+			_health_component.structure_changed.connect(_update_armor)
 	
 	_populate_ui()
 

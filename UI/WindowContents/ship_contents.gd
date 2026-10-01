@@ -5,6 +5,7 @@ class_name ShipContents
 const SECTION_DESCRIPTION = "/DESCRIPTION/"
 const SECTION_STATS = "/STATS/"
 const SECTION_ARMOR = "/ARMOR/"
+const SECTION_MODULE_DETAILS = "/MODULE DETAILS/"
 
 #ЭКСПОРТЫ
 @export var label_theme: Theme
@@ -147,7 +148,7 @@ func _update_armor() -> void:
 
 func _update_module_details(module: Module) -> void:
 	if not module:
-		module_details_label.text = "Select module to inspect it"
+		module_details_label.text = "%s\nSelect module to inspect it" % SECTION_MODULE_DETAILS
 		return
 	
 	_selected_module = module
@@ -157,7 +158,7 @@ func _update_module_details(module: Module) -> void:
 	if module.has_method("get_stats_text"):
 		details += module.get_stats_text()
 	
-	module_details_label.text = details
+	module_details_label.text = "%s\n%s" % [SECTION_MODULE_DETAILS, details]
 
 #Чистка
 func _clear_state() -> void:

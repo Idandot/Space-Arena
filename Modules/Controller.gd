@@ -8,6 +8,7 @@ var _actions: Dictionary[String, Action]
 
 func setup(_config: Resource) -> void:
 	parent.turn_started.connect(_take_control)
+	
 
 @abstract
 func _take_control(_actor: Actor, _phase: Enums.game_states) -> void

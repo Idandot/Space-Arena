@@ -12,12 +12,13 @@ func setup(new_weapon_stats) -> void:
 	hex_rigidbody = parent.find_child("HexRigidbody")
 	module_name = weapon_stats.config_name
 	module_acronym = weapon_stats.config_acronym
+	description = weapon_stats.config_description
 	TurnManager.phase_started.connect(_on_action_phase_started)
 
 ##Стреляет из оружия, если есть возможность
 func fire():
 	if !weapon_active:
-		GameEvents.log_request.emit(weapon_stats.name +" is already fired this turn")
+		GameEvents.log_request.emit(weapon_stats.config_name +" is already fired this turn")
 		return
 	
 	var target: Actor = _find_target()
@@ -74,3 +75,14 @@ func _is_in_arc(target_pos: Vector2i) -> bool:
 		if hex == target_pos:
 			return true
 	return false
+
+func get_stats_text() -> String:
+	var stats_text := ""
+	for property in weapon_stats.get_property_list():
+		if !property.usage & PROPERTY_USAGE_SCRIPT_VARIABLE:
+			continue
+		if property.type != TYPE_INT:
+			continue
+		
+		stats_text += "%s: %s\n" % [property["name"], weapon_stats.get(property["name"])]
+	return stats_text

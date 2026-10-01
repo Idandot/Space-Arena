@@ -17,6 +17,7 @@ func setup(_config: Resource) -> void:
 	tags.append(Enums.module_tags.CONTROLLER)
 	module_name = "Player Controller"
 	module_acronym = "PC"
+	description = "Brain of the ship, vital to it's functioning"
 
 func _process(_delta: float) -> void:
 	if _should_handle_input():

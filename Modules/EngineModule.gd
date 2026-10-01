@@ -20,6 +20,7 @@ func setup(config: Resource) -> void:
 	parent.turn_started.connect(_on_turn_started)
 	module_name = engine_config.config_name
 	module_acronym = engine_config.config_acronym
+	description = engine_config.config_description
 
 ##Возвращает доступные действия модуля
 func get_available_actions() -> Array[Action]:

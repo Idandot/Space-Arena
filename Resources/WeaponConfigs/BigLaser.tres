@@ -6,4 +6,6 @@
 script = ExtResource("1_q7gqn")
 config_name = "Big Laser"
 config_acronym = "BL"
+config_description = "Lasers are typically used to destroy trash around big ships"
+arc_degrees = 180
 metadata/_custom_type_script = "uid://ceiaskrajdh8i"

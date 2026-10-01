@@ -6,6 +6,7 @@
 script = ExtResource("1_bxunw")
 config_name = "Gauss Cannon"
 config_acronym = "GC"
+config_description = "This weapon is light and powerful"
 damage = 6
 max_range = 7
 min_range = 2

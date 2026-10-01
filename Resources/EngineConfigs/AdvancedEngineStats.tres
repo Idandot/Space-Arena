@@ -6,6 +6,6 @@
 script = ExtResource("1_pv4mm")
 config_name = "Advanced Engine"
 config_acronym = "E2"
+config_description = "Military grade engine"
 max_thrust = 5
-brake_cost = 1
 metadata/_custom_type_script = "uid://rgkmbxhqeme2"

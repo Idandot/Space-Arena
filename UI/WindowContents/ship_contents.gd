@@ -24,9 +24,10 @@ const SECTION_MODULE_DETAILS = "/MODULE DETAILS/"
 
 #СОСТОЯНИЕ
 var _actor: Actor
-var _health_component: DamageResolver
+var _damage_resolver: DamageResolver
 var _ship_layout: ShipLayout
 var _selected_module: Module
+var _cells: Dictionary[Vector2i, Button] = {}
 
 func setup(actor: Actor) -> void:
 	if not is_instance_valid(actor):
@@ -40,9 +41,9 @@ func setup(actor: Actor) -> void:
 	_ship_layout = _actor.get_node_or_null("ShipLayout") as ShipLayout
 	
 	if _ship_layout != null:
-		_health_component = _ship_layout.get_node_or_null("DamageResolver") as DamageResolver
-		if _health_component:
-			_health_component.structure_changed.connect(_update_armor)
+		_damage_resolver = _ship_layout.get_node_or_null("DamageResolver") as DamageResolver
+		if _damage_resolver:
+			_damage_resolver.structure_changed.connect(_update_armor)
 	
 	_populate_ui()
 
@@ -51,7 +52,7 @@ func _populate_ui() -> void:
 	
 	_update_initiative()
 	
-	_update_armor()
+	_update_armor("", [])
 	
 	if _ship_layout:
 		_build_ship_grid()
@@ -67,16 +68,11 @@ func _build_ship_grid() -> void:
 	if modules.is_empty():
 		return
 	
-	var min_pos: Vector2i
-	var max_pos: Vector2i
-	for pos in modules.keys():
-		min_pos.x = min(min_pos.x, pos.x)
-		min_pos.y = min(min_pos.y, pos.y)
-		max_pos.x = max(max_pos.x, pos.x)
-		max_pos.y = max(max_pos.y, pos.y)
+	var modules_rect: Rect2i = _ship_layout.get_grid_rect()
+	var min_pos: Vector2i = modules_rect.position
+	var max_pos: Vector2i = min_pos + modules_rect.size - Vector2i.ONE
 	
-	var width = max_pos.x - min_pos.x + 1
-	ship_grid.columns = width
+	ship_grid.columns = modules_rect.size.x
 	
 	for y in range(max_pos.y, min_pos.y -1, -1):
 		for x in range(min_pos.x, max_pos.x +1):
@@ -93,7 +89,7 @@ func _create_module_cell(module: Module) -> Control:
 	btn.tooltip_text = module.module_name
 	btn.text = module.module_acronym
 	
-	if _health_component:
+	if _damage_resolver:
 		var max_hp := module._max_module_integrity
 		var hp := module._module_integrity
 		var hp_ratio: float = float(hp) / float(max_hp)
@@ -101,6 +97,7 @@ func _create_module_cell(module: Module) -> Control:
 	
 	btn.pressed.connect(_update_module_details.bind(module))
 	
+	_cells[module.grid_position] = btn
 	return btn
 
 func _create_empty_cell() -> Control:
@@ -116,23 +113,22 @@ func _update_initiative():
 	var stats_text: Array[String] = ["initiative: %.2f" % _actor.get_initiative()]
 	stats_label.text = "%s\n%s" % [SECTION_STATS, "".join(stats_text)]
 
-func _update_armor() -> void:
-	if not _health_component:
+func _update_armor(_location: String, damaged_modules: Array[Module]) -> void:
+	if not _damage_resolver:
 		return
-	print(location_labels)
 	for label in location_labels.values():
 		label.text = ""
 	
 	var starting: Dictionary[String, int] = {}
 	var current: Dictionary[String, int] = {}
-	for property in _health_component.starting_structure.get_property_list():
+	for property in _damage_resolver.starting_structure.get_property_list():
 		if !property.usage & PROPERTY_USAGE_SCRIPT_VARIABLE:
 			continue
 		if property.type != TYPE_INT:
 			continue
 		
-		starting[property.name] = _health_component.starting_structure.get(property.name)
-		current[property.name] = _health_component.structure.get(property.name)
+		starting[property.name] = _damage_resolver.starting_structure.get(property.name)
+		current[property.name] = _damage_resolver.structure.get(property.name)
 	
 	
 	for location: String in starting.keys():
@@ -145,7 +141,16 @@ func _update_armor() -> void:
 		
 		var current_hp: int = current.get(location, 0)
 		var max_hp: int = starting[location]
+		var hp_ratio: float = float(current_hp) / max_hp
 		label.text = "%s: %d/%d" % [location, current_hp, max_hp]
+		label.modulate = Color(1,1,1,1).lerp(Color(1, 0.2, 0.2, 1), 1.0 - hp_ratio)
+	
+	for module in damaged_modules:
+		var max_hp := module._max_module_integrity
+		var hp := module._module_integrity
+		var hp_ratio: float = float(hp) / float(max_hp)
+		var module_pos: Vector2i = module.grid_position
+		_cells[module_pos].modulate = Color(1,1,1,1).lerp(Color(1, 0.2, 0.2, 1), 1.0 - hp_ratio)
 
 func _update_module_details(module: Module) -> void:
 	if not module:
@@ -170,12 +175,12 @@ func _clear_state() -> void:
 	
 	_actor = null
 	_ship_layout = null
-	_health_component = null
+	_damage_resolver = null
 	_selected_module = null
 
 func _disconnect_signals() -> void:
 	if is_instance_valid(_actor) and _actor.initiative_changed.is_connected(_update_initiative):
 		_actor.initiative_changed.disconnect(_update_initiative)
 	
-	if is_instance_valid(_health_component) and _health_component.structure_changed.is_connected(_update_armor):
-		_health_component.structure_changed.disconnect(_update_armor)
+	if is_instance_valid(_damage_resolver) and _damage_resolver.structure_changed.is_connected(_update_armor):
+		_damage_resolver.structure_changed.disconnect(_update_armor)

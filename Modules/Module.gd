@@ -28,10 +28,17 @@ func setup(_config: Resource) -> void:
 func get_stats_text() -> String:
 	return ""
 
+func destruction_action() -> void:
+	return
+
 func take_damage(amount: int) -> int:
 	_module_integrity -= amount
+	GameEvents.log_request.emit("%s had taken %d damage in %s. Integrity: %s/%s" % [
+		parent.display_name, amount, module_name, _module_integrity, _max_module_integrity
+	])
 	if _module_integrity <= 0:
 		print(module_name, " module destroyed")
 		_active = false
+		destruction_action()
 		return abs(_module_integrity)
 	return 0

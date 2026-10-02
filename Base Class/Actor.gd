@@ -7,6 +7,8 @@ signal turn_ended(actor: Actor)
 signal turn_started(actor: Actor, phase: Enums.game_states)
 signal killed(actor: Actor)
 signal initiative_changed()
+@warning_ignore("unused_signal")
+signal damage_taken(amount: int, source_position: Vector2i)
 
 var display_name: String = "":
 	set(value):

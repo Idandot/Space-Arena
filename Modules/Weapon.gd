@@ -25,10 +25,7 @@ func fire():
 	if target == null:
 		GameEvents.log_request.emit("No target available")
 		return
-	if !target.has_node("ShipLayout/DamageResolver"):
-		print("цель не может получить урон")
-		return
-	target.get_node("ShipLayout/DamageResolver").take_damage_from_position(weapon_stats.damage, hex_rigidbody.axial_position)
+	target.damage_taken.emit(weapon_stats.damage, hex_rigidbody.axial_position)
 	weapon_active = false
 
 ##Возвращается доступные действия модуля

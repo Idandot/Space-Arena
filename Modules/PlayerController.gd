@@ -54,3 +54,6 @@ func _is_action_available(action: Action) -> bool:
 ##Сверяемся с тем может ли в текущей фазе актер выполнять действия
 func _should_handle_input() -> bool:
 	return parent.is_active
+
+func destruction_action() -> void:
+	parent.kill()

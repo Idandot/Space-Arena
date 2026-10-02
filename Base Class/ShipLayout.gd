@@ -1,6 +1,8 @@
 extends Node
 class_name ShipLayout
 
+signal action_collection_started
+
 var ship_controller: Controller
 @export var modules: Dictionary[Vector2i, Module]
 var parent: Actor
@@ -9,6 +11,8 @@ var WCS: WeaponControlSystem = WeaponControlSystem.new()
 
 func collect_actions() -> Array[Action]:
 	var actions: Array[Action] = []
+	action_collection_started.emit()
+	
 	for module in modules.values():
 		actions.append_array(module.get_available_actions())
 	
@@ -89,3 +93,19 @@ func _on_action_phase_turn_started(_actor, phase: Enums.game_states):
 	await get_tree().process_frame
 	
 	WCS.update_weapon_highlight()
+
+func get_grid_rect() -> Rect2i:
+	if modules.is_empty():
+		return Rect2i()
+	
+	var min_pos: Vector2i = modules.keys()[0]
+	var max_pos: Vector2i = modules.keys()[0]
+	
+	for pos in modules.keys():
+		min_pos.x = min(min_pos.x, pos.x)
+		min_pos.y = min(min_pos.y, pos.y)
+		max_pos.x = max(max_pos.x, pos.x)
+		max_pos.y = max(max_pos.y, pos.y)
+	
+	var size: Vector2i = max_pos - min_pos + Vector2i.ONE
+	return Rect2i(min_pos, size)

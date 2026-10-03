@@ -31,7 +31,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-dragging_enabled = false
 
 [node name="LeftPanel" type="VBoxContainer" parent="HSplitContainer"]
 custom_minimum_size = Vector2(10, 10)
@@ -90,16 +89,12 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 12
 
 [node name="DescriptionLabel" type="Label" parent="HSplitContainer/ScrollContainer/RightPanel"]
-custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "Fuck"
-autowrap_mode = 3
 
 [node name="StatsLabel" type="Label" parent="HSplitContainer/ScrollContainer/RightPanel"]
-custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
-autowrap_mode = 3
 
 [node name="ModuleDetailsLabel" type="RichTextLabel" parent="HSplitContainer/ScrollContainer/RightPanel"]
 layout_mode = 2

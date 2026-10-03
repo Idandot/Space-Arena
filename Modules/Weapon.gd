@@ -4,6 +4,8 @@ class_name Weapon
 @export var weapon_stats: WeaponConfig
 var hex_rigidbody: HexRigidbody
 var weapon_active: bool = true
+var targets: Array[Actor] = []
+var _current_target_index: int = 0
 
 #ПУБЛИЧНЫЕ МЕТОДЫ
 
@@ -25,12 +27,30 @@ func fire():
 		GameEvents.log_request.emit(weapon_stats.config_name +" is already fired this turn")
 		return
 	
-	var target: Actor = _find_target()
-	if target == null:
+	if _current_target_index == -1:
 		GameEvents.log_request.emit("No target available")
 		return
+	var target: Actor = targets[_current_target_index]
 	target.damage_taken.emit(weapon_stats.damage, hex_rigidbody.axial_position)
 	weapon_active = false
+
+func next_target() -> void:
+	if targets.is_empty():
+		GameEvents.log_request.emit("No target found")
+		_current_target_index = -1
+		return
+	
+	var _start_index = _current_target_index
+	var _count: int = targets.size()
+	
+	for i in _count:
+		_current_target_index = (_current_target_index + 1) % _count
+		if targets[_current_target_index].is_alive():
+			GameEvents.log_request.emit("Current target: %s" % targets[_current_target_index].display_name)
+			return
+	
+	GameEvents.log_request.emit("No alive target found")
+	_current_target_index = -1
 
 ##Возвращается доступные действия модуля
 func get_available_actions() -> Array[Action]:
@@ -54,12 +74,16 @@ func _on_action_phase_started(phase: Enums.game_states):
 	if !_active:
 		return 
 	weapon_active = true
-
-func _find_target() -> Actor:
-	var alive_actors = TurnManager.alive_actors
-	var best_target: Actor = null
 	
-	#временный код, в будущем поиск цели будет реализован более сложно
+	await get_tree().process_frame
+	
+	targets = find_targets()
+	next_target()
+
+func find_targets() -> Array[Actor]:
+	var alive_actors = TurnManager.alive_actors
+	var new_targets: Array[Actor]
+	
 	for actor in alive_actors:
 		if actor == parent:
 			continue
@@ -68,16 +92,14 @@ func _find_target() -> Actor:
 		var target_rigidbody: HexRigidbody = actor.find_child("HexRigidbody")
 		if !_is_in_arc(target_rigidbody.axial_position):
 			continue
-		best_target = actor
+		new_targets.append(actor)
 	
-	return best_target
+	return new_targets
 
 func _is_in_arc(target_pos: Vector2i) -> bool:
-	
-	for hex in get_arc_hexes():
-		if hex == target_pos:
-			return true
-	return false
+	var arc_hexes: Array[Vector2i] = get_arc_hexes()
+	var result = arc_hexes.has(target_pos)
+	return result
 
 func get_stats_text() -> String:
 	var stats_text := ""

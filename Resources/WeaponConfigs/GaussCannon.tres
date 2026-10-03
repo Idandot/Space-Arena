@@ -11,5 +11,6 @@ config_description = "This weapon is light and powerful"
 damage = 6
 max_range = 7
 min_range = 2
+arc_degrees = 60
 facing_offset = 0
 metadata/_custom_type_script = "uid://ceiaskrajdh8i"

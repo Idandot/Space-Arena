@@ -8,6 +8,7 @@ var _current_weapon_index: int = -1
 
 func _ready() -> void:
 	_ship_layout.ship_layout_setup_ended.connect(setup)
+	TurnManager.phase_started.connect(_on_action_phase_started)
 
 func setup() -> void:
 	_ship_layout.highlight_changed.connect(update_weapon_highlight)
@@ -26,6 +27,8 @@ func provide_actions() -> Array[Action]:
 		if owc > 1:
 			actions.append(Action.new("next_weapon", next_weapon, Enums.game_states.ACTION, "next_weapon"))
 	
+	actions.append(Action.new("next_target", next_target, Enums.game_states.ACTION, "next_target"))
+	
 	return actions
 
 func get_current_weapon() -> Weapon:
@@ -40,6 +43,12 @@ func fire_current_weapon() -> void:
 func next_weapon() -> void:
 	select_next_operational_weapon()
 	update_weapon_highlight()
+
+func next_target() -> void:
+	var current_weapon = get_current_weapon()
+	if current_weapon == null:
+		return
+	current_weapon.next_target()
 
 func update_weapon_highlight() -> void:
 	var arc_hexes: Array[Vector2i] = []
@@ -70,3 +79,8 @@ func _get_operational_weapons_count() -> int:
 		if weapon.weapon_active:
 			count += 1
 	return count
+
+func _on_action_phase_started(phase: Enums.game_states):
+	if phase != Enums.game_states.ACTION:
+		return
+	next_weapon()

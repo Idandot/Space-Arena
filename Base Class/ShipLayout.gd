@@ -94,7 +94,7 @@ func _on_action_phase_turn_started(_actor, phase: Enums.game_states):
 	
 	WCS.update_weapon_highlight()
 
-func get_grid_rect() -> Rect2i:
+func get_grid_rect(only_count_active: bool = true) -> Rect2i:
 	if modules.is_empty():
 		return Rect2i()
 	
@@ -102,6 +102,8 @@ func get_grid_rect() -> Rect2i:
 	var max_pos: Vector2i = modules.keys()[0]
 	
 	for pos in modules.keys():
+		if !modules[pos]._active and only_count_active:
+			continue
 		min_pos.x = min(min_pos.x, pos.x)
 		min_pos.y = min(min_pos.y, pos.y)
 		max_pos.x = max(max_pos.x, pos.x)
@@ -109,3 +111,12 @@ func get_grid_rect() -> Rect2i:
 	
 	var size: Vector2i = max_pos - min_pos + Vector2i.ONE
 	return Rect2i(min_pos, size)
+
+func get_total_inner_structure() -> Array[int]:
+	var max_integrity: int = 0
+	var integrity: int = 0
+	for module: Module in modules.values():
+		max_integrity += module._max_module_integrity
+		if module._module_integrity > 0:
+			integrity += module._module_integrity
+	return [integrity, max_integrity]

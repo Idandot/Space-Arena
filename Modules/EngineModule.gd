@@ -21,6 +21,8 @@ func setup(config: Resource) -> void:
 	module_name = engine_config.config_name
 	module_acronym = engine_config.config_acronym
 	description = engine_config.config_description
+	_max_module_integrity = engine_config.max_engine_integrity
+	_module_integrity = engine_config.max_engine_integrity
 
 ##Возвращает доступные действия модуля
 func get_available_actions() -> Array[Action]:
@@ -50,6 +52,7 @@ func get_stats_text() -> String:
 ##Действие ускоряющее корабль в направлении носа
 func _accelerate():
 	if !_active:
+		GameEvents.log_request.emit("Engine is not configured or severely damaged, cannot perform action")
 		return
 	if !_try_spend_thrust(engine_config.acceleration_cost):
 		return
@@ -58,6 +61,7 @@ func _accelerate():
 ##Действие поворачивающее корабль по часовой
 func _turn_right():
 	if !_active:
+		GameEvents.log_request.emit("Engine is not configured or severely damaged, cannot perform action")
 		return
 	if !_try_spend_thrust(engine_config.turn_cost):
 		return
@@ -68,6 +72,7 @@ func _turn_right():
 ##Действие поворачивающее корабль против часовой
 func _turn_left():
 	if !_active:
+		GameEvents.log_request.emit("Engine is not configured or severely damaged, cannot perform action")
 		return
 	if !_try_spend_thrust(engine_config.turn_cost):
 		return
@@ -78,6 +83,7 @@ func _turn_left():
 ##Действие ускоряющее корабль в противоположном направлении от носа
 func _brake():
 	if !_active:
+		GameEvents.log_request.emit("Engine is not configured or severely damaged, cannot perform action")
 		return
 	if !_try_spend_thrust(engine_config.brake_cost):
 		return
@@ -85,6 +91,7 @@ func _brake():
 
 func _reset_move():
 	if !_active:
+		GameEvents.log_request.emit("Engine is not configured or severely damaged, cannot perform action")
 		return
 	hex_rigidbody.restore_initial_state()
 	_thrust = _initial_thrust
@@ -95,6 +102,7 @@ func _reset_move():
 
 func _on_turn_started(_actor: Actor, _phase: Enums.game_states):
 	if !_active:
+		GameEvents.log_request.emit("Engine is not configured or severely damaged, cannot regain thrust")
 		return
 	_thrust = min(_thrust + engine_config.thrust_regeneration, engine_config.max_thrust)
 	_initial_thrust = _thrust
@@ -102,6 +110,7 @@ func _on_turn_started(_actor: Actor, _phase: Enums.game_states):
 
 func _try_spend_thrust(amount: int) -> bool:
 	if !_active:
+		GameEvents.log_request.emit("Engine is not configured or severely damaged, cannot spend thrust")
 		return false
 	if amount > _thrust:
 		GameEvents.log_request.emit("Not enough thrust to make action")

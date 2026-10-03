@@ -1,7 +1,7 @@
 extends Resource
 class_name WeaponConfig
 
-
+@export var max_weapon_integrity: int = 8
 @export var config_name: String = "Weapon"
 @export var config_acronym: String = "W0"
 @export var config_description: String = "(No description provided)"

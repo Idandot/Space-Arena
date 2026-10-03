@@ -47,22 +47,19 @@ func _take_damage_from_position(amount: int, from_ax: Vector2i) -> void:
 		structure_changed.emit(location_str, [] as Array[Module])
 		return
 	
-	var damage_path: Array[Vector2i] = _calculate_damage_path(location)
-	var damaged_modules: Array[Module] = []
-	for grid_pos in damage_path:
-		var module = _ship_layout.get_module_or_null(grid_pos)
-		if module == null:
+	var damage_path: Array[Module] = _calculate_damage_path(location)
+	for module in damage_path:
+		if module == null or !module._active:
 			continue
 		
 		excess_damage = module.take_damage(excess_damage)
-		damaged_modules.append(module)
 		if excess_damage == 0:
 			break
 	
-	structure_changed.emit(location_str, damaged_modules)
+	structure_changed.emit(location_str, damage_path)
 
-func _calculate_damage_path(location: LOCATION) -> Array[Vector2i]:
-	var path: Array[Vector2i] = []
+func _calculate_damage_path(location: LOCATION) -> Array[Module]:
+	var path: Array[Module] = []
 	var grid: Rect2i = _ship_layout.get_grid_rect()
 	
 	var min_pos: Vector2i = grid.position
@@ -91,10 +88,13 @@ func _calculate_damage_path(location: LOCATION) -> Array[Vector2i]:
 			step_count = grid.size.x
 		_:
 			push_error("DamageResolver: Invalid location for damage path")
-			return path
+			return [] as Array[Module]
 	
 	for i in step_count:
-		path.append(start_pos + step * i)
+		var module = _ship_layout.get_module_or_null(start_pos + step * i)
+		if module == null or !module._active:
+			continue
+		path.append(module)
 	
 	return path
 

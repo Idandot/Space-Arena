@@ -36,7 +36,7 @@ func setup(actor: Actor) -> void:
 	_clear_state()
 	_actor = actor
 	
-	_actor.initiative_changed.connect(_update_initiative)
+	_actor.initiative_changed.connect(_update_stats)
 	
 	_ship_layout = _actor.get_node_or_null("ShipLayout") as ShipLayout
 	
@@ -50,7 +50,7 @@ func setup(actor: Actor) -> void:
 func _populate_ui() -> void:
 	description_label.text = "%s\n%s" % [SECTION_DESCRIPTION, _actor.description]
 	
-	_update_initiative()
+	_update_stats()
 	
 	_update_armor("", [])
 	
@@ -109,8 +109,11 @@ func _create_empty_cell() -> Control:
 	return panel
 
 #ОБНОВЛЕНИЯ
-func _update_initiative():
-	var stats_text: Array[String] = ["initiative: %.2f" % _actor.get_initiative()]
+func _update_stats():
+	var stats_text: Array[String] = [
+		"Initiative: %.2f\n" % _actor.get_initiative(),
+		"Total inner intergity: %d/%d\n" % _ship_layout.get_total_inner_structure()
+		]
 	stats_label.text = "%s\n%s" % [SECTION_STATS, "".join(stats_text)]
 
 func _update_armor(_location: String, damaged_modules: Array[Module]) -> void:
@@ -151,6 +154,8 @@ func _update_armor(_location: String, damaged_modules: Array[Module]) -> void:
 		var hp_ratio: float = float(hp) / float(max_hp)
 		var module_pos: Vector2i = module.grid_position
 		_cells[module_pos].modulate = Color(1,1,1,1).lerp(Color(1, 0.2, 0.2, 1), 1.0 - hp_ratio)
+	
+	_update_stats()
 
 func _update_module_details(module: Module) -> void:
 	if not module:
@@ -160,6 +165,7 @@ func _update_module_details(module: Module) -> void:
 	_selected_module = module
 	var details: String = "%s\n" % module.module_name
 	details += "%s\n" % module.description
+	details += "Integrity: %d/%d \n" % [module._module_integrity, module._max_module_integrity]
 	
 	if module.has_method("get_stats_text"):
 		details += module.get_stats_text()
@@ -179,8 +185,8 @@ func _clear_state() -> void:
 	_selected_module = null
 
 func _disconnect_signals() -> void:
-	if is_instance_valid(_actor) and _actor.initiative_changed.is_connected(_update_initiative):
-		_actor.initiative_changed.disconnect(_update_initiative)
+	if is_instance_valid(_actor) and _actor.initiative_changed.is_connected(_update_stats):
+		_actor.initiative_changed.disconnect(_update_stats)
 	
 	if is_instance_valid(_damage_resolver) and _damage_resolver.structure_changed.is_connected(_update_armor):
 		_damage_resolver.structure_changed.disconnect(_update_armor)

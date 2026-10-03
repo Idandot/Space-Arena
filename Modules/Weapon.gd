@@ -13,10 +13,15 @@ func setup(new_weapon_stats) -> void:
 	module_name = weapon_stats.config_name
 	module_acronym = weapon_stats.config_acronym
 	description = weapon_stats.config_description
+	_max_module_integrity = weapon_stats.max_weapon_integrity
+	_module_integrity = weapon_stats.max_weapon_integrity
 	TurnManager.phase_started.connect(_on_action_phase_started)
 
 ##Стреляет из оружия, если есть возможность
 func fire():
+	if !_active:
+		GameEvents.log_request.emit(weapon_stats.config_name +" is severely damaged. Cannot fire")
+		return
 	if !weapon_active:
 		GameEvents.log_request.emit(weapon_stats.config_name +" is already fired this turn")
 		return
@@ -47,6 +52,8 @@ func get_arc_hexes() -> Array[Vector2i]:
 func _on_action_phase_started(phase: Enums.game_states):
 	if phase != Enums.game_states.ACTION:
 		return
+	if !_active:
+		return 
 	weapon_active = true
 
 func _find_target() -> Actor:

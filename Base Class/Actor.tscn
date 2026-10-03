@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://c4kh3mrinecq8"]
+[gd_scene load_steps=15 format=3 uid="uid://c4kh3mrinecq8"]
 
 [ext_resource type="Script" uid="uid://cgvsym4hxgs0s" path="res://Base Class/Actor.gd" id="1_3jj5i"]
 [ext_resource type="Script" uid="uid://bk5ges4258ki7" path="res://Base Class/Visualizer.gd" id="2_np13p"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://cq6i5t0avk767" path="res://Base Class/ShipMediator.gd" id="7_r3n7q"]
 [ext_resource type="Script" uid="uid://c866xksra0t07" path="res://Base Class/damage_resolver.gd" id="10_pkitw"]
 [ext_resource type="Script" uid="uid://ceydj021o6i55" path="res://Resources/ArmorConfig.gd" id="11_dwf2m"]
+[ext_resource type="Script" uid="uid://h2y81jaod4i" path="res://Base Class/WeaponControlSystem.gd" id="13_hcv5f"]
 
 [sub_resource type="Resource" id="Resource_hcv5f"]
 script = ExtResource("11_dwf2m")
@@ -53,3 +54,7 @@ script = ExtResource("7_cy77k")
 script = ExtResource("10_pkitw")
 hex_rigidbody = NodePath("../../HexRigidbody")
 starting_structure = SubResource("Resource_hcv5f")
+
+[node name="WeaponControlSystem" type="Node" parent="ShipLayout"]
+script = ExtResource("13_hcv5f")
+metadata/_custom_type_script = "uid://h2y81jaod4i"

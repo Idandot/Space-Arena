@@ -68,7 +68,7 @@ func _build_ship_grid() -> void:
 	if modules.is_empty():
 		return
 	
-	var modules_rect: Rect2i = _ship_layout.get_grid_rect()
+	var modules_rect: Rect2i = _ship_layout.get_grid_rect(false)
 	var min_pos: Vector2i = modules_rect.position
 	var max_pos: Vector2i = min_pos + modules_rect.size - Vector2i.ONE
 	
@@ -90,8 +90,8 @@ func _create_module_cell(module: Module) -> Control:
 	btn.text = module.module_acronym
 	
 	if _damage_resolver:
-		var max_hp := module._max_module_integrity
-		var hp := module._module_integrity
+		var max_hp := module.max_module_integrity
+		var hp := module.module_integrity
 		var hp_ratio: float = float(hp) / float(max_hp)
 		btn.modulate = Color(1,1,1,1).lerp(Color(1, 0.2, 0.2, 1), 1.0 - hp_ratio)
 	
@@ -110,9 +110,10 @@ func _create_empty_cell() -> Control:
 
 #ОБНОВЛЕНИЯ
 func _update_stats():
+	var total_integrity: Integrity = _ship_layout.get_total_inner_structure()
 	var stats_text: Array[String] = [
 		"Initiative: %.2f\n" % _actor.get_initiative(),
-		"Total inner intergity: %d/%d\n" % _ship_layout.get_total_inner_structure()
+		"Total inner intergity: %d/%d\n" % [total_integrity.current, total_integrity.maximum]
 		]
 	stats_label.text = "%s\n%s" % [SECTION_STATS, "".join(stats_text)]
 
@@ -149,8 +150,8 @@ func _update_armor(_location: String, damaged_modules: Array[Module]) -> void:
 		label.modulate = Color(1,1,1,1).lerp(Color(1, 0.2, 0.2, 1), 1.0 - hp_ratio)
 	
 	for module in damaged_modules:
-		var max_hp := module._max_module_integrity
-		var hp := module._module_integrity
+		var max_hp := module.max_module_integrity
+		var hp := module.module_integrity
 		var hp_ratio: float = float(hp) / float(max_hp)
 		var module_pos: Vector2i = module.grid_position
 		_cells[module_pos].modulate = Color(1,1,1,1).lerp(Color(1, 0.2, 0.2, 1), 1.0 - hp_ratio)
@@ -165,7 +166,7 @@ func _update_module_details(module: Module) -> void:
 	_selected_module = module
 	var details: String = "%s\n" % module.module_name
 	details += "%s\n" % module.description
-	details += "Integrity: %d/%d \n" % [module._module_integrity, module._max_module_integrity]
+	details += "Integrity: %d/%d \n" % [module.module_integrity, module.max_module_integrity]
 	
 	if module.has_method("get_stats_text"):
 		details += module.get_stats_text()

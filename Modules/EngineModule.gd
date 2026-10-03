@@ -21,8 +21,8 @@ func setup(config: Resource) -> void:
 	module_name = engine_config.config_name
 	module_acronym = engine_config.config_acronym
 	description = engine_config.config_description
-	_max_module_integrity = engine_config.max_engine_integrity
-	_module_integrity = engine_config.max_engine_integrity
+	max_module_integrity = engine_config.max_engine_integrity
+	module_integrity = engine_config.max_engine_integrity
 
 ##Возвращает доступные действия модуля
 func get_available_actions() -> Array[Action]:

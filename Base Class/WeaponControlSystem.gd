@@ -1,13 +1,32 @@
-extends RefCounted
+extends Node
 class_name WeaponControlSystem
 
 var weapons: Array[Weapon] = []
 var _current_weapon_index: int = -1
 
-func setup(new_weapons: Array[Weapon]) -> void:
-	weapons = new_weapons
+@onready var _ship_layout: ShipLayout = self.get_parent()
+
+func _ready() -> void:
+	_ship_layout.ship_layout_setup_ended.connect(setup)
+
+func setup() -> void:
+	_ship_layout.highlight_changed.connect(update_weapon_highlight)
+	_ship_layout.action_providers.append(self)
+	
+	weapons = _ship_layout.get_weapons()
 	_current_weapon_index = -1
 	select_next_operational_weapon()
+
+func provide_actions() -> Array[Action]:
+	var actions: Array[Action]
+	var owc = _get_operational_weapons_count()
+	if owc > 0:
+		actions.append(Action.new("fire_current_weapon", fire_current_weapon, Enums.game_states.ACTION, "fire"))
+		
+		if owc > 1:
+			actions.append(Action.new("next_weapon", next_weapon, Enums.game_states.ACTION, "next_weapon"))
+	
+	return actions
 
 func get_current_weapon() -> Weapon:
 	if _current_weapon_index >= 0 and _current_weapon_index < weapons.size():

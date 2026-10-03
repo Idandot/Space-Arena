@@ -1,27 +1,22 @@
 extends Node
 class_name ShipLayout
 
-signal action_collection_started
+signal ship_layout_setup_ended
+signal highlight_changed
 
 var ship_controller: Controller
 @export var modules: Dictionary[Vector2i, Module]
 var parent: Actor
-
-var WCS: WeaponControlSystem = WeaponControlSystem.new()
+var action_providers: Array[Node] = []
 
 func collect_actions() -> Array[Action]:
 	var actions: Array[Action] = []
-	action_collection_started.emit()
 	
 	for module in modules.values():
 		actions.append_array(module.get_available_actions())
 	
-	var owc = WCS._get_operational_weapons_count()
-	if owc > 0:
-		actions.append(Action.new("fire_current_weapon", WCS.fire_current_weapon, Enums.game_states.ACTION, "fire"))
-		
-		if owc > 1:
-			actions.append(Action.new("next_weapon", WCS.next_weapon, Enums.game_states.ACTION, "next_weapon"))
+	for provider in action_providers:
+		actions.append_array(provider.provide_actions())
 	
 	return actions
 
@@ -34,7 +29,7 @@ func _setup(config: ActorConfig) -> void:
 	ship_controller = _find_controller()
 	TurnManager.turn_started.connect(_on_action_phase_turn_started)
 	
-	WCS.setup(get_weapons())
+	ship_layout_setup_ended.emit()
 
 func _find_controller() -> Controller:
 	var controllers = get_modules_by_tag(Enums.module_tags.CONTROLLER)
@@ -92,7 +87,7 @@ func _on_action_phase_turn_started(_actor, phase: Enums.game_states):
 	
 	await get_tree().process_frame
 	
-	WCS.update_weapon_highlight()
+	highlight_changed.emit()
 
 func get_grid_rect(only_count_active: bool = true) -> Rect2i:
 	if modules.is_empty():
@@ -112,11 +107,11 @@ func get_grid_rect(only_count_active: bool = true) -> Rect2i:
 	var size: Vector2i = max_pos - min_pos + Vector2i.ONE
 	return Rect2i(min_pos, size)
 
-func get_total_inner_structure() -> Array[int]:
+func get_total_inner_structure() -> Integrity:
 	var max_integrity: int = 0
 	var integrity: int = 0
 	for module: Module in modules.values():
-		max_integrity += module._max_module_integrity
-		if module._module_integrity > 0:
-			integrity += module._module_integrity
-	return [integrity, max_integrity]
+		max_integrity += module.max_module_integrity
+		if module.module_integrity > 0:
+			integrity += module.module_integrity
+	return Integrity.new(integrity, max_integrity)

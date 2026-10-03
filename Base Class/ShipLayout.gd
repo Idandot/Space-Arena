@@ -108,10 +108,10 @@ func get_grid_rect(only_count_active: bool = true) -> Rect2i:
 	return Rect2i(min_pos, size)
 
 func get_total_inner_structure() -> Integrity:
-	var max_integrity: int = 0
-	var integrity: int = 0
+	var integrity: Integrity = Integrity.new(0, 0)
 	for module: Module in modules.values():
-		max_integrity += module.max_module_integrity
-		if module.module_integrity > 0:
-			integrity += module.module_integrity
-	return Integrity.new(integrity, max_integrity)
+		var module_integrity: Integrity = module.get_integrity()
+		integrity.maximum += module_integrity.maximum
+		if module_integrity.current > 0:
+			integrity.current += module_integrity.current
+	return integrity

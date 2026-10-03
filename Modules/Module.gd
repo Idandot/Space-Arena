@@ -10,13 +10,11 @@ var description: String
 
 var actor_mediator: ActorMediator
 var tags: Array[Enums.module_tags]
-var max_module_integrity: int = 5
 var _active: bool = true
 var grid_position: Vector2i
 var ship_layout: ShipLayout
 var parent: Actor
-
-@onready var module_integrity: int = max_module_integrity
+var _integrity: Integrity
 
 @abstract
 func get_available_actions() -> Array[Action]
@@ -32,13 +30,16 @@ func destruction_action() -> void:
 	return
 
 func take_damage(amount: int) -> int:
-	module_integrity -= amount
+	_integrity.current -= amount
 	GameEvents.log_request.emit("%s had taken %d damage in %s. Integrity: %s/%s" % [
-		parent.display_name, amount, module_name, module_integrity, max_module_integrity
+		parent.display_name, amount, module_name, _integrity.current, _integrity.maximum
 	])
-	if module_integrity <= 0:
+	if _integrity.current <= 0:
 		print(module_name, " module destroyed")
 		_active = false
 		destruction_action()
-		return abs(module_integrity)
+		return abs(_integrity.current)
 	return 0
+
+func get_integrity() -> Integrity:
+	return _integrity

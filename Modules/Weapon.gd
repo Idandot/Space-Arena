@@ -13,8 +13,7 @@ func setup(new_weapon_stats) -> void:
 	module_name = weapon_stats.config_name
 	module_acronym = weapon_stats.config_acronym
 	description = weapon_stats.config_description
-	max_module_integrity = weapon_stats.max_weapon_integrity
-	module_integrity = weapon_stats.max_weapon_integrity
+	_integrity = Integrity.new(weapon_stats.max_weapon_integrity, weapon_stats.max_weapon_integrity)
 	TurnManager.phase_started.connect(_on_action_phase_started)
 
 ##Стреляет из оружия, если есть возможность

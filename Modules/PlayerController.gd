@@ -18,6 +18,7 @@ func setup(_config: Resource) -> void:
 	module_name = "Player Controller"
 	module_acronym = "PC"
 	description = "Brain of the ship, vital to it's functioning"
+	_integrity = Integrity.new(5,5)
 
 func _process(_delta: float) -> void:
 	if _should_handle_input():

@@ -90,9 +90,8 @@ func _create_module_cell(module: Module) -> Control:
 	btn.text = module.module_acronym
 	
 	if _damage_resolver:
-		var max_hp := module.max_module_integrity
-		var hp := module.module_integrity
-		var hp_ratio: float = float(hp) / float(max_hp)
+		var module_integrity = module.get_integrity()
+		var hp_ratio: float = float(module_integrity.current) / float(module_integrity.maximum)
 		btn.modulate = Color(1,1,1,1).lerp(Color(1, 0.2, 0.2, 1), 1.0 - hp_ratio)
 	
 	btn.pressed.connect(_update_module_details.bind(module))
@@ -113,7 +112,7 @@ func _update_stats():
 	var total_integrity: Integrity = _ship_layout.get_total_inner_structure()
 	var stats_text: Array[String] = [
 		"Initiative: %.2f\n" % _actor.get_initiative(),
-		"Total inner intergity: %d/%d\n" % [total_integrity.current, total_integrity.maximum]
+		"Total inner intergity: %s\n" % total_integrity.get_text()
 		]
 	stats_label.text = "%s\n%s" % [SECTION_STATS, "".join(stats_text)]
 
@@ -150,9 +149,8 @@ func _update_armor(_location: String, damaged_modules: Array[Module]) -> void:
 		label.modulate = Color(1,1,1,1).lerp(Color(1, 0.2, 0.2, 1), 1.0 - hp_ratio)
 	
 	for module in damaged_modules:
-		var max_hp := module.max_module_integrity
-		var hp := module.module_integrity
-		var hp_ratio: float = float(hp) / float(max_hp)
+		var module_integrity = module.get_integrity()
+		var hp_ratio: float = float(module_integrity.current) / float(module_integrity.maximum)
 		var module_pos: Vector2i = module.grid_position
 		_cells[module_pos].modulate = Color(1,1,1,1).lerp(Color(1, 0.2, 0.2, 1), 1.0 - hp_ratio)
 	
@@ -166,7 +164,8 @@ func _update_module_details(module: Module) -> void:
 	_selected_module = module
 	var details: String = "%s\n" % module.module_name
 	details += "%s\n" % module.description
-	details += "Integrity: %d/%d \n" % [module.module_integrity, module.max_module_integrity]
+	details += "Integrity: %s \n" % module.get_integrity().get_text()
+	
 	
 	if module.has_method("get_stats_text"):
 		details += module.get_stats_text()

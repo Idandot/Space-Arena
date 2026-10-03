@@ -8,5 +8,4 @@ func _ready() -> void:
 	module_name = "Bulkhead"
 	module_acronym = "B"
 	description = "Module that just tanks damage"
-	max_module_integrity = 15
-	module_integrity = 15
+	_integrity = Integrity.new(15, 15)

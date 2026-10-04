@@ -1,8 +1,10 @@
 extends Node2D
+class_name ShipVisualizer
 
 @export var actor_mediator: ActorMediator
 @export var hex_rigidbody: HexRigidbody
 @export var start_texture: TMTexture
+@export var active_radius: float = AxialUtilities.HEX_SIDE * 0.7
 
 @onready var texture := start_texture.duplicate(true)
 @onready var parent: Actor = self.get_parent()
@@ -30,7 +32,7 @@ func _draw():
 		return
 	
 	if parent.is_active:
-		draw_circle(Vector2.ZERO, 50, Color(0.71, 0.808, 0.498, 0.239))
+		draw_circle(Vector2.ZERO, active_radius, Color(0.71, 0.808, 0.498, 0.239))
 	
 	var closed_points = texture.points.duplicate()
 	if closed_points[0] != closed_points[closed_points.size()-1]:

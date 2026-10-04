@@ -5,10 +5,12 @@ var weapons: Array[Weapon] = []
 var _current_weapon_index: int = -1
 
 @onready var _ship_layout: ShipLayout = self.get_parent()
+var _actor: Actor
 
 func _ready() -> void:
 	_ship_layout.ship_layout_setup_ended.connect(setup)
-	TurnManager.phase_started.connect(_on_action_phase_started)
+	_actor = _ship_layout.get_parent()
+	_actor.turn_started.connect(_on_turn_started)
 
 func setup() -> void:
 	_ship_layout.highlight_changed.connect(update_weapon_highlight)
@@ -69,9 +71,11 @@ func select_next_operational_weapon() -> void:
 	for i in _count:
 		_current_weapon_index = (_current_weapon_index + 1) % _count
 		if weapons[_current_weapon_index].weapon_active:
+			weapons[_current_weapon_index].next_target()
 			return
 	
 	_current_weapon_index = -1
+	GameEvents.toggle_target.emit(false)
 
 func _get_operational_weapons_count() -> int:
 	var count = 0
@@ -80,7 +84,7 @@ func _get_operational_weapons_count() -> int:
 			count += 1
 	return count
 
-func _on_action_phase_started(phase: Enums.game_states):
+func _on_turn_started(_actor_emitter, phase: Enums.game_states):
 	if phase != Enums.game_states.ACTION:
 		return
 	next_weapon()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://desilnlp5gqtr"]
+[gd_scene load_steps=15 format=3 uid="uid://desilnlp5gqtr"]
 
 [ext_resource type="Script" uid="uid://dwvjpdp1pitku" path="res://Base Class/Arena.gd" id="1_q4evv"]
 [ext_resource type="PackedScene" uid="uid://drbie2ve3q7dd" path="res://Base Class/Hex.tscn" id="3_4hi4l"]
@@ -11,6 +11,7 @@
 [ext_resource type="Resource" uid="uid://b0rvuhkbh4shv" path="res://Resources/ActorConfigs/Idandot.tres" id="6_7idsn"]
 [ext_resource type="Script" uid="uid://cemxx5dpd6xcu" path="res://Resources/GameConfig.gd" id="6_e5ake"]
 [ext_resource type="Script" uid="uid://dvhdky2xyyqyb" path="res://Autoload Class/UIManager.gd" id="7_2o31o"]
+[ext_resource type="Script" uid="uid://c2i0bwjpb7opy" path="res://Base Class/TargetManager.gd" id="9_iroh1"]
 
 [sub_resource type="Resource" id="Resource_c5xbw"]
 script = ExtResource("6_e5ake")
@@ -27,6 +28,11 @@ game_config = SubResource("Resource_c5xbw")
 
 [node name="HexGrid" type="Node2D" parent="."]
 script = ExtResource("4_t804p")
+
+[node name="TargetManager" type="Node2D" parent="HexGrid"]
+script = ExtResource("9_iroh1")
+marker_line_coeff = 0.3
+line_width = 5
 
 [node name="ArenaCamera" type="Camera2D" parent="."]
 script = ExtResource("4_kmxm0")

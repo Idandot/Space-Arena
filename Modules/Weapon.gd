@@ -28,7 +28,7 @@ func fire():
 		return
 	
 	if _current_target_index == -1:
-		GameEvents.log_request.emit("No target available")
+		GameEvents.toggle_target.emit(false)
 		return
 	var target: Actor = targets[_current_target_index]
 	target.damage_taken.emit(weapon_stats.damage, hex_rigidbody.axial_position)
@@ -36,7 +36,7 @@ func fire():
 
 func next_target() -> void:
 	if targets.is_empty():
-		GameEvents.log_request.emit("No target found")
+		GameEvents.toggle_target.emit(false)
 		_current_target_index = -1
 		return
 	
@@ -46,10 +46,11 @@ func next_target() -> void:
 	for i in _count:
 		_current_target_index = (_current_target_index + 1) % _count
 		if targets[_current_target_index].is_alive():
-			GameEvents.log_request.emit("Current target: %s" % targets[_current_target_index].display_name)
+			GameEvents.target_change.emit(targets[_current_target_index])
+			GameEvents.toggle_target.emit(true)
 			return
 	
-	GameEvents.log_request.emit("No alive target found")
+	GameEvents.toggle_target.emit(false)
 	_current_target_index = -1
 
 ##Возвращается доступные действия модуля

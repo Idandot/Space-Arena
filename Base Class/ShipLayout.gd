@@ -47,15 +47,33 @@ func _build_from_config(config: ActorConfig) -> void:
 	modules.clear()
 	if config.modules == null:
 		push_warning("ShipLayout: config is not provided")
+		return
+	
+	var type_counts: Dictionary[StringName, int] = {}
 	
 	for placement in config.modules:
 		if modules.has(placement.position):
 			push_warning("ShipLayout: %s is already taken"% placement.position)
+			continue
+		
+		var module_config = placement.config
+		var module_name: String
+		if module_config != null:
+			module_name = module_config.get("config_name")
+		else:
+			module_name = placement.type
+		
+		if not type_counts.has(module_name):
+			type_counts[module_name] = 0
+		type_counts[module_name] += 1
+		
+		var instance_i: int = type_counts[module_name]
 		
 		var module = ModuleFactory.create(parent, placement.type, placement.config)
 		if module == null:
 			continue
 		
+		module.instance_index = instance_i
 		module.grid_position = placement.position
 		module.ship_layout = self
 		add_child(module)

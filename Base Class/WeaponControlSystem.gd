@@ -11,6 +11,7 @@ func _ready() -> void:
 	_ship_layout.ship_layout_setup_ended.connect(setup)
 	_actor = _ship_layout.get_parent()
 	_actor.turn_started.connect(_on_turn_started)
+	TurnManager.round_started.connect(_on_round_started)
 
 func setup() -> void:
 	_ship_layout.highlight_changed.connect(update_weapon_highlight)
@@ -63,6 +64,8 @@ func update_weapon_highlight() -> void:
 func select_next_operational_weapon() -> void:
 	if weapons.is_empty():
 		_current_weapon_index = -1
+		GameEvents.toggle_target.emit(false)
+		GameEvents.active_weapon_changed.emit(null)
 		return
 	
 	var _start_index = _current_weapon_index
@@ -72,10 +75,12 @@ func select_next_operational_weapon() -> void:
 		_current_weapon_index = (_current_weapon_index + 1) % _count
 		if weapons[_current_weapon_index].weapon_active:
 			weapons[_current_weapon_index].next_target()
+			GameEvents.active_weapon_changed.emit(weapons[_current_weapon_index])
 			return
 	
 	_current_weapon_index = -1
 	GameEvents.toggle_target.emit(false)
+	GameEvents.active_weapon_changed.emit(null)
 
 func _get_operational_weapons_count() -> int:
 	var count = 0
@@ -88,3 +93,7 @@ func _on_turn_started(_actor_emitter, phase: Enums.game_states):
 	if phase != Enums.game_states.ACTION:
 		return
 	next_weapon()
+
+func _on_round_started(_round: int) -> void:
+	GameEvents.toggle_target.emit(false)
+	return

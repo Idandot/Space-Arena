@@ -3,7 +3,9 @@ extends Node
 class_name Module
 
 #FLUFF
-var module_name: String
+var module_name: String:
+	get():
+		return "%s %d" % [module_name, instance_index]
 var module_acronym: String = "M1"
 var description: String
 
@@ -15,6 +17,7 @@ var grid_position: Vector2i
 var ship_layout: ShipLayout
 var parent: Actor
 var _integrity: Integrity
+var instance_index: int
 
 @abstract
 func get_available_actions() -> Array[Action]

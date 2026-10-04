@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://desilnlp5gqtr"]
+[gd_scene load_steps=14 format=3 uid="uid://desilnlp5gqtr"]
 
 [ext_resource type="Script" uid="uid://dwvjpdp1pitku" path="res://Base Class/Arena.gd" id="1_q4evv"]
 [ext_resource type="PackedScene" uid="uid://drbie2ve3q7dd" path="res://Base Class/Hex.tscn" id="3_4hi4l"]
@@ -10,16 +10,13 @@
 [ext_resource type="Script" uid="uid://3ie11nou16mr" path="res://Autoload Class/TurnManager.gd" id="6_5jmcn"]
 [ext_resource type="Resource" uid="uid://b0rvuhkbh4shv" path="res://Resources/ActorConfigs/Idandot.tres" id="6_7idsn"]
 [ext_resource type="Script" uid="uid://cemxx5dpd6xcu" path="res://Resources/GameConfig.gd" id="6_e5ake"]
-[ext_resource type="Script" uid="uid://dvhdky2xyyqyb" path="res://Autoload Class/UIManager.gd" id="7_2o31o"]
 [ext_resource type="Script" uid="uid://c2i0bwjpb7opy" path="res://Base Class/TargetManager.gd" id="9_iroh1"]
+[ext_resource type="PackedScene" uid="uid://sygaawqoonor" path="res://Base Class/ArenaUI.tscn" id="12_iroh1"]
 
 [sub_resource type="Resource" id="Resource_c5xbw"]
 script = ExtResource("6_e5ake")
 actors_data = Array[ExtResource("3_7idsn")]([ExtResource("4_xf6yu"), ExtResource("5_8rq1b"), ExtResource("6_7idsn")])
 metadata/_custom_type_script = "uid://cemxx5dpd6xcu"
-
-[sub_resource type="Theme" id="Theme_7idsn"]
-default_font_size = 128
 
 [node name="Arena" type="Node2D"]
 script = ExtResource("1_q4evv")
@@ -40,78 +37,4 @@ script = ExtResource("4_kmxm0")
 [node name="TurnManager" type="Node" parent="."]
 script = ExtResource("6_5jmcn")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." node_paths=PackedStringArray("thrust_label", "round_label", "phase_label", "actor_label", "game_log_label", "game_over_label")]
-script = ExtResource("7_2o31o")
-thrust_label = NodePath("Panel/MarginContainer/VBoxContainer/ThrustLabel")
-round_label = NodePath("Panel/MarginContainer/VBoxContainer/RoundLabel")
-phase_label = NodePath("Panel/MarginContainer/VBoxContainer/PhaseLabel")
-actor_label = NodePath("Panel/MarginContainer/VBoxContainer/ActorLabel")
-game_log_label = NodePath("Panel/MarginContainer/VBoxContainer/GameLogLabel")
-game_over_label = NodePath("GameOverLabel")
-
-[node name="GameOverLabel" type="Label" parent="CanvasLayer"]
-visible = false
-offset_right = 1152.0
-offset_bottom = 648.0
-theme = SubResource("Theme_7idsn")
-text = "GAME OVER"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Panel" type="Panel" parent="CanvasLayer"]
-offset_left = 962.0
-offset_right = 1152.0
-offset_bottom = 648.0
-
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Panel"]
-layout_mode = 0
-offset_right = 190.0
-offset_bottom = 648.0
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Panel/MarginContainer"]
-layout_mode = 2
-
-[node name="RoundLabel" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Turn Label"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="PhaseLabel" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Phase Label"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ActorLabel" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Actor Label"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ThrustLabel" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Thrust Label"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="GameLogLabel" type="RichTextLabel" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-text = "BATTLE LOG:
-"
-scroll_following = true
-vertical_alignment = 2
-
-[node name="InspectorParent" type="Control" parent="CanvasLayer"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
+[node name="CanvasLayer" parent="." instance=ExtResource("12_iroh1")]

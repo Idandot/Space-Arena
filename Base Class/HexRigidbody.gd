@@ -84,8 +84,8 @@ func add_impulse(impulse_name: String, value: Vector2i):
 #ЛОКАЛЬНЫЕ МЕТОДЫ
 
 func _ready() -> void:
-	actor_mediator.movement_animation_finished.connect(_on_movement_animation_finished)
-	TurnManager.phase_started.connect(_physics_result)
+	actor_mediator.physics_finished.connect(_on_physics_finished)
+	parent.turn_started.connect(_physics_turn_started)
 	if parent.has_signal("setup_started"):
 		parent.setup_started.connect(_on_setup)
 	if parent.has_signal("turn_started"):
@@ -106,10 +106,12 @@ func _on_turn_start(_actor: Actor, _phase: Enums.game_states):
 	_hex_rigidbody_state = _save_state()
 
 ##Конец фазы движения, фактическое перемещение
-func _on_movement_animation_finished():
+func _on_physics_finished():
 	_apply_velocity()
 	_commit_velocity()
 	velocity_changed.emit(get_velocity_data())
+	
+	TurnManager.notify_physics_completed()
 
 #ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ
 
@@ -147,8 +149,9 @@ func _apply_velocity():
 		GameEvents.log_request.emit("Pushed in the wall")
 	axial_position = axial_position + _displacement
 
-func _physics_result(phase: Enums.game_states):
-	_velocity = _calculate_velocity()
+##Начало фазы физики
+func _physics_turn_started(_actor: Actor, phase: Enums.game_states):
 	if phase != Enums.game_states.PHYSICS:
 		return
-	actor_mediator.call_movement_ended(_velocity)
+	_velocity = _calculate_velocity()
+	actor_mediator.call_physics_started(_velocity)

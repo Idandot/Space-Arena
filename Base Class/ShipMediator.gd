@@ -1,10 +1,10 @@
 extends Node
 class_name ActorMediator
 
-signal movement_ended(to: Vector2i)
-func call_movement_ended(to: Vector2i):
-	movement_ended.emit(to)
+signal physics_started(to: Vector2i)
+func call_physics_started(to: Vector2i):
+	physics_started.emit(to)
 
-signal movement_animation_finished()
-func call_movement_animation_finished():
-	movement_animation_finished.emit()
+signal physics_finished()
+func call_physics_finished():
+	physics_finished.emit()

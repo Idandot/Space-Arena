@@ -76,8 +76,6 @@ func _on_action_phase_started(phase: Enums.game_states):
 		return 
 	weapon_active = true
 	
-	await get_tree().process_frame
-	
 	targets = find_targets()
 	next_target()
 

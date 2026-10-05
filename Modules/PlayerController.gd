@@ -26,6 +26,8 @@ func _process(_delta: float) -> void:
 
 ##Вызывается в начале хода актера
 func _take_control(_actor: Actor, _phase: Enums.game_states) -> void:
+	if _phase == Enums.game_states.PHYSICS:
+		return
 	var actions = ship_layout.collect_actions()
 	for action in actions:
 		if !action.callback.is_valid():

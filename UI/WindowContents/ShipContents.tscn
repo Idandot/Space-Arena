@@ -31,11 +31,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+dragging_enabled = false
 
 [node name="LeftPanel" type="VBoxContainer" parent="HSplitContainer"]
 custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="ShipStructureLabel" type="Label" parent="HSplitContainer/LeftPanel"]
 layout_mode = 2

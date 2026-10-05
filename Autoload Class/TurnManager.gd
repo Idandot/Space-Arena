@@ -7,6 +7,7 @@ var _phase_queue: Array[Actor] = []
 var _current_actor: Actor
 var _current_round := 0
 var _max_round := 10
+var _pending_physics_actors := 0
 
 var current_game_state := Enums.game_states.INACTIVE
 var alive_actors: Array[Actor] = []
@@ -119,13 +120,17 @@ func _start_movement_phase():
 	_start_next_turn()
 
 func _start_physics_phase():
-	
 	current_game_state = Enums.game_states.PHYSICS
 	phase_started.emit(current_game_state)
 	
-	await get_tree().create_timer(physics_phase_duration).timeout
+	_pending_physics_actors = _starting_actors.size()
 	
-	_start_next_phase()
+	for actor in _starting_actors:
+		actor.take_turn(current_game_state)
+	
+	if _pending_physics_actors <= 0:
+		_pending_physics_actors = 0
+		_start_next_phase()
 
 func _start_action_phase():
 	
@@ -203,3 +208,10 @@ func _on_actor_killed(killed_actor: Actor):
 	alive_actors = _starting_actors.filter(func(a): return a.is_alive())
 	if killed_actor == _current_actor:
 		_start_next_turn()
+
+func notify_physics_completed() -> void:
+	_pending_physics_actors -= 1
+	
+	if _pending_physics_actors <= 0:
+		_pending_physics_actors = 0
+		_start_next_phase()

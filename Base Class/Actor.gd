@@ -50,7 +50,8 @@ func setup(config: ActorConfig) -> void:
 func take_turn(phase: Enums.game_states) -> void:
 	if !_is_alive:
 		return
-	is_active = true
+	if phase != Enums.game_states.PHYSICS:
+		is_active = true
 	
 	emit_signal("turn_started", self, phase)
 

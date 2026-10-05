@@ -46,3 +46,6 @@ func take_damage(amount: int) -> int:
 
 func get_integrity() -> Integrity:
 	return _integrity
+
+func is_active() -> bool:
+	return _active

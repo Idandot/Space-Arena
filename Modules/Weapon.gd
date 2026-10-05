@@ -80,6 +80,10 @@ func _on_action_phase_started(phase: Enums.game_states):
 	next_target()
 
 func find_targets() -> Array[Actor]:
+	if !_active:
+		GameEvents.toggle_target.emit(false)
+		return []
+	
 	var alive_actors = TurnManager.alive_actors
 	var new_targets: Array[Actor]
 	

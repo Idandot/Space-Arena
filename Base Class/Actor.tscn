@@ -26,7 +26,6 @@ script = ExtResource("2_np13p")
 actor_mediator = NodePath("../ActorMediator")
 hex_rigidbody = NodePath("../HexRigidbody")
 start_texture = ExtResource("3_poh3c")
-active_radius = null
 
 [node name="Area2D" type="Area2D" parent="Visualizer"]
 script = ExtResource("4_hcv5f")

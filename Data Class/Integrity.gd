@@ -10,3 +10,6 @@ func _init(new_current: int, new_max: int) -> void:
 
 func get_text() -> String:
 	return "%d/%d" % [current, maximum]
+
+func get_ratio() -> float:
+	return float(current)/float(maximum)

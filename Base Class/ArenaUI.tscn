@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://sygaawqoonor"]
 
 [ext_resource type="Script" uid="uid://dvhdky2xyyqyb" path="res://Autoload Class/UIManager.gd" id="1_dqrmg"]
-[ext_resource type="Script" uid="uid://c2wl55leenqj7" path="res://Base Class/CurrentWeaponUI.gd" id="2_r1gao"]
+[ext_resource type="Script" uid="uid://ceoytsue52pcy" path="res://Base Class/WeaponListUI.gd" id="3_xxlru"]
+[ext_resource type="PackedScene" uid="uid://b6ge6hwfh2ts2" path="res://Base Class/WeaponSlotUI.tscn" id="4_le23j"]
 
 [sub_resource type="Theme" id="Theme_7idsn"]
 default_font_size = 128
@@ -93,39 +94,15 @@ layout_mode = 2
 
 [node name="CurrentWeaponLabel" type="Label" parent="LeftPanel/MarginContainer/VBoxContainer" unique_id=1042076694]
 layout_mode = 2
-text = "Current Weapon:"
+text = "Weapons:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="LeftPanel/MarginContainer/VBoxContainer" unique_id=499895508 node_paths=PackedStringArray("prev_weapon_button", "next_weapon_button", "weapon_label", "damage_label")]
+[node name="WeaponListUI" type="VBoxContainer" parent="LeftPanel/MarginContainer/VBoxContainer" unique_id=634026904 node_paths=PackedStringArray("slot_container")]
 layout_mode = 2
-script = ExtResource("2_r1gao")
-prev_weapon_button = NodePath("PrevWeaponButton")
-next_weapon_button = NodePath("NextWeaponButton")
-weapon_label = NodePath("WeaponLabel")
-damage_label = NodePath("../DamageLabel")
-
-[node name="PrevWeaponButton" type="Button" parent="LeftPanel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=2007643055]
-layout_mode = 2
-text = "<-"
-
-[node name="WeaponLabel" type="Label" parent="LeftPanel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=424970129]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "N/D"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="NextWeaponButton" type="Button" parent="LeftPanel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1635946165]
-layout_mode = 2
-tooltip_text = "Next weapon. [Q]"
-text = "->"
-
-[node name="DamageLabel" type="Label" parent="LeftPanel/MarginContainer/VBoxContainer" unique_id=2107455701]
-layout_mode = 2
-text = "Damage: 0"
-horizontal_alignment = 1
-vertical_alignment = 1
+script = ExtResource("3_xxlru")
+weapon_slot_scene = ExtResource("4_le23j")
+slot_container = NodePath(".")
 
 [node name="InspectorParent" type="Control" parent="." unique_id=265121632]
 layout_mode = 3

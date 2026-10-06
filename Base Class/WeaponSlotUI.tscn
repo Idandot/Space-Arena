@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://b6ge6hwfh2ts2"]
+
+[ext_resource type="Script" uid="uid://dfgu6qyv5ig5" path="res://Base Class/WeaponSlotUI.gd" id="1_1ysd0"]
+
+[node name="WeaponSlotUI" type="PanelContainer" unique_id=1171507063 node_paths=PackedStringArray("name_label", "damage_label", "status_rect")]
+offset_right = 210.0
+offset_bottom = 57.0
+script = ExtResource("1_1ysd0")
+name_label = NodePath("MarginContainer/VBoxContainer/HBoxContainer/NameLabel")
+damage_label = NodePath("MarginContainer/VBoxContainer/DamageLabel")
+status_rect = NodePath("MarginContainer/VBoxContainer/HBoxContainer/ColorRect")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=187932281]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1638535965]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=783562190]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=2079812970]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1581888261]
+layout_mode = 2
+text = "Weapon Name"
+
+[node name="DamageLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1755174949]
+layout_mode = 2
+text = "Damage: 0"

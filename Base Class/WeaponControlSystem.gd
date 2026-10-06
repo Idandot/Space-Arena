@@ -1,6 +1,8 @@
 extends Node
 class_name WeaponControlSystem
 
+signal weapon_state_changed()
+
 var weapons: Array[Weapon] = []
 var _current_weapon_index: int = -1
 
@@ -42,10 +44,12 @@ func get_current_weapon() -> Weapon:
 func fire_current_weapon() -> void:
 	if _current_weapon_index >= 0 and _current_weapon_index<weapons.size():
 		weapons[_current_weapon_index].fire()
+		weapon_state_changed.emit()
 
 func next_weapon() -> void:
 	select_next_operational_weapon()
 	update_weapon_highlight()
+	weapon_state_changed.emit()
 
 func next_target() -> void:
 	var current_weapon = get_current_weapon()
@@ -73,6 +77,8 @@ func select_next_operational_weapon() -> void:
 	
 	for i in _count:
 		_current_weapon_index = (_current_weapon_index + 1) % _count
+		if !weapons[_current_weapon_index].is_active():
+			continue
 		if weapons[_current_weapon_index].weapon_active:
 			weapons[_current_weapon_index].next_target()
 			GameEvents.active_weapon_changed.emit(weapons[_current_weapon_index])

@@ -100,6 +100,7 @@ vertical_alignment = 1
 
 [node name="WeaponListUI" type="VBoxContainer" parent="LeftPanel/MarginContainer/VBoxContainer" unique_id=634026904 node_paths=PackedStringArray("slot_container")]
 layout_mode = 2
+size_flags_vertical = 3
 script = ExtResource("3_xxlru")
 weapon_slot_scene = ExtResource("4_le23j")
 slot_container = NodePath(".")

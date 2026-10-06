@@ -1,4 +1,4 @@
-extends Control
+extends VBoxContainer
 class_name WeaponListUI
 
 @export var weapon_slot_scene: PackedScene
@@ -52,6 +52,7 @@ func _unbind_system() -> void:
 func _refresh_slots() -> void:
 	if !_current_system:
 		_hide_all_slots()
+		return
 	
 	var _current_weapon = _current_system.get_current_weapon()
 	

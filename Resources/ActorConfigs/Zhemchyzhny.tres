@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ActorConfig" load_steps=14 format=3 uid="uid://dwpdkom4k88dl"]
+[gd_resource type="Resource" script_class="ActorConfig" format=3 uid="uid://dwpdkom4k88dl"]
 
 [ext_resource type="Script" uid="uid://ceydj021o6i55" path="res://Resources/ArmorConfig.gd" id="1_7esn5"]
 [ext_resource type="PackedScene" uid="uid://c4kh3mrinecq8" path="res://Base Class/Actor.tscn" id="1_a2rwf"]

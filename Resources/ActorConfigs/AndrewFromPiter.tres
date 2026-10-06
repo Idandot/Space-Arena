@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ActorConfig" load_steps=13 format=3 uid="uid://deq6inrchxfdg"]
+[gd_resource type="Resource" script_class="ActorConfig" format=3 uid="uid://deq6inrchxfdg"]
 
 [ext_resource type="Script" uid="uid://dbjly20k4n8n4" path="res://Data Class/ModulePlacement.gd" id="1_3ya48"]
 [ext_resource type="Script" uid="uid://ceydj021o6i55" path="res://Resources/ArmorConfig.gd" id="1_gekcw"]

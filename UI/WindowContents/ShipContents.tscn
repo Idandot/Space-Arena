@@ -1,10 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://bnv8yabjdd0px"]
+[gd_scene format=3 uid="uid://bnv8yabjdd0px"]
 
 [ext_resource type="Script" uid="uid://dpy2d62b47o2b" path="res://UI/WindowContents/ship_contents.gd" id="1_gdgan"]
 [ext_resource type="Theme" uid="uid://dho5hnu13gwhm" path="res://Themes/Font.tres" id="2_s5j1w"]
 [ext_resource type="Script" uid="uid://c45140mrqbcrw" path="res://UI/VerticalLabel.gd" id="3_s5j1w"]
 
-[node name="ShipInspection" type="Control" node_paths=PackedStringArray("ship_grid", "description_label", "stats_label", "module_details_label", "location_labels")]
+[node name="ShipInspection" type="Control" unique_id=119998253 node_paths=PackedStringArray("ship_grid", "description_label", "stats_label", "module_details_label", "location_labels")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -24,7 +24,7 @@ location_labels = {
 "starboard": NodePath("HSplitContainer/LeftPanel/HBoxContainer/StarboardLabel")
 }
 
-[node name="HSplitContainer" type="HSplitContainer" parent="."]
+[node name="HSplitContainer" type="HSplitContainer" parent="." unique_id=931661501]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -33,32 +33,32 @@ grow_horizontal = 2
 grow_vertical = 2
 dragging_enabled = false
 
-[node name="LeftPanel" type="VBoxContainer" parent="HSplitContainer"]
+[node name="LeftPanel" type="VBoxContainer" parent="HSplitContainer" unique_id=292527579]
 custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 
-[node name="ShipStructureLabel" type="Label" parent="HSplitContainer/LeftPanel"]
+[node name="ShipStructureLabel" type="Label" parent="HSplitContainer/LeftPanel" unique_id=1907855567]
 layout_mode = 2
 text = "/SHIP STRUCTURE/"
 horizontal_alignment = 1
 
-[node name="NoseLabel" type="Label" parent="HSplitContainer/LeftPanel"]
+[node name="NoseLabel" type="Label" parent="HSplitContainer/LeftPanel" unique_id=212684359]
 layout_mode = 2
 text = "Nose"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/LeftPanel"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/LeftPanel" unique_id=1329999620]
 layout_mode = 2
 alignment = 1
 
-[node name="PortLabel" type="Control" parent="HSplitContainer/LeftPanel/HBoxContainer"]
+[node name="PortLabel" type="Control" parent="HSplitContainer/LeftPanel/HBoxContainer" unique_id=2010848673]
 layout_mode = 2
 script = ExtResource("3_s5j1w")
 text = "Port"
 metadata/_custom_type_script = "uid://c45140mrqbcrw"
 
-[node name="GridContainer" type="GridContainer" parent="HSplitContainer/LeftPanel/HBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="HSplitContainer/LeftPanel/HBoxContainer" unique_id=1426397784]
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -66,37 +66,37 @@ size_flags_vertical = 3
 theme_override_constants/h_separation = 4
 theme_override_constants/v_separation = 4
 
-[node name="StarboardLabel" type="Control" parent="HSplitContainer/LeftPanel/HBoxContainer"]
+[node name="StarboardLabel" type="Control" parent="HSplitContainer/LeftPanel/HBoxContainer" unique_id=251020745]
 layout_mode = 2
 script = ExtResource("3_s5j1w")
 text = "Starboard"
 flip = true
 metadata/_custom_type_script = "uid://c45140mrqbcrw"
 
-[node name="AftLabel" type="Label" parent="HSplitContainer/LeftPanel"]
+[node name="AftLabel" type="Label" parent="HSplitContainer/LeftPanel" unique_id=875712745]
 layout_mode = 2
 text = "Aft"
 horizontal_alignment = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer" unique_id=75655070]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="RightPanel" type="VBoxContainer" parent="HSplitContainer/ScrollContainer"]
+[node name="RightPanel" type="VBoxContainer" parent="HSplitContainer/ScrollContainer" unique_id=1007173109]
 custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 12
 
-[node name="DescriptionLabel" type="Label" parent="HSplitContainer/ScrollContainer/RightPanel"]
+[node name="DescriptionLabel" type="Label" parent="HSplitContainer/ScrollContainer/RightPanel" unique_id=1893452301]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "Fuck"
 
-[node name="StatsLabel" type="Label" parent="HSplitContainer/ScrollContainer/RightPanel"]
+[node name="StatsLabel" type="Label" parent="HSplitContainer/ScrollContainer/RightPanel" unique_id=1028182671]
 layout_mode = 2
 
-[node name="ModuleDetailsLabel" type="RichTextLabel" parent="HSplitContainer/ScrollContainer/RightPanel"]
+[node name="ModuleDetailsLabel" type="RichTextLabel" parent="HSplitContainer/ScrollContainer/RightPanel" unique_id=1115800321]
 layout_mode = 2
 size_flags_vertical = 3
 bbcode_enabled = true

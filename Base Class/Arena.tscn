@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://desilnlp5gqtr"]
+[gd_scene format=3 uid="uid://desilnlp5gqtr"]
 
 [ext_resource type="Script" uid="uid://dwvjpdp1pitku" path="res://Base Class/Arena.gd" id="1_q4evv"]
 [ext_resource type="PackedScene" uid="uid://drbie2ve3q7dd" path="res://Base Class/Hex.tscn" id="3_4hi4l"]
@@ -18,24 +18,24 @@ script = ExtResource("6_e5ake")
 actors_data = Array[ExtResource("3_7idsn")]([ExtResource("4_xf6yu"), ExtResource("5_8rq1b"), ExtResource("6_7idsn")])
 metadata/_custom_type_script = "uid://cemxx5dpd6xcu"
 
-[node name="Arena" type="Node2D"]
+[node name="Arena" type="Node2D" unique_id=1894896767]
 script = ExtResource("1_q4evv")
 arena_radius = 12
 hex_scene = ExtResource("3_4hi4l")
 game_config = SubResource("Resource_c5xbw")
 
-[node name="HexGrid" type="Node2D" parent="."]
+[node name="HexGrid" type="Node2D" parent="." unique_id=172935855]
 script = ExtResource("4_t804p")
 
-[node name="TargetManager" type="Node2D" parent="HexGrid"]
+[node name="TargetManager" type="Node2D" parent="HexGrid" unique_id=497524436]
 script = ExtResource("9_iroh1")
 marker_line_coeff = 0.3
 line_width = 5
 
-[node name="ArenaCamera" type="Camera2D" parent="."]
+[node name="ArenaCamera" type="Camera2D" parent="." unique_id=845632562]
 script = ExtResource("4_kmxm0")
 
-[node name="TurnManager" type="Node" parent="."]
+[node name="TurnManager" type="Node" parent="." unique_id=452023269]
 script = ExtResource("6_5jmcn")
 
-[node name="CanvasLayer" parent="." instance=ExtResource("12_iroh1")]
+[node name="CanvasLayer" parent="." unique_id=1269883491 instance=ExtResource("12_iroh1")]

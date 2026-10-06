@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="TMTexture" load_steps=2 format=3 uid="uid://dkxvnl4kxb403"]
+[gd_resource type="Resource" script_class="TMTexture" format=3 uid="uid://dkxvnl4kxb403"]
 
 [ext_resource type="Script" uid="uid://bppjimsyxegic" path="res://Resources/TMTexture.gd" id="1_fl5bs"]
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://sygaawqoonor"]
+[gd_scene format=3 uid="uid://sygaawqoonor"]
 
 [ext_resource type="Script" uid="uid://dvhdky2xyyqyb" path="res://Autoload Class/UIManager.gd" id="1_dqrmg"]
 [ext_resource type="Script" uid="uid://c2wl55leenqj7" path="res://Base Class/CurrentWeaponUI.gd" id="2_r1gao"]
@@ -6,7 +6,7 @@
 [sub_resource type="Theme" id="Theme_7idsn"]
 default_font_size = 128
 
-[node name="CanvasLayer" type="CanvasLayer" node_paths=PackedStringArray("thrust_label", "round_label", "phase_label", "actor_label", "game_log_label", "game_over_label")]
+[node name="CanvasLayer" type="CanvasLayer" unique_id=1642326744 node_paths=PackedStringArray("thrust_label", "round_label", "phase_label", "actor_label", "game_log_label", "game_over_label")]
 script = ExtResource("1_dqrmg")
 thrust_label = NodePath("RightPanel/MarginContainer/VBoxContainer/ThrustLabel")
 round_label = NodePath("RightPanel/MarginContainer/VBoxContainer/RoundLabel")
@@ -15,7 +15,7 @@ actor_label = NodePath("RightPanel/MarginContainer/VBoxContainer/ActorLabel")
 game_log_label = NodePath("RightPanel/MarginContainer/VBoxContainer/GameLogLabel")
 game_over_label = NodePath("GameOverLabel")
 
-[node name="GameOverLabel" type="Label" parent="."]
+[node name="GameOverLabel" type="Label" parent="." unique_id=877330992]
 visible = false
 offset_right = 1152.0
 offset_bottom = 648.0
@@ -24,7 +24,7 @@ text = "GAME OVER"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RightPanel" type="PanelContainer" parent="."]
+[node name="RightPanel" type="PanelContainer" parent="." unique_id=480882953]
 anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
@@ -33,41 +33,41 @@ offset_left = -190.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="RightPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="RightPanel" unique_id=760909786]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="RightPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="RightPanel/MarginContainer" unique_id=591334525]
 layout_mode = 2
 
-[node name="RoundLabel" type="Label" parent="RightPanel/MarginContainer/VBoxContainer"]
+[node name="RoundLabel" type="Label" parent="RightPanel/MarginContainer/VBoxContainer" unique_id=275753315]
 layout_mode = 2
 text = "Turn Label"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PhaseLabel" type="Label" parent="RightPanel/MarginContainer/VBoxContainer"]
+[node name="PhaseLabel" type="Label" parent="RightPanel/MarginContainer/VBoxContainer" unique_id=668889929]
 layout_mode = 2
 text = "Phase Label"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ActorLabel" type="Label" parent="RightPanel/MarginContainer/VBoxContainer"]
+[node name="ActorLabel" type="Label" parent="RightPanel/MarginContainer/VBoxContainer" unique_id=714487540]
 layout_mode = 2
 text = "Actor Label"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ThrustLabel" type="Label" parent="RightPanel/MarginContainer/VBoxContainer"]
+[node name="ThrustLabel" type="Label" parent="RightPanel/MarginContainer/VBoxContainer" unique_id=1596843218]
 layout_mode = 2
 text = "Thrust Label"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="GameLogLabel" type="RichTextLabel" parent="RightPanel/MarginContainer/VBoxContainer"]
+[node name="GameLogLabel" type="RichTextLabel" parent="RightPanel/MarginContainer/VBoxContainer" unique_id=1871252191]
 layout_mode = 2
 size_flags_vertical = 3
 text = "BATTLE LOG:
@@ -75,29 +75,29 @@ text = "BATTLE LOG:
 scroll_following = true
 vertical_alignment = 2
 
-[node name="LeftPanel" type="PanelContainer" parent="."]
+[node name="LeftPanel" type="PanelContainer" parent="." unique_id=1187002338]
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 190.0
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="LeftPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="LeftPanel" unique_id=1387157813]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="LeftPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="LeftPanel/MarginContainer" unique_id=2118254822]
 layout_mode = 2
 
-[node name="CurrentWeaponLabel" type="Label" parent="LeftPanel/MarginContainer/VBoxContainer"]
+[node name="CurrentWeaponLabel" type="Label" parent="LeftPanel/MarginContainer/VBoxContainer" unique_id=1042076694]
 layout_mode = 2
 text = "Current Weapon:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="LeftPanel/MarginContainer/VBoxContainer" node_paths=PackedStringArray("prev_weapon_button", "next_weapon_button", "weapon_label", "damage_label")]
+[node name="HBoxContainer" type="HBoxContainer" parent="LeftPanel/MarginContainer/VBoxContainer" unique_id=499895508 node_paths=PackedStringArray("prev_weapon_button", "next_weapon_button", "weapon_label", "damage_label")]
 layout_mode = 2
 script = ExtResource("2_r1gao")
 prev_weapon_button = NodePath("PrevWeaponButton")
@@ -105,29 +105,29 @@ next_weapon_button = NodePath("NextWeaponButton")
 weapon_label = NodePath("WeaponLabel")
 damage_label = NodePath("../DamageLabel")
 
-[node name="PrevWeaponButton" type="Button" parent="LeftPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="PrevWeaponButton" type="Button" parent="LeftPanel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=2007643055]
 layout_mode = 2
 text = "<-"
 
-[node name="WeaponLabel" type="Label" parent="LeftPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="WeaponLabel" type="Label" parent="LeftPanel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=424970129]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "N/D"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="NextWeaponButton" type="Button" parent="LeftPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="NextWeaponButton" type="Button" parent="LeftPanel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1635946165]
 layout_mode = 2
 tooltip_text = "Next weapon. [Q]"
 text = "->"
 
-[node name="DamageLabel" type="Label" parent="LeftPanel/MarginContainer/VBoxContainer"]
+[node name="DamageLabel" type="Label" parent="LeftPanel/MarginContainer/VBoxContainer" unique_id=2107455701]
 layout_mode = 2
 text = "Damage: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="InspectorParent" type="Control" parent="."]
+[node name="InspectorParent" type="Control" parent="." unique_id=265121632]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

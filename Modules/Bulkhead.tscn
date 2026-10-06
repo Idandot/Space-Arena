@@ -1,8 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://bg64tsfcohx71"]
+[gd_scene format=3 uid="uid://bg64tsfcohx71"]
 
 [ext_resource type="Script" uid="uid://b7cgtdinx7f7p" path="res://Modules/Bulkhead.gd" id="1_2emc7"]
 
-[node name="Bulkhead" type="Node" node_paths=PackedStringArray("actor_mediator")]
+[node name="Bulkhead" type="Node" unique_id=714081051]
 script = ExtResource("1_2emc7")
-actor_mediator = NodePath("")
-tags = Array[int]([1])

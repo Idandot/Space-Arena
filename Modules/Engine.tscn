@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bynrv1d3lhbac"]
+[gd_scene format=3 uid="uid://bynrv1d3lhbac"]
 
 [ext_resource type="Script" uid="uid://cn1diyybq86d0" path="res://Modules/EngineModule.gd" id="1_aytt4"]
 [ext_resource type="Script" uid="uid://rgkmbxhqeme2" path="res://Resources/EngineConfig.gd" id="2_yyodf"]
@@ -7,9 +7,6 @@
 script = ExtResource("2_yyodf")
 metadata/_custom_type_script = "uid://rgkmbxhqeme2"
 
-[node name="Engine" type="Node" node_paths=PackedStringArray("hex_rigidbody", "actor_mediator")]
+[node name="Engine" type="Node" unique_id=2133615080]
 script = ExtResource("1_aytt4")
-hex_rigidbody = NodePath("")
 engine_config = SubResource("Resource_cy77k")
-actor_mediator = NodePath("")
-tags = Array[int]([1])

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="EngineConfig" load_steps=2 format=3 uid="uid://b2idh7f108a85"]
+[gd_resource type="Resource" script_class="EngineConfig" format=3 uid="uid://b2idh7f108a85"]
 
 [ext_resource type="Script" uid="uid://rgkmbxhqeme2" path="res://Resources/EngineConfig.gd" id="1_pv4mm"]
 

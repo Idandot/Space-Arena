@@ -1,7 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://vrxmtgwdqiea"]
+[gd_scene format=3 uid="uid://vrxmtgwdqiea"]
 
 [ext_resource type="Script" uid="uid://ck20odycxu2yu" path="res://Modules/Weapon.gd" id="1_28rsx"]
 
-[node name="Weapon" type="Node"]
+[node name="Weapon" type="Node" unique_id=1995219797]
 script = ExtResource("1_28rsx")
 metadata/_custom_type_script = "uid://ck20odycxu2yu"

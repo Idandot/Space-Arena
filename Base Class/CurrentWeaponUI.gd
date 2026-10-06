@@ -25,7 +25,7 @@ func _on_active_weapon_changed(weapon: Weapon) -> void:
 	if module_integrity.current <= 0:
 		damage_label.text = "Damage: 0"
 	else:
-		damage_label.text = "Damage: %d" % weapon.weapon_stats.damage
+		damage_label.text = "OFFLINE"
 
 func _on_phase_started(phase: Enums.game_states) -> void:
 	if phase != Enums.game_states.ACTION:

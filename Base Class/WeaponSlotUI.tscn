@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b6ge6hwfh2ts2"]
 
 [ext_resource type="Script" uid="uid://dfgu6qyv5ig5" path="res://Base Class/WeaponSlotUI.gd" id="1_1ysd0"]
+[ext_resource type="Theme" uid="uid://dho5hnu13gwhm" path="res://Themes/Font.tres" id="2_akw02"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ysd0"]
 content_margin_left = 3.0
@@ -15,8 +16,8 @@ corner_radius_bottom_left = 3
 corner_detail = 5
 
 [node name="WeaponSlotUI" type="PanelContainer" unique_id=1171507063 node_paths=PackedStringArray("name_label", "damage_label", "status_rect")]
-offset_right = 210.0
-offset_bottom = 57.0
+offset_right = 98.0
+offset_bottom = 40.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_1ysd0")
 script = ExtResource("1_1ysd0")
 name_label = NodePath("VBoxContainer/HBoxContainer/NameLabel")
@@ -31,13 +32,15 @@ layout_mode = 2
 size_flags_vertical = 4
 
 [node name="ColorRect" type="ColorRect" parent="VBoxContainer/HBoxContainer" unique_id=2079812970]
-custom_minimum_size = Vector2(24, 24)
+custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 
 [node name="NameLabel" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1581888261]
 layout_mode = 2
+theme = ExtResource("2_akw02")
 text = "Weapon Name"
 
 [node name="DamageLabel" type="Label" parent="VBoxContainer" unique_id=1755174949]
 layout_mode = 2
+theme = ExtResource("2_akw02")
 text = "Damage: 0"

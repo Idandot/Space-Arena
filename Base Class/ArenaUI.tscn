@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://sygaawqoonor"]
 
 [ext_resource type="Script" uid="uid://dvhdky2xyyqyb" path="res://Autoload Class/UIManager.gd" id="1_dqrmg"]
+[ext_resource type="Theme" uid="uid://dho5hnu13gwhm" path="res://Themes/Font.tres" id="2_xxlru"]
 [ext_resource type="Script" uid="uid://ceoytsue52pcy" path="res://Base Class/WeaponListUI.gd" id="3_xxlru"]
 [ext_resource type="PackedScene" uid="uid://b6ge6hwfh2ts2" path="res://Base Class/WeaponSlotUI.tscn" id="4_le23j"]
 
@@ -9,10 +10,10 @@ default_font_size = 128
 
 [node name="CanvasLayer" type="CanvasLayer" unique_id=1642326744 node_paths=PackedStringArray("thrust_label", "round_label", "phase_label", "actor_label", "game_log_label", "game_over_label")]
 script = ExtResource("1_dqrmg")
-thrust_label = NodePath("RightPanel/MarginContainer/VBoxContainer/ThrustLabel")
-round_label = NodePath("RightPanel/MarginContainer/VBoxContainer/RoundLabel")
-phase_label = NodePath("RightPanel/MarginContainer/VBoxContainer/PhaseLabel")
-actor_label = NodePath("RightPanel/MarginContainer/VBoxContainer/ActorLabel")
+thrust_label = NodePath("RightPanel/MarginContainer/VBoxContainer/GridContainer/ThrustLabel")
+round_label = NodePath("RightPanel/MarginContainer/VBoxContainer/GridContainer/RoundLabel")
+phase_label = NodePath("RightPanel/MarginContainer/VBoxContainer/GridContainer/PhaseLabel")
+actor_label = NodePath("RightPanel/MarginContainer/VBoxContainer/GridContainer/ActorLabel")
 game_log_label = NodePath("RightPanel/MarginContainer/VBoxContainer/GameLogLabel")
 game_over_label = NodePath("GameOverLabel")
 
@@ -44,26 +45,36 @@ theme_override_constants/margin_bottom = 5
 [node name="VBoxContainer" type="VBoxContainer" parent="RightPanel/MarginContainer" unique_id=591334525]
 layout_mode = 2
 
-[node name="RoundLabel" type="Label" parent="RightPanel/MarginContainer/VBoxContainer" unique_id=275753315]
+[node name="GridContainer" type="GridContainer" parent="RightPanel/MarginContainer/VBoxContainer" unique_id=383301866]
 layout_mode = 2
+columns = 2
+
+[node name="RoundLabel" type="Label" parent="RightPanel/MarginContainer/VBoxContainer/GridContainer" unique_id=275753315]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_xxlru")
 text = "Turn Label"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PhaseLabel" type="Label" parent="RightPanel/MarginContainer/VBoxContainer" unique_id=668889929]
+[node name="PhaseLabel" type="Label" parent="RightPanel/MarginContainer/VBoxContainer/GridContainer" unique_id=668889929]
 layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_xxlru")
 text = "Phase Label"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ActorLabel" type="Label" parent="RightPanel/MarginContainer/VBoxContainer" unique_id=714487540]
+[node name="ActorLabel" type="Label" parent="RightPanel/MarginContainer/VBoxContainer/GridContainer" unique_id=714487540]
 layout_mode = 2
+theme = ExtResource("2_xxlru")
 text = "Actor Label"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ThrustLabel" type="Label" parent="RightPanel/MarginContainer/VBoxContainer" unique_id=1596843218]
+[node name="ThrustLabel" type="Label" parent="RightPanel/MarginContainer/VBoxContainer/GridContainer" unique_id=1596843218]
 layout_mode = 2
+theme = ExtResource("2_xxlru")
 text = "Thrust Label"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -71,6 +82,7 @@ vertical_alignment = 1
 [node name="GameLogLabel" type="RichTextLabel" parent="RightPanel/MarginContainer/VBoxContainer" unique_id=1871252191]
 layout_mode = 2
 size_flags_vertical = 3
+theme = ExtResource("2_xxlru")
 text = "BATTLE LOG:
 "
 scroll_following = true
@@ -79,7 +91,7 @@ vertical_alignment = 2
 [node name="LeftPanel" type="PanelContainer" parent="." unique_id=1187002338]
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_right = 190.0
+offset_right = 135.0
 grow_vertical = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="LeftPanel" unique_id=1387157813]
@@ -94,6 +106,7 @@ layout_mode = 2
 
 [node name="CurrentWeaponLabel" type="Label" parent="LeftPanel/MarginContainer/VBoxContainer" unique_id=1042076694]
 layout_mode = 2
+theme = ExtResource("2_xxlru")
 text = "Weapons:"
 horizontal_alignment = 1
 vertical_alignment = 1

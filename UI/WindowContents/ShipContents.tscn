@@ -39,11 +39,13 @@ layout_mode = 2
 
 [node name="ShipStructureLabel" type="Label" parent="HSplitContainer/LeftPanel" unique_id=1907855567]
 layout_mode = 2
+theme = ExtResource("2_s5j1w")
 text = "/SHIP STRUCTURE/"
 horizontal_alignment = 1
 
 [node name="NoseLabel" type="Label" parent="HSplitContainer/LeftPanel" unique_id=212684359]
 layout_mode = 2
+theme = ExtResource("2_s5j1w")
 text = "Nose"
 horizontal_alignment = 1
 vertical_alignment = 2
@@ -54,12 +56,13 @@ alignment = 1
 
 [node name="PortLabel" type="Control" parent="HSplitContainer/LeftPanel/HBoxContainer" unique_id=2010848673]
 layout_mode = 2
+theme = ExtResource("2_s5j1w")
 script = ExtResource("3_s5j1w")
 text = "Port"
+font_size = 10
 metadata/_custom_type_script = "uid://c45140mrqbcrw"
 
 [node name="GridContainer" type="GridContainer" parent="HSplitContainer/LeftPanel/HBoxContainer" unique_id=1426397784]
-custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
@@ -68,13 +71,16 @@ theme_override_constants/v_separation = 4
 
 [node name="StarboardLabel" type="Control" parent="HSplitContainer/LeftPanel/HBoxContainer" unique_id=251020745]
 layout_mode = 2
+theme = ExtResource("2_s5j1w")
 script = ExtResource("3_s5j1w")
 text = "Starboard"
+font_size = 10
 flip = true
 metadata/_custom_type_script = "uid://c45140mrqbcrw"
 
 [node name="AftLabel" type="Label" parent="HSplitContainer/LeftPanel" unique_id=875712745]
 layout_mode = 2
+theme = ExtResource("2_s5j1w")
 text = "Aft"
 horizontal_alignment = 1
 
@@ -90,15 +96,16 @@ theme_override_constants/separation = 12
 
 [node name="DescriptionLabel" type="Label" parent="HSplitContainer/ScrollContainer/RightPanel" unique_id=1893452301]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "Fuck"
+theme = ExtResource("2_s5j1w")
 
 [node name="StatsLabel" type="Label" parent="HSplitContainer/ScrollContainer/RightPanel" unique_id=1028182671]
 layout_mode = 2
+theme = ExtResource("2_s5j1w")
 
 [node name="ModuleDetailsLabel" type="RichTextLabel" parent="HSplitContainer/ScrollContainer/RightPanel" unique_id=1115800321]
 layout_mode = 2
 size_flags_vertical = 3
+theme = ExtResource("2_s5j1w")
 bbcode_enabled = true
 fit_content = true
 scroll_active = false

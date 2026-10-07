@@ -3,22 +3,21 @@
 [ext_resource type="Script" uid="uid://b4t3dbbyaogwk" path="res://Base Class/inspection_window.gd" id="1_sv08r"]
 [ext_resource type="Theme" uid="uid://dho5hnu13gwhm" path="res://Themes/Font.tres" id="2_vdbsl"]
 
-[sub_resource type="Theme" id="Theme_uonaj"]
-default_font_size = 32
-
 [sub_resource type="LabelSettings" id="LabelSettings_vdbsl"]
+font_size = 10
 
 [node name="Control" type="Control" unique_id=1583009882 node_paths=PackedStringArray("title_container", "title_label", "close_button", "minimize_button", "body_panel")]
-custom_minimum_size = Vector2(300, 400)
+custom_minimum_size = Vector2(300, 300)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -752.0
+offset_right = -852.0
 offset_bottom = -348.0
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 1
+theme = ExtResource("2_vdbsl")
 script = ExtResource("1_sv08r")
 title = "Окно инспектора"
 title_container = NodePath("Header/Header/MarginContainer")
@@ -33,17 +32,19 @@ anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 32.0
 grow_horizontal = 2
-theme = SubResource("Theme_uonaj")
+theme = ExtResource("2_vdbsl")
 
 [node name="Header" type="HBoxContainer" parent="Header" unique_id=658765660]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
+theme = ExtResource("2_vdbsl")
 theme_override_constants/separation = 4
 
 [node name="CloseButton" type="Button" parent="Header/Header" unique_id=1367665131]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 focus_mode = 0
+theme = ExtResource("2_vdbsl")
 theme_override_font_sizes/font_size = 16
 text = "X"
 
@@ -51,12 +52,14 @@ text = "X"
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 focus_mode = 0
+theme = ExtResource("2_vdbsl")
 theme_override_font_sizes/font_size = 16
 text = "--"
 
 [node name="MarginContainer" type="MarginContainer" parent="Header/Header" unique_id=1263350414]
 layout_mode = 2
 size_flags_horizontal = 3
+theme = ExtResource("2_vdbsl")
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
@@ -78,7 +81,7 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -368.0
+offset_top = -268.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_horizontal = 3

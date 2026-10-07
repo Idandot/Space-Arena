@@ -10,7 +10,7 @@ const SECTION_MODULE_DETAILS = "/MODULE DETAILS/"
 #ЭКСПОРТЫ
 @export var label_theme: Theme
 @export var empty_cell_color:= Color(0.2, 0.2, 0.2, 0.5)
-@export var cell_size:= Vector2(32,32)
+@export var cell_size:= Vector2(24,24)
 
 #ССЫЛКИ НА НОДЫ
 @export var ship_grid: GridContainer

@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://dvhdky2xyyqyb" path="res://Autoload Class/UIManager.gd" id="1_dqrmg"]
 [ext_resource type="Theme" uid="uid://dho5hnu13gwhm" path="res://Themes/Font.tres" id="2_xxlru"]
-[ext_resource type="Script" uid="uid://ceoytsue52pcy" path="res://Base Class/WeaponListUI.gd" id="3_xxlru"]
-[ext_resource type="PackedScene" uid="uid://b6ge6hwfh2ts2" path="res://Base Class/WeaponSlotUI.tscn" id="4_le23j"]
+[ext_resource type="Script" uid="uid://ceoytsue52pcy" path="res://UI/WeaponListUI.gd" id="3_xxlru"]
+[ext_resource type="PackedScene" uid="uid://b6ge6hwfh2ts2" path="res://UI/WeaponSlotUI.tscn" id="4_le23j"]
 
 [sub_resource type="Theme" id="Theme_7idsn"]
 default_font_size = 128

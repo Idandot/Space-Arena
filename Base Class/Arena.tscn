@@ -11,7 +11,7 @@
 [ext_resource type="Resource" uid="uid://b0rvuhkbh4shv" path="res://Resources/ActorConfigs/Idandot.tres" id="6_7idsn"]
 [ext_resource type="Script" uid="uid://cemxx5dpd6xcu" path="res://Resources/GameConfig.gd" id="6_e5ake"]
 [ext_resource type="Script" uid="uid://c2i0bwjpb7opy" path="res://Base Class/TargetManager.gd" id="9_iroh1"]
-[ext_resource type="PackedScene" uid="uid://sygaawqoonor" path="res://Base Class/ArenaUI.tscn" id="12_iroh1"]
+[ext_resource type="PackedScene" uid="uid://sygaawqoonor" path="res://UI/ArenaUI.tscn" id="12_iroh1"]
 
 [sub_resource type="Resource" id="Resource_c5xbw"]
 script = ExtResource("6_e5ake")

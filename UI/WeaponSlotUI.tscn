@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b6ge6hwfh2ts2"]
 
-[ext_resource type="Script" uid="uid://dfgu6qyv5ig5" path="res://Base Class/WeaponSlotUI.gd" id="1_1ysd0"]
+[ext_resource type="Script" uid="uid://dfgu6qyv5ig5" path="res://UI/WeaponSlotUI.gd" id="1_1ysd0"]
 [ext_resource type="Theme" uid="uid://dho5hnu13gwhm" path="res://Themes/Font.tres" id="2_akw02"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ysd0"]

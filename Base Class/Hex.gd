@@ -1,7 +1,8 @@
 extends Node2D
 class_name Hex
 
-var _points := []
+var _points: Array[Vector2] = []
+var _inner_points: Array[Vector2] = []
 @onready var _colPoly = $Area2D/CollisionPolygon2D
 var _color: Color = Color.WHITE
 var _coordinates: Vector2i
@@ -17,6 +18,7 @@ func setup(pos: Vector2i):
 	for i in range(7):
 		var angle = deg_to_rad(60*i + 30)
 		_points.append(Vector2(cos(angle), sin(angle))*side_size)
+		_inner_points.append(_points[i] * 0.9)
 	_colPoly.polygon = _points
 	
 	self.position = AxialUtilities.axial_to_world(_coordinates)
@@ -25,4 +27,4 @@ func setup(pos: Vector2i):
 func _draw():
 	if len(_points) != 0:
 		draw_polyline(_points, _color)
-		draw_colored_polygon(_points, fill_color)
+		draw_colored_polygon(_inner_points, fill_color)

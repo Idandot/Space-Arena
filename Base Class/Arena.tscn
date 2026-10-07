@@ -16,6 +16,7 @@
 [sub_resource type="Resource" id="Resource_c5xbw"]
 script = ExtResource("6_e5ake")
 actors_data = Array[ExtResource("3_7idsn")]([ExtResource("4_xf6yu"), ExtResource("5_8rq1b"), ExtResource("6_7idsn")])
+max_round = 20
 metadata/_custom_type_script = "uid://cemxx5dpd6xcu"
 
 [node name="Arena" type="Node2D" unique_id=1894896767]

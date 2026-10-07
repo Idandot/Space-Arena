@@ -157,6 +157,8 @@ func _update_armor(_location: String, damaged_modules: Array[Module]) -> void:
 	_update_stats()
 
 func _update_module_details(module: Module) -> void:
+	HexGridClass.clear_layer(HexGridClass.highlight_layers.INSPECTED_WEAPON)
+	
 	if not module:
 		module_details_label.text = "%s\nSelect module to inspect it" % SECTION_MODULE_DETAILS
 		return
@@ -171,6 +173,12 @@ func _update_module_details(module: Module) -> void:
 		details += module.get_stats_text()
 	
 	module_details_label.text = "%s\n%s" % [SECTION_MODULE_DETAILS, details]
+	
+	if module is Weapon:
+		var weapon: Weapon = module as Weapon
+		var arc_hexes: Array[Vector2i] = weapon.get_arc_hexes()
+		HexGridClass.highlight_layer(HexGridClass.highlight_layers.INSPECTED_WEAPON,
+		arc_hexes, Color.YELLOW, false, false)
 
 #Чистка
 func _clear_state() -> void:

@@ -63,7 +63,9 @@ func update_weapon_highlight() -> void:
 	var current_weapon = get_current_weapon()
 	if current_weapon:
 		arc_hexes = current_weapon.get_arc_hexes()
-	HexGridClass.highlight(arc_hexes, Color.GREEN, false, true)
+	HexGridClass.highlight_layer(
+		HexGridClass.highlight_layers.CURRENT_WEAPON, 
+		arc_hexes, Color.GREEN, false, false)
 
 func select_next_operational_weapon() -> void:
 	if weapons.is_empty():
@@ -97,6 +99,7 @@ func _get_operational_weapons_count() -> int:
 
 func _on_turn_started(_actor_emitter, phase: Enums.game_states):
 	if phase != Enums.game_states.ACTION:
+		HexGridClass.clear_layer(HexGridClass.highlight_layers.CURRENT_WEAPON)
 		return
 	next_weapon()
 

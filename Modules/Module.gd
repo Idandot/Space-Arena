@@ -38,7 +38,7 @@ func take_damage(amount: int) -> int:
 		parent.display_name, amount, module_name, _integrity.current, _integrity.maximum
 	])
 	if _integrity.current <= 0:
-		print(module_name, " module destroyed")
+		GameEvents.log_request.emit("%s: %s module destroyed" % [parent.display_name, module_name])
 		_active = false
 		destruction_action()
 		return abs(_integrity.current)

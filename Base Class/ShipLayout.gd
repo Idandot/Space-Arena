@@ -40,7 +40,6 @@ func _find_controller() -> Controller:
 func get_module_or_null(position: Vector2i) -> Module:
 	if modules.has(position):
 		return modules[position]
-	print("Position is empty")
 	return null
 
 func _build_from_config(config: ActorConfig) -> void:
@@ -98,7 +97,7 @@ func get_weapons() -> Array[Weapon]:
 
 func _on_action_phase_turn_started(_actor, phase: Enums.game_states):
 	if phase != Enums.game_states.ACTION:
-		HexGridClass.highlight([], Color.GREEN, false, true)
+		
 		return
 	if _actor != parent:
 		return

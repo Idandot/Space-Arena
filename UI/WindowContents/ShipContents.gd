@@ -4,7 +4,6 @@ class_name ShipContents
 #КОНСТАНТЫ
 const SECTION_DESCRIPTION = "/DESCRIPTION/"
 const SECTION_STATS = "/STATS/"
-const SECTION_ARMOR = "/ARMOR/"
 const SECTION_MODULE_DETAILS = "/MODULE DETAILS/"
 
 #ЭКСПОРТЫ
@@ -29,6 +28,7 @@ var _ship_layout: ShipLayout
 var _selected_module: Module
 var _cells: Dictionary[Vector2i, Button] = {}
 
+#ПУБЛИЧНЫЕ МЕТОДЫ
 func setup(actor: Actor) -> void:
 	if not is_instance_valid(actor):
 		return
@@ -58,6 +58,7 @@ func _populate_ui() -> void:
 		_build_ship_grid()
 	
 	_update_module_details(null)
+	_connect_location_labels()
 
 #РАБОТА С СЕТКОЙ
 func _build_ship_grid() -> void:
@@ -106,6 +107,44 @@ func _create_empty_cell() -> Control:
 	style.bg_color = empty_cell_color
 	panel.add_theme_stylebox_override("panel", style)
 	return panel
+
+#РАБОТА С ЛОКАЦИЯМИ
+
+func _connect_location_labels() -> void:
+	for location_name in location_labels.keys():
+		var label: Control = location_labels[location_name]
+		if !is_instance_valid(label):
+			continue
+		
+		label.mouse_filter = Control.MOUSE_FILTER_STOP
+		
+		if label.gui_input.is_connected(_on_location_label_gui_input):
+			label.gui_input.disconnect(_on_location_label_gui_input)
+		
+		label.gui_input.connect(_on_location_label_gui_input.bind(location_name))
+
+func _on_location_label_gui_input(event: InputEvent, location_name: StringName) -> void:
+	var mouse_event: InputEventMouseButton
+	if event is InputEventMouseButton:
+		mouse_event = event
+	else:
+		return
+	if mouse_event.pressed and mouse_event.button_index == MOUSE_BUTTON_LEFT:
+		_highlight_location_arc(location_name)
+
+func _highlight_location_arc(location_name: StringName) -> void:
+	HexGridClass.clear_layer(HexGridClass.highlight_layers.INSPECTION)
+	
+	if !_damage_resolver:
+		return
+	
+	var arc_hexes: Array[Vector2i] = _damage_resolver.get_location_arc_hexes(location_name)
+	if arc_hexes.is_empty():
+		return
+	
+	HexGridClass.highlight_layer(
+		HexGridClass.highlight_layers.INSPECTION,
+		arc_hexes, Color.CYAN)
 
 #ОБНОВЛЕНИЯ
 func _update_stats():
@@ -157,7 +196,7 @@ func _update_armor(_location: String, damaged_modules: Array[Module]) -> void:
 	_update_stats()
 
 func _update_module_details(module: Module) -> void:
-	HexGridClass.clear_layer(HexGridClass.highlight_layers.INSPECTED_WEAPON)
+	HexGridClass.clear_layer(HexGridClass.highlight_layers.INSPECTION)
 	
 	if not module:
 		module_details_label.text = "%s\nSelect module to inspect it" % SECTION_MODULE_DETAILS
@@ -177,7 +216,7 @@ func _update_module_details(module: Module) -> void:
 	if module is Weapon:
 		var weapon: Weapon = module as Weapon
 		var arc_hexes: Array[Vector2i] = weapon.get_arc_hexes()
-		HexGridClass.highlight_layer(HexGridClass.highlight_layers.INSPECTED_WEAPON,
+		HexGridClass.highlight_layer(HexGridClass.highlight_layers.INSPECTION,
 		arc_hexes, Color.YELLOW, false, false)
 
 #Чистка
@@ -191,6 +230,8 @@ func _clear_state() -> void:
 	_ship_layout = null
 	_damage_resolver = null
 	_selected_module = null
+	
+	HexGridClass.clear_layer(HexGridClass.highlight_layers.INSPECTION)
 
 func _disconnect_signals() -> void:
 	if is_instance_valid(_actor) and _actor.initiative_changed.is_connected(_update_stats):
@@ -198,3 +239,6 @@ func _disconnect_signals() -> void:
 	
 	if is_instance_valid(_damage_resolver) and _damage_resolver.structure_changed.is_connected(_update_armor):
 		_damage_resolver.structure_changed.disconnect(_update_armor)
+
+func _exit_tree() -> void:
+	_clear_state()

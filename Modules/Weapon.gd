@@ -64,7 +64,7 @@ func get_arc_hexes() -> Array[Vector2i]:
 	var origin = hex_rigidbody.axial_position
 	var weapon_facing: HexOrientation = HexOrientation.new()
 	weapon_facing.set_direction(weapon_stats.facing_offset+hex_rigidbody.facing.get_current_index())
-	return AxialUtilities.hexes_in_sector(origin, weapon_facing.get_current_vector(), 
+	return AxialUtilities.hexes_in_sector(origin, weapon_facing.get_current_angle(), 
 	weapon_stats.arc_degrees, weapon_stats.min_range, weapon_stats.max_range)
 
 #ПРИВАТНЫЕ МЕТОДЫ

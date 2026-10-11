@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://bnv8yabjdd0px" path="res://UI/WindowContents/ShipContents.tscn" id="6_vqikk"]
 [ext_resource type="Script" uid="uid://ctbaoqmjpniyw" path="res://Base Class/ShipLayout.gd" id="7_cy77k"]
 [ext_resource type="Script" uid="uid://cq6i5t0avk767" path="res://Base Class/ShipMediator.gd" id="7_r3n7q"]
-[ext_resource type="Script" uid="uid://c866xksra0t07" path="res://Base Class/damage_resolver.gd" id="10_pkitw"]
+[ext_resource type="Script" uid="uid://c866xksra0t07" path="res://Base Class/DamageResolver.gd" id="10_pkitw"]
 [ext_resource type="Script" uid="uid://ceydj021o6i55" path="res://Resources/ArmorConfig.gd" id="11_dwf2m"]
 [ext_resource type="Script" uid="uid://h2y81jaod4i" path="res://Base Class/WeaponControlSystem.gd" id="13_hcv5f"]
 

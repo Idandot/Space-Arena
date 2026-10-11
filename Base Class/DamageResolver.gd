@@ -13,11 +13,32 @@ var actor: Actor
 
 @onready var _ship_layout: ShipLayout = self.get_parent()
 
-var location_to_string: Dictionary[LOCATION, String] = {
+const location_to_string: Dictionary[LOCATION, String] = {
 	LOCATION.NOSE: "nose",
 	LOCATION.AFT: "aft",
 	LOCATION.PORT: "port",
 	LOCATION.STARBOARD: "starboard",
+}
+
+const string_to_location: Dictionary[String, LOCATION] = {
+	"nose": LOCATION.NOSE,
+	"aft": LOCATION.AFT,
+	"port": LOCATION.PORT,
+	"starboard": LOCATION.STARBOARD,
+}
+
+const location_center_offset: Dictionary[LOCATION, int] = {
+	LOCATION.NOSE: 0,
+	LOCATION.AFT: 180,
+	LOCATION.PORT: 90,
+	LOCATION.STARBOARD: -90,
+}
+
+const location_arc_size: Dictionary[LOCATION, int] = {
+	LOCATION.NOSE: 120,
+	LOCATION.AFT: 120,
+	LOCATION.PORT: 60,
+	LOCATION.STARBOARD: 60,
 }
 
 func _ready() -> void:
@@ -119,6 +140,23 @@ func get_hit_zone(attacker_position: Vector2i) -> LOCATION:
 		return LOCATION.NOSE
 	else:
 		return LOCATION.AFT
+
+func get_location_arc_hexes(location_name: String) -> Array[Vector2i]:
+	if !string_to_location.has(location_name):
+		push_error("DamageResolver: invalid location name '%s'" % location_name)
+		return []
+	
+	var origin: Vector2i = hex_rigidbody.axial_position
+	var radius: int = 5
+	var nose_angle: float = hex_rigidbody.facing.get_current_angle()
+	
+	var location: LOCATION = string_to_location[location_name]
+	var arc_center_angle: float = nose_angle + location_center_offset[location]
+	var arc_degrees: float = location_arc_size[location]
+	
+	return AxialUtilities.hexes_in_sector(
+		origin, arc_center_angle, arc_degrees, 1, radius
+	)
 
 func _angle_difference(angle1: float, angle2: float) -> float:
 	var diff = fmod(angle2 - angle1, 360.0)

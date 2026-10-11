@@ -8,7 +8,7 @@ var _hex: PackedScene
 var _grid_radius: int
 var _grid: Dictionary[Vector2i, Hex]
 
-enum highlight_layers {CURRENT_WEAPON, INSPECTED_WEAPON}
+enum highlight_layers {CURRENT_WEAPON, INSPECTION}
 
 #Dictionary[StringName, Variant]
 var _highlight_layers: Dictionary[highlight_layers, Dictionary]
@@ -63,7 +63,7 @@ func highlight_layer(
 	_highlight_layers[layer] = {"hexes": hexes, "color": color}
 	_rebuild_visuals()
 
-func clear_layer(layer) -> void:
+func clear_layer(layer: highlight_layers) -> void:
 	_highlight_layers.erase(layer)
 	_rebuild_visuals()
 

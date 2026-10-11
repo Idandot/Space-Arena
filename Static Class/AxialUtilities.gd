@@ -207,17 +207,20 @@ static func solve_by_Cramer(colA: Vector2, colB: Vector2, C: Vector2) -> Vector2
 	return Vector2(A, B)
 
 static func hexes_in_sector(origin: Vector2i, 
-					facing: Vector2i,
+					offset_degrees: float,
 					arc_degrees: float = 120, 
 					min_range: int = 0, 
 					max_range: int = 50):
 	var _hexes_in_sector: Array[Vector2i] = []
-	
-	var _half_arc = arc_degrees / 2
+	var _offset_rad: float = deg_to_rad(offset_degrees)
+	var _offset_direction: Vector2 = Vector2(cos(_offset_rad), -sin(_offset_rad))
+	var _half_arc = arc_degrees / 2.0
 	var _hexes_in_radius = hexes_in_radius(origin, max_range, min_range)
+	
 	for hex_pos in _hexes_in_radius:
-		var angle_degrees = abs(angle_between(hex_pos - origin, facing))
-		if angle_degrees <= _half_arc or is_equal_approx(angle_degrees, _half_arc):
+		var to_hex: Vector2 = axial_to_world(hex_pos - origin)
+		var angle_diff = rad_to_deg(to_hex.angle_to(_offset_direction))
+		if abs(angle_diff) <= _half_arc or is_equal_approx(abs(angle_diff), _half_arc):
 			_hexes_in_sector.append(hex_pos)
 	
 	return _hexes_in_sector

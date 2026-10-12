@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="TMTexture" format=3 uid="uid://dkxvnl4kxb403"]
-
-[ext_resource type="Script" uid="uid://bppjimsyxegic" path="res://Resources/TMTexture.gd" id="1_fl5bs"]
-
-[resource]
-script = ExtResource("1_fl5bs")
-points = [Vector2(-30, 25), Vector2(-30, -25), Vector2(40, 0)]
-line_width = 5.0
-fill = true

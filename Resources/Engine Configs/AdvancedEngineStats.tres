@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EngineConfig" format=3 uid="uid://b2idh7f108a85"]
+
+[ext_resource type="Script" uid="uid://rgkmbxhqeme2" path="res://Resources/Engine Configs/EngineConfig.gd" id="1_pv4mm"]
+
+[resource]
+script = ExtResource("1_pv4mm")
+config_name = "Advanced Engine"
+config_acronym = "E2"
+config_description = "Military grade engine"
+max_thrust = 5
+metadata/_custom_type_script = "uid://rgkmbxhqeme2"

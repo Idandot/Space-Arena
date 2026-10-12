@@ -1,0 +1,115 @@
+[gd_scene format=3 uid="uid://bnv8yabjdd0px"]
+
+[ext_resource type="Script" uid="uid://dpy2d62b47o2b" path="res://UI/InspectionWindow/ShipContents.gd" id="1_f6g5o"]
+[ext_resource type="Theme" uid="uid://dho5hnu13gwhm" path="res://Themes/Font.tres" id="2_sp4bc"]
+[ext_resource type="Script" uid="uid://c45140mrqbcrw" path="res://UI/VerticalLabel.gd" id="3_f6g5o"]
+
+[node name="ShipInspection" type="Control" unique_id=119998253 node_paths=PackedStringArray("ship_grid", "description_label", "stats_label", "module_details_label", "location_labels")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_f6g5o")
+label_theme = ExtResource("2_sp4bc")
+ship_grid = NodePath("HSplitContainer/LeftPanel/HBoxContainer/GridContainer")
+description_label = NodePath("HSplitContainer/ScrollContainer/RightPanel/DescriptionLabel")
+stats_label = NodePath("HSplitContainer/ScrollContainer/RightPanel/StatsLabel")
+module_details_label = NodePath("HSplitContainer/ScrollContainer/RightPanel/ModuleDetailsLabel")
+location_labels = {
+"aft": NodePath("HSplitContainer/LeftPanel/AftLabel"),
+"nose": NodePath("HSplitContainer/LeftPanel/NoseLabel"),
+"port": NodePath("HSplitContainer/LeftPanel/HBoxContainer/PortLabel"),
+"starboard": NodePath("HSplitContainer/LeftPanel/HBoxContainer/StarboardLabel")
+}
+
+[node name="HSplitContainer" type="HSplitContainer" parent="." unique_id=931661501]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+dragging_enabled = false
+
+[node name="LeftPanel" type="VBoxContainer" parent="HSplitContainer" unique_id=292527579]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+
+[node name="ShipStructureLabel" type="Label" parent="HSplitContainer/LeftPanel" unique_id=1907855567]
+layout_mode = 2
+theme = ExtResource("2_sp4bc")
+text = "/SHIP STRUCTURE/"
+horizontal_alignment = 1
+
+[node name="NoseLabel" type="Label" parent="HSplitContainer/LeftPanel" unique_id=212684359]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme = ExtResource("2_sp4bc")
+text = "Nose"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/LeftPanel" unique_id=1329999620]
+layout_mode = 2
+alignment = 1
+
+[node name="PortLabel" type="Control" parent="HSplitContainer/LeftPanel/HBoxContainer" unique_id=2010848673]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme = ExtResource("2_sp4bc")
+script = ExtResource("3_f6g5o")
+text = "Port"
+font_size = 10
+metadata/_custom_type_script = "uid://c45140mrqbcrw"
+
+[node name="GridContainer" type="GridContainer" parent="HSplitContainer/LeftPanel/HBoxContainer" unique_id=1426397784]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+
+[node name="StarboardLabel" type="Control" parent="HSplitContainer/LeftPanel/HBoxContainer" unique_id=251020745]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme = ExtResource("2_sp4bc")
+script = ExtResource("3_f6g5o")
+text = "Starboard"
+font_size = 10
+flip = true
+metadata/_custom_type_script = "uid://c45140mrqbcrw"
+
+[node name="AftLabel" type="Label" parent="HSplitContainer/LeftPanel" unique_id=875712745]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme = ExtResource("2_sp4bc")
+text = "Aft"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer" unique_id=75655070]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RightPanel" type="VBoxContainer" parent="HSplitContainer/ScrollContainer" unique_id=1007173109]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="DescriptionLabel" type="Label" parent="HSplitContainer/ScrollContainer/RightPanel" unique_id=1893452301]
+layout_mode = 2
+theme = ExtResource("2_sp4bc")
+
+[node name="StatsLabel" type="Label" parent="HSplitContainer/ScrollContainer/RightPanel" unique_id=1028182671]
+layout_mode = 2
+theme = ExtResource("2_sp4bc")
+
+[node name="ModuleDetailsLabel" type="RichTextLabel" parent="HSplitContainer/ScrollContainer/RightPanel" unique_id=1115800321]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_sp4bc")
+bbcode_enabled = true
+fit_content = true
+scroll_active = false

@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://c4kh3mrinecq8"]
+
+[ext_resource type="Script" uid="uid://cgvsym4hxgs0s" path="res://Scripts/Actor/Actor.gd" id="1_4pigi"]
+[ext_resource type="Script" uid="uid://bk5ges4258ki7" path="res://Scripts/Vector Graphics/Visualizer.gd" id="2_4pigi"]
+[ext_resource type="Resource" uid="uid://dkxvnl4kxb403" path="res://Resources/Texture Configs/Ship.tres" id="3_aiuxd"]
+[ext_resource type="Script" uid="uid://b3xumdidevena" path="res://UI/InspectionWindow/ShipClickHandler.gd" id="4_o07q7"]
+[ext_resource type="PackedScene" uid="uid://cyeegvoov25bo" path="res://UI/InspectionWindow/inspection_window.tscn" id="5_is3bj"]
+[ext_resource type="PackedScene" uid="uid://bnv8yabjdd0px" path="res://UI/InspectionWindow/ShipContents.tscn" id="6_leyws"]
+[ext_resource type="Script" uid="uid://cpwlg2v1jnfow" path="res://Scripts/Movement and Physics/HexRigidbody.gd" id="7_4pigi"]
+[ext_resource type="Script" uid="uid://bpovoinqd86cg" path="res://Scripts/Vector Graphics/VectorVisualizer.gd" id="8_ppv75"]
+[ext_resource type="Script" uid="uid://cq6i5t0avk767" path="res://Scripts/Ship/ShipMediator.gd" id="9_ppv75"]
+[ext_resource type="Script" uid="uid://ctbaoqmjpniyw" path="res://Scripts/Ship/ShipLayout.gd" id="10_aiuxd"]
+[ext_resource type="Script" uid="uid://c866xksra0t07" path="res://Scripts/Combat/DamageResolver.gd" id="11_4pigi"]
+[ext_resource type="Script" uid="uid://ceydj021o6i55" path="res://Resources/Armor Configs/ArmorConfig.gd" id="12_a5ne0"]
+[ext_resource type="Script" uid="uid://h2y81jaod4i" path="res://Scripts/Combat/WeaponControlSystem.gd" id="13_ppv75"]
+
+[sub_resource type="Resource" id="Resource_hcv5f"]
+script = ExtResource("12_a5ne0")
+metadata/_custom_type_script = "uid://ceydj021o6i55"
+
+[node name="Actor" type="Node2D" unique_id=71589796]
+script = ExtResource("1_4pigi")
+
+[node name="Visualizer" type="Node2D" parent="." unique_id=1743329792 node_paths=PackedStringArray("actor_mediator", "hex_rigidbody")]
+script = ExtResource("2_4pigi")
+actor_mediator = NodePath("../ActorMediator")
+hex_rigidbody = NodePath("../HexRigidbody")
+start_texture = ExtResource("3_aiuxd")
+
+[node name="Area2D" type="Area2D" parent="Visualizer" unique_id=1248457616]
+script = ExtResource("4_o07q7")
+window_reference = ExtResource("5_is3bj")
+ship_contents = ExtResource("6_leyws")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Visualizer/Area2D" unique_id=1059107496]
+polygon = PackedVector2Array(-30, 25, -30, -25, 40, 0)
+
+[node name="HexRigidbody" type="Node2D" parent="." unique_id=146571672 node_paths=PackedStringArray("actor_mediator")]
+script = ExtResource("7_4pigi")
+actor_mediator = NodePath("../ActorMediator")
+
+[node name="VectorVisualizer" type="Node2D" parent="HexRigidbody" unique_id=866816838 node_paths=PackedStringArray("hex_rigidbody")]
+z_index = -100
+script = ExtResource("8_ppv75")
+hex_rigidbody = NodePath("..")
+
+[node name="ActorMediator" type="Node" parent="." unique_id=1730408832]
+script = ExtResource("9_ppv75")
+
+[node name="ShipLayout" type="Node" parent="." unique_id=921500294]
+script = ExtResource("10_aiuxd")
+
+[node name="DamageResolver" type="Node" parent="ShipLayout" unique_id=531696205 node_paths=PackedStringArray("hex_rigidbody")]
+script = ExtResource("11_4pigi")
+hex_rigidbody = NodePath("../../HexRigidbody")
+starting_structure = SubResource("Resource_hcv5f")
+
+[node name="WeaponControlSystem" type="Node" parent="ShipLayout" unique_id=2076527081]
+script = ExtResource("13_ppv75")

@@ -11,16 +11,16 @@ config_version=5
 [application]
 
 config/name="Space Arena"
-run/main_scene="res://Base Class/Arena.tscn"
+run/main_scene="res://Scripts/Arena/Arena.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
-HexGridClass="*res://Autoload Class/HexGrid.gd"
-EventManager="*res://Autoload Class/UIManager.gd"
-GameEvents="*res://Autoload Class/GameEvents.gd"
-TurnManager="*res://Autoload Class/TurnManager.gd"
+HexGridClass="*res://Autoload/HexGrid.gd"
+EventManager="*res://Autoload/UIManager.gd"
+GameEvents="*res://Autoload/GameEvents.gd"
+TurnManager="*res://Autoload/TurnManager.gd"
 
 [display]
 

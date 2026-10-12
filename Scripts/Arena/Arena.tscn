@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://desilnlp5gqtr"]
+
+[ext_resource type="Script" uid="uid://dwvjpdp1pitku" path="res://Scripts/Arena/Arena.gd" id="1_g1pe3"]
+[ext_resource type="PackedScene" uid="uid://drbie2ve3q7dd" path="res://Scripts/Arena/Hex/Hex.tscn" id="2_m42ns"]
+[ext_resource type="Script" uid="uid://daq1waive7xpx" path="res://Resources/Actor Configs/ActorConfig.gd" id="3_gqcik"]
+[ext_resource type="Resource" uid="uid://dwpdkom4k88dl" path="res://Resources/Actor Configs/Zhemchyzhny.tres" id="4_fd1p0"]
+[ext_resource type="Resource" uid="uid://deq6inrchxfdg" path="res://Resources/Actor Configs/AndrewFromPiter.tres" id="5_mfdf5"]
+[ext_resource type="Resource" uid="uid://b0rvuhkbh4shv" path="res://Resources/Actor Configs/Idandot.tres" id="6_a6fs7"]
+[ext_resource type="Script" uid="uid://cemxx5dpd6xcu" path="res://Resources/Game Configs/GameConfig.gd" id="7_pa8me"]
+[ext_resource type="Script" uid="uid://ra5ms2jmqdqj" path="res://Autoload/HexGrid.gd" id="8_encvf"]
+[ext_resource type="Script" uid="uid://c2i0bwjpb7opy" path="res://Scripts/Vector Graphics/TargetManager.gd" id="9_xf58a"]
+[ext_resource type="Script" uid="uid://bsxmn8p1yrsl7" path="res://Scripts/Arena/ArenaCam.gd" id="10_eehfx"]
+[ext_resource type="Script" uid="uid://3ie11nou16mr" path="res://Autoload/TurnManager.gd" id="11_jgga1"]
+[ext_resource type="PackedScene" uid="uid://sygaawqoonor" path="res://UI/HUD/ArenaUI.tscn" id="12_1myni"]
+
+[sub_resource type="Resource" id="Resource_c5xbw"]
+script = ExtResource("7_pa8me")
+actors_data = Array[ExtResource("3_gqcik")]([ExtResource("4_fd1p0"), ExtResource("5_mfdf5"), ExtResource("6_a6fs7")])
+max_round = 20
+metadata/_custom_type_script = "uid://cemxx5dpd6xcu"
+
+[node name="Arena" type="Node2D" unique_id=1894896767]
+script = ExtResource("1_g1pe3")
+arena_radius = 12
+hex_scene = ExtResource("2_m42ns")
+game_config = SubResource("Resource_c5xbw")
+
+[node name="HexGrid" type="Node2D" parent="." unique_id=172935855]
+script = ExtResource("8_encvf")
+
+[node name="TargetManager" type="Node2D" parent="HexGrid" unique_id=497524436]
+script = ExtResource("9_xf58a")
+marker_line_coeff = 0.3
+line_width = 5
+
+[node name="ArenaCamera" type="Camera2D" parent="." unique_id=845632562]
+script = ExtResource("10_eehfx")
+
+[node name="TurnManager" type="Node" parent="." unique_id=452023269]
+script = ExtResource("11_jgga1")
+
+[node name="CanvasLayer" parent="." unique_id=1269883491 instance=ExtResource("12_1myni")]

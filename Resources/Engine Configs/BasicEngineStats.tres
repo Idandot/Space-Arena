@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EngineConfig" format=3 uid="uid://cuwftjygcwr0x"]
+
+[ext_resource type="Script" uid="uid://rgkmbxhqeme2" path="res://Resources/Engine Configs/EngineConfig.gd" id="1_d22kt"]
+
+[resource]
+script = ExtResource("1_d22kt")
+config_name = "Basic Engine"
+config_acronym = "E1"
+config_description = "Engine you can find on mailships"
+thrust_regeneration = 3
+metadata/_custom_type_script = "uid://rgkmbxhqeme2"
